@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late final MonochromeShaderConfiguration configuration;
+  late final ShaderConfiguration configuration;
 
   @override
   void initState() {
