@@ -35,31 +35,35 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final MonochromeShaderConfiguration configuration;
+
   @override
   void initState() {
     super.initState();
+    configuration = MonochromeShaderConfiguration()
+      ..intensity = 0.5
+      ..color = Colors.red;
     _exportImage();
   }
 
   Future<void> _exportImage() async {
     const asset = 'images/test.jpg';
     final texture = await TextureSource.fromAsset(asset);
-    final configuration = MonochromeShaderConfiguration()
-      ..setIntensity(0.5)
-      ..setColor(Colors.red);
     final directory = await getTemporaryDirectory();
     final output =
         File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
     final watch = Stopwatch();
     watch.start();
-    final image = await configuration.exportImage([texture],
-        Size(texture.width.toDouble(), texture.height.toDouble()));
+    final image = await configuration.exportImage(
+        [texture], Size(texture.width.toDouble(), texture.height.toDouble()));
     final bytes = await image.toByteData();
-    debugPrint('Exporting image took ${watch.elapsedMilliseconds} milliseconds');
+    debugPrint(
+        'Exporting image took ${watch.elapsedMilliseconds} milliseconds');
     if (bytes == null) {
       throw UnsupportedError('Failed to extract bytes for image');
     }
-    final image1 = img.Image.fromBytes(image.width, image.height, bytes.buffer.asUint8List());
+    final image1 = img.Image.fromBytes(
+        image.width, image.height, bytes.buffer.asUint8List());
     img.JpegEncoder encoder = img.JpegEncoder();
     final data = encoder.encodeImage(image1);
     await output.writeAsBytes(data);
@@ -77,17 +81,24 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ...configuration.parameters.map((e) {
+              if (e is ColorParameter) {
+                //e.value = Colors.blue;
+                //e.update(configuration);
+                return Text('${e.displayName} ::: ${e.value}');
+              } else if (e is NumberParameter) {
+                return Text('${e.displayName} ::: ${e.value}');
+              }
+              return const Offstage();
+            }),
             Expanded(
                 child: FutureBuilder(
               future: TextureSource.fromAsset('images/test.jpg'),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ImageShaderPreview(
-                    textures: [snapshot.data].whereType<TextureSource>(),
-                    configuration: MonochromeShaderConfiguration()
-                      ..setIntensity(0.5)
-                      ..setColor(Colors.red),
-                  );
+                      textures: [snapshot.data].whereType<TextureSource>(),
+                      configuration: configuration);
                 }
                 return const CircularProgressIndicator();
               },
