@@ -3,48 +3,45 @@ import 'package:image_filters/image_filters.dart';
 
 import 'filters_details.dart';
 
-class FiltersListScreen extends StatefulWidget {
+class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
 
-  @override
-  State<FiltersListScreen> createState() => _FiltersListScreenState();
-}
-
-class _FiltersListScreenState extends State<FiltersListScreen> {
-  final _items = availableShaders.keys.toList();
-  @override
-  void initState() {
-    super.initState();
-    _items;
-  }
+  List<String> get _items => availableShaders.keys.toList();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('List filters')),
+        title: const Center(child: Text('Available filters')),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final item = _items[index];
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(
+            height: 8,
+          ),
+          itemBuilder: (context, index) {
+            final item = _items[index];
 
-          return Container(
-            color: Colors.greenAccent.withAlpha(120),
-            child: ListTile(
-              title: Text(item),
-              trailing: const Icon(Icons.navigate_next),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FilterDetailsScreen(),
-                  ),
-                );
-              },
-            ),
-          );
-        },
-        itemCount: _items.length,
+            return Container(
+              color: Colors.greenAccent.withAlpha(120),
+              child: ListTile(
+                title: Text(item),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          FilterDetailsScreen(filterName: item),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          itemCount: _items.length,
+        ),
       ),
     );
   }

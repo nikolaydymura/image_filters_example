@@ -105,11 +105,9 @@ packages:
   image_filters:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: ab8588a4069fe18f9c4c066156b51795f55fcee6
-      url: "https://github.com/nikolaydymura/image_filters"
-    source: git
+      path: ".."
+      relative: true
+    source: path
     version: "0.0.1"
   lints:
     dependency: transitive

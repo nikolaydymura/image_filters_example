@@ -37,7 +37,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   image_filters:
-    git: https://github.com/nikolaydymura/image_filters
+    path: ../
+    #git: https://github.com/nikolaydymura/image_filters
   path_provider: ^2.0.11
   image: ^3.2.2
 
@@ -66,6 +67,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
+    - lut/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
