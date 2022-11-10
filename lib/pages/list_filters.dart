@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:image_filters/image_filters.dart';
 
@@ -6,7 +8,8 @@ import 'filters_details.dart';
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
 
-  List<String> get _items => availableShaders.keys.toList();
+  List<String> get _items =>
+      SplayTreeSet<String>.from(availableShaders.keys).toList();
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,8 @@
 name: Build and Deploy Flutter application
-on: [ push ]
+on:
+  push:
+    branches:
+      - main
 jobs:
   analyze_flutter_app:
     name: Check Flutter sources
