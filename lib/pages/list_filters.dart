@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:image_filters/image_filters.dart';
+
+import 'filters_details.dart';
 
 class FiltersListScreen extends StatefulWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
@@ -24,12 +25,26 @@ class _FiltersListScreenState extends State<FiltersListScreen> {
         title: const Center(child: Text('List filters')),
       ),
       body: ListView.builder(
-        itemCount: _items.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_items[index]),
+          final item = _items[index];
+
+          return Container(
+            color: Colors.greenAccent.withAlpha(120),
+            child: ListTile(
+              title: Text(item),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FilterDetailsScreen(),
+                  ),
+                );
+              },
+            ),
           );
         },
+        itemCount: _items.length,
       ),
     );
   }
