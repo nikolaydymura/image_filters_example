@@ -15,6 +15,7 @@ class FilterDetailsScreen extends StatefulWidget {
 }
 
 class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
+  TextEditingController numController = TextEditingController();
   late final ShaderConfiguration configuration;
 
   @override
@@ -24,6 +25,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     if (configuration != null) {
       this.configuration = configuration;
     }
+    numController;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    numController.dispose();
   }
 
   @override
@@ -81,7 +89,11 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                         value: e.value.toDouble(),
                         max: e.max?.toDouble() ?? double.infinity,
                         min: e.min?.toDouble() ?? double.minPositive,
-                        onChanged: (double value) {},
+                        onChanged: (double value) {
+                          setState(() {
+                            e.value = value;
+                          });
+                        },
                       ),
                     )
                   ],
@@ -102,8 +114,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                     ),
                     Expanded(
                       child: TextField(
-                        controller:
-                            TextEditingController(text: e.value.toString()),
+                        onSubmitted: (value) => setState(() {
+                          e.value = double.parse(value);
+                        }),
+                        keyboardType: TextInputType.number,
+                        controller: numController.text.isNotEmpty
+                            ? numController
+                            : TextEditingController(text: e.value.toString()),
                       ),
                     )
                   ],
