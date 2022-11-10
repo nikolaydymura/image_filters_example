@@ -27,7 +27,7 @@ jobs:
           flutter-version: '3.3.4'
           channel: 'stable'
       - run: |
-          flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --verbose
+          flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
         name: Building application
       - uses: actions/upload-artifact@v3
         name: Archive production artifacts
@@ -61,14 +61,14 @@ jobs:
           security unlock-keychain -p "" ~/Library/Keychains/flutter-build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/flutter-build.keychain
           
-          flutter build ipa --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --export-options-plist=ios/app-ios-export.plist  --verbose
+          flutter build ipa --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --export-options-plist=ios/app-ios-export.plist
         name: Building application
       - uses: actions/upload-artifact@v3
         name: Archive production artifacts
         with:
           name: ios-app-1.0.0-${{github.run_number}}-${{github.sha}}
           path: |
-            build/ios/ipa/flutter_tour.ipa
+            build/ios/ipa/image-video-demo.ipa
           retention-days: 1
   deploy_apps:
     name: Upload all artifacts
@@ -92,4 +92,4 @@ jobs:
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: testers
-          file: ./artifacts/ios-app-1.0.0-${{github.run_number}}-${{github.sha}}/flutter_tour.ipa
+          file: ./artifacts/ios-app-1.0.0-${{github.run_number}}-${{github.sha}}/image-video-demo.ipa
