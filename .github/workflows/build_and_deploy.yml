@@ -1,0 +1,95 @@
+name: Build and Deploy Flutter application
+on: [ push ]
+jobs:
+  analyze_flutter_app:
+    name: Check Flutter sources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Downloading sources
+      - uses: subosito/flutter-action@v2
+        name: Preparing Flutter SDK
+        with:
+          flutter-version: '3.3.4'
+          channel: 'stable'
+      - run: flutter analyze
+        name: Analyzing sources
+  build_android_flutter_app:
+    name: Build Android application using Flutter
+    runs-on: ubuntu-latest
+    needs: [ analyze_flutter_app ]
+    steps:
+      - uses: actions/checkout@v3
+        name: Downloading sources
+      - uses: subosito/flutter-action@v2
+        name: Preparing Flutter SDK
+        with:
+          flutter-version: '3.3.4'
+          channel: 'stable'
+      - run: |
+          flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --verbose
+        name: Building application
+      - uses: actions/upload-artifact@v3
+        name: Archive production artifacts
+        with:
+          name: android-app-1.0.0-${{github.run_number}}-${{github.sha}}
+          path: |
+            build/app/outputs/apk/release/app-release.apk
+          retention-days: 1
+  build_ios_flutter_app:
+    name: Build iOS application using Flutter
+    runs-on: macos-latest
+    needs: [ analyze_flutter_app ]
+    steps:
+      - uses: actions/checkout@v3
+        name: Downloading sources
+      - uses: subosito/flutter-action@v2
+        name: Preparing Flutter SDK
+        with:
+          flutter-version: '3.3.4'
+          channel: 'stable'
+      - run: |
+          ./generate_ios_plist.sh
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp ios/fluttertourdev.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          
+          security create-keychain -p "" flutter-build.keychain
+          security import ios/flutter-tour.p12 -t agg -k ~/Library/Keychains/flutter-build.keychain -P "098qwe!@#" -A
+          
+          security list-keychains -s ~/Library/Keychains/flutter-build.keychain
+          security default-keychain -s ~/Library/Keychains/flutter-build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/flutter-build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/flutter-build.keychain
+          
+          flutter build ipa --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --export-options-plist=ios/app-ios-export.plist  --verbose
+        name: Building application
+      - uses: actions/upload-artifact@v3
+        name: Archive production artifacts
+        with:
+          name: ios-app-1.0.0-${{github.run_number}}-${{github.sha}}
+          path: |
+            build/ios/ipa/flutter_tour.ipa
+          retention-days: 1
+  deploy_apps:
+    name: Upload all artifacts
+    runs-on: ubuntu-latest
+    needs: [build_ios_flutter_app, build_android_flutter_app]
+    steps:
+      - uses: actions/download-artifact@v3
+        name: Download all workflow run artifacts
+        with:
+          path: ./artifacts
+      - uses: wzieba/Firebase-Distribution-Github-Action@v1
+        name: Uploading Android production artifact to Firebase App Distribution
+        with:
+          appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: testers
+          file: ./artifacts/android-app-1.0.0-${{github.run_number}}-${{github.sha}}/app-release.apk
+      - uses: wzieba/Firebase-Distribution-Github-Action@v1
+        name: Uploading iOS production artifact to Firebase App Distribution
+        with:
+          appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: testers
+          file: ./artifacts/ios-app-1.0.0-${{github.run_number}}-${{github.sha}}/flutter_tour.ipa
