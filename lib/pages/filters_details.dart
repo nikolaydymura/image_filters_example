@@ -6,6 +6,8 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:image/image.dart' as img;
 
+import '../widgets/slider_number_parameter.dart';
+
 class FilterDetailsScreen extends StatefulWidget {
   final String filterName;
 
@@ -72,32 +74,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                   ],
                 );
               } else if (e is SliderNumberParameter) {
-                return Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text(
-                        e.displayName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Slider(
-                        value: e.value.toDouble(),
-                        max: e.max?.toDouble() ?? double.infinity,
-                        min: e.min?.toDouble() ?? double.minPositive,
-                        onChanged: (double value) {
-                          setState(() {
-                            e.value = value;
-                          });
-                        },
-                      ),
-                    )
-                  ],
+                return SliderNumberParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
                 );
               } else if (e is NumberParameter) {
                 return Row(
@@ -130,24 +113,31 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               return const Offstage();
             }),
             Expanded(
-              child: BeforeAfter(
-                beforeImage: Image.asset('images/test.jpg'),
-                afterImage: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.61,
-                  child: FutureBuilder(
-                    future: _textures,
-                    builder: (context, snapshot) {
-                      final data = snapshot.data;
-                      if (snapshot.hasData && data != null) {
-                        return ImageShaderPreview(
+              child: FutureBuilder(
+                future: _textures,
+                builder: (context, snapshot) {
+                  final data = snapshot.data;
+                  if (snapshot.hasData && data != null) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.61,
+                      child: BeforeAfter(
+                        thumbRadius: 0.0,
+                        thumbColor: Colors.transparent,
+                        beforeImage: ImageShaderPreview(
+                          textures: [data.whereType<TextureSource>().first],
+                          configuration: NoneShaderConfiguration(),
+                        ),
+                        afterImage: ImageShaderPreview(
                           textures: data.whereType<TextureSource>(),
                           configuration: configuration,
-                        );
-                      }
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  ),
-                ),
+                        ),
+                      ),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ],

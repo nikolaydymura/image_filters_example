@@ -15,7 +15,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter filters example',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
+        sliderTheme: const SliderThemeData(
+          showValueIndicator: ShowValueIndicator.always,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          isCollapsed: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
       ),
       home: const FiltersListScreen(),
     );
