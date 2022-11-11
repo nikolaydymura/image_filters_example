@@ -39,8 +39,10 @@ dependencies:
   image_filters:
     #path: ../
     git: https://github.com/nikolaydymura/image_filters
+
   path_provider: ^2.0.11
   image: ^3.2.2
+  before_after_image_slider_nullsafty: ^1.0.1
 
 dev_dependencies:
   flutter_test:
