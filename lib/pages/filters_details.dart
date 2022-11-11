@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:image/image.dart' as img;
 
+import '../widgets/number_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
@@ -83,35 +84,21 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                   },
                 );
               } else if (e is NumberParameter) {
-                return Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text(
-                        e.displayName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        onSubmitted: (value) => setState(() {
-                          e.value = double.parse(value);
-                        }),
-                        keyboardType: TextInputType.number,
-                        controller: numController.text.isNotEmpty
-                            ? numController
-                            : TextEditingController(text: e.value.toString()),
-                      ),
-                    )
-                  ],
+                return NumberParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                  controller: numController,
                 );
               }
               return const Offstage();
             }),
+            const SizedBox(
+              height: 8.0,
+            ),
             Expanded(
               child: FutureBuilder(
                 future: _textures,
