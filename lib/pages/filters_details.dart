@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:image/image.dart' as img;
 
+import '../widgets/color_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
@@ -52,26 +53,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               if (e is ColorParameter) {
                 //e.value = Colors.blue;
                 //e.update(configuration);
-                return Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text(
-                        e.displayName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller:
-                            TextEditingController(text: e.value.toString()),
-                      ),
-                    )
-                  ],
+                return ColorParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
                 );
               } else if (e is SliderNumberParameter) {
                 return SliderNumberParameterWidget(
