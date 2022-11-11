@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
 import 'package:image_filters/image_filters.dart';
 import 'package:path_provider/path_provider.dart';
@@ -112,18 +113,24 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               return const Offstage();
             }),
             Expanded(
-              child: FutureBuilder(
-                future: _textures,
-                builder: (context, snapshot) {
-                  final data = snapshot.data;
-                  if (snapshot.hasData && data != null) {
-                    return ImageShaderPreview(
-                      textures: data.whereType<TextureSource>(),
-                      configuration: configuration,
-                    );
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
+              child: BeforeAfter(
+                beforeImage: Image.asset('images/test.jpg'),
+                afterImage: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.61,
+                  child: FutureBuilder(
+                    future: _textures,
+                    builder: (context, snapshot) {
+                      final data = snapshot.data;
+                      if (snapshot.hasData && data != null) {
+                        return ImageShaderPreview(
+                          textures: data.whereType<TextureSource>(),
+                          configuration: configuration,
+                        );
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                ),
               ),
             ),
           ],
