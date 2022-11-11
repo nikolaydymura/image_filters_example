@@ -43,6 +43,7 @@ dependencies:
   path_provider: ^2.0.11
   image: ^3.2.2
   before_after_image_slider_nullsafty: ^1.0.1
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:
