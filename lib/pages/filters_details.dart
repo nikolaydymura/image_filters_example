@@ -8,6 +8,7 @@ import 'package:image/image.dart' as img;
 
 import '../widgets/color_parameter.dart';
 import '../widgets/number_parameter.dart';
+import '../widgets/size_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
@@ -21,6 +22,8 @@ class FilterDetailsScreen extends StatefulWidget {
 
 class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   TextEditingController numController = TextEditingController();
+  TextEditingController xController = TextEditingController();
+  TextEditingController yController = TextEditingController();
   late final ShaderConfiguration configuration;
 
   @override
@@ -80,6 +83,17 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                     });
                   },
                   controller: numController,
+                );
+              } else if (e is SizeParameter) {
+                return SizeParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                  widthController: xController,
+                  heightController: yController,
                 );
               }
               return const Offstage();
