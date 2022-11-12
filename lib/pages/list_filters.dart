@@ -19,18 +19,17 @@ class FiltersListScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 8,
-          ),
+        child: ListView.builder(
           itemBuilder: (context, index) {
             final item = _items[index];
 
-            return Container(
-              color: Colors.greenAccent.withAlpha(120),
+            return Card(
               child: ListTile(
                 title: Text(item),
-                trailing: const Icon(Icons.navigate_next),
+                trailing: Icon(
+                  Icons.navigate_next,
+                  color: Theme.of(context).primaryColor,
+                ),
                 onTap: () {
                   Navigator.push(
                     context,

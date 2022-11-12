@@ -21,10 +21,12 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           isCollapsed: true,
+          contentPadding: const EdgeInsets.all(12.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
+        cardColor: Colors.deepPurple[200],
       ),
       home: const FiltersListScreen(),
     );
