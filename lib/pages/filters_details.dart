@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
 
 import '../widgets/color_parameter.dart';
+import '../widgets/dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/size_parameter.dart';
 import '../widgets/point_parameter.dart';
@@ -35,12 +36,16 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
       this.configuration = configuration;
     }
     numController;
+    xController;
+    yController;
   }
 
   @override
   void dispose() {
     super.dispose();
     numController.dispose();
+    xController.dispose();
+    yController.dispose();
   }
 
   @override
@@ -110,6 +115,8 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               }
               return const Offstage();
             }),
+            if (configuration is LookupTableShaderConfiguration)
+              const DropdownButtonWidget(),
             const SizedBox(
               height: 8.0,
             ),
@@ -120,7 +127,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                   final data = snapshot.data;
                   if (snapshot.hasData && data != null) {
                     return SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.61,
+                      height: MediaQuery.of(context).size.height * 0.60,
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
@@ -157,6 +164,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     final textures = <TextureSource>[];
     final source = await TextureSource.fromAsset('images/test.jpg');
     textures.add(source);
+
     if (configuration is LookupTableShaderConfiguration) {
       final lut = await TextureSource.fromAsset('lut/filter_lut_1.png');
       textures.add(lut);
