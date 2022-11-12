@@ -25,7 +25,6 @@ class DropdownButtonWidget extends StatefulWidget {
 
 class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
   String dropdownValue = luts.first;
-  ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
