@@ -8,6 +8,7 @@ import 'package:image/image.dart' as img;
 
 import '../widgets/color_parameter.dart';
 import '../widgets/number_parameter.dart';
+import '../widgets/size_parameter.dart';
 import '../widgets/point_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
@@ -94,6 +95,17 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                   },
                   xController: xController,
                   yController: yController,
+                );
+              } else if (e is SizeParameter) {
+                return SizeParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                  widthController: xController,
+                  heightController: yController,
                 );
               }
               return const Offstage();
