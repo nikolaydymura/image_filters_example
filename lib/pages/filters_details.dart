@@ -9,6 +9,7 @@ import 'package:image/image.dart' as img;
 import '../widgets/color_parameter.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/size_parameter.dart';
+import '../widgets/point_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
@@ -83,6 +84,17 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                     });
                   },
                   controller: numController,
+                );
+              } else if (e is PointParameter) {
+                return PointParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                  xController: xController,
+                  yController: yController,
                 );
               } else if (e is SizeParameter) {
                 return SizeParameterWidget(
