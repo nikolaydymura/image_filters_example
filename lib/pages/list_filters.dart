@@ -1,9 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
-import 'package:flutter_core_image_filters/flutter_core_image_filters.dart' as cif;
+import 'package:flutter_core_image_filters/flutter_core_image_filters.dart'
+    as cif;
 
+import '../blocs/source_image_bloc/source_image_bloc.dart';
 import 'ci_filter_details.dart';
 import 'filters_details.dart';
 
@@ -39,7 +42,15 @@ class FiltersListScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         if (imf.availableShaders.containsKey(item)) {
-                          return FilterDetailsScreen(filterName: item);
+                          final configuration =
+                              imf.availableShaders[item]!.call();
+                          return BlocProvider(
+                            create: (context) => Image1Bloc(configuration),
+                            child: FilterDetailsScreen(
+                              filterName: item,
+                              filterConfiguration: configuration,
+                            ),
+                          );
                         }
                         return CIFilterDetailsPage(filterName: item);
                       },
