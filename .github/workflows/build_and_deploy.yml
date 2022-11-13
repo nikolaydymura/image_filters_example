@@ -27,16 +27,19 @@ jobs:
         name: Downloading sources
       - uses: actions/checkout@v3
         name: Downloading Core Image sources
-        repository: nikolaydymura/flutter_core_image_filters
-        path: gpu_flutter_dependencies/flutter_core_image_filters
+        with:
+          repository: nikolaydymura/flutter_core_image_filters
+          path: gpu_flutter_dependencies/flutter_core_image_filters
       - uses: actions/checkout@v3
         name: Downloading GPU Video sources
-        repository: nikolaydymura/flutter_gpu_video_filters
-        path: gpu_flutter_dependencies/flutter_gpu_video_filters
+        with:
+          repository: nikolaydymura/flutter_gpu_video_filters
+          path: gpu_flutter_dependencies/flutter_gpu_video_filters
       - uses: actions/checkout@v3
         name: Downloading Image Filters sources
-        repository: nikolaydymura/flutter_image_filters
-        path: gpu_flutter_dependencies/flutter_image_filters
+        with:
+          repository: nikolaydymura/flutter_image_filters
+          path: gpu_flutter_dependencies/flutter_image_filters
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
@@ -62,16 +65,19 @@ jobs:
         name: Downloading sources
       - uses: actions/checkout@v3
         name: Downloading Core Image sources
-        repository: nikolaydymura/flutter_core_image_filters
-        path: gpu_flutter_dependencies/flutter_core_image_filters
+        with:
+          repository: nikolaydymura/flutter_core_image_filters
+          path: gpu_flutter_dependencies/flutter_core_image_filters
       - uses: actions/checkout@v3
         name: Downloading GPU Video sources
-        repository: nikolaydymura/flutter_gpu_video_filters
-        path: gpu_flutter_dependencies/flutter_gpu_video_filters
+        with:
+          repository: nikolaydymura/flutter_gpu_video_filters
+          path: gpu_flutter_dependencies/flutter_gpu_video_filters
       - uses: actions/checkout@v3
         name: Downloading Image Filters sources
-        repository: nikolaydymura/flutter_image_filters
-        path: gpu_flutter_dependencies/flutter_image_filters
+        with:
+          repository: nikolaydymura/flutter_image_filters
+          path: gpu_flutter_dependencies/flutter_image_filters
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
