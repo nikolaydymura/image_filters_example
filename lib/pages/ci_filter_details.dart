@@ -1,37 +1,33 @@
-import 'dart:io';
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
+import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
-import 'package:path_provider/path_provider.dart';
-
-import 'package:image/image.dart' as img;
 
 import '../widgets/color_parameter.dart';
 import '../widgets/number_parameter.dart';
-import '../widgets/size_parameter.dart';
 import '../widgets/point_parameter.dart';
+import '../widgets/size_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
-class FilterDetailsScreen extends StatefulWidget {
+class CIFilterDetailsPage extends StatefulWidget {
   final String filterName;
 
-  const FilterDetailsScreen({super.key, required this.filterName});
+  const CIFilterDetailsPage({super.key, required this.filterName});
 
   @override
-  State<FilterDetailsScreen> createState() => _FilterDetailsScreenState();
+  State<CIFilterDetailsPage> createState() => _CIFilterDetailsPageState();
 }
 
-class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
+class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   TextEditingController numController = TextEditingController();
   TextEditingController xController = TextEditingController();
   TextEditingController yController = TextEditingController();
-  late final ShaderConfiguration configuration;
+  late final CIFilterConfiguration configuration;
 
   @override
   void initState() {
     super.initState();
-    final configuration = availableShaders[widget.filterName]?.call();
+    final configuration = availableFilters[widget.filterName]?.call();
     if (configuration != null) {
       this.configuration = configuration;
     }
@@ -115,23 +111,16 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: _textures,
+                future: configuration.prepare(),
                 builder: (context, snapshot) {
-                  final data = snapshot.data;
-                  if (snapshot.hasData && data != null) {
+                  if (snapshot.connectionState == ConnectionState.done) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.61,
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
-                        beforeImage: ImageShaderPreview(
-                          textures: [data.whereType<TextureSource>().first],
-                          configuration: NoneShaderConfiguration(),
-                        ),
-                        afterImage: ImageShaderPreview(
-                          textures: data.whereType<TextureSource>(),
-                          configuration: configuration,
-                        ),
+                        beforeImage: Image.asset('images/test.jpg'),
+                        afterImage: CIImagePreview(configuration: configuration,),
                       ),
                     );
                   }
@@ -153,45 +142,5 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     );
   }
 
-  Future<Iterable<TextureSource>> get _textures async {
-    final textures = <TextureSource>[];
-    final source = await TextureSource.fromAsset('images/test.jpg');
-    textures.add(source);
-    if (configuration is LookupTableShaderConfiguration) {
-      final lut = await TextureSource.fromAsset('lut/filter_lut_1.png');
-      textures.add(lut);
-    }
-    return textures;
-  }
-
-  Future<void> _exportImage() async {
-    const asset = 'images/test.jpg';
-    final texture = await TextureSource.fromAsset(asset);
-    final directory = await getTemporaryDirectory();
-    final output =
-        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
-    final watch = Stopwatch();
-    watch.start();
-    final image = await configuration.exportImage(
-      [texture],
-      Size(texture.width.toDouble(), texture.height.toDouble()),
-    );
-    final bytes = await image.toByteData();
-    debugPrint(
-      'Exporting image took ${watch.elapsedMilliseconds} milliseconds',
-    );
-    if (bytes == null) {
-      throw UnsupportedError('Failed to extract bytes for image');
-    }
-    final image1 = img.Image.fromBytes(
-      image.width,
-      image.height,
-      bytes.buffer.asUint8List(),
-    );
-    img.JpegEncoder encoder = img.JpegEncoder();
-    final data = encoder.encodeImage(image1);
-    await output.writeAsBytes(data);
-    debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
-    debugPrint('Exported: ${output.absolute}');
-  }
+  Future<void> _exportImage() async {}
 }
