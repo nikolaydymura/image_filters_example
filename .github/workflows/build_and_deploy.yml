@@ -16,6 +16,7 @@ jobs:
           flutter-version: '3.3.4'
           channel: 'stable'
       - run: flutter analyze
+        continue-on-error: true
         name: Analyzing sources
   build_android_flutter_app:
     name: Build Android application using Flutter
