@@ -31,7 +31,7 @@ jobs:
           flutter-version: '3.3.4'
           channel: 'stable'
       - run: |
-          sed -i '' -E 's/path: \.\.\/(.*)/git: https:\/\/github.com\/nikolaydymura\/\1/g' pubspec.yaml
+          sed -E 's/path: \.\.\/(.*)/git: https:\/\/github.com\/nikolaydymura\/\1/g' pubspec.yaml
           flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
         name: Building application
       - uses: actions/upload-artifact@v3
