@@ -25,13 +25,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Downloading sources
+      - uses: actions/checkout@v3
+        name: Downloading Core Image sources
+        repository: nikolaydymura/flutter_core_image_filters
+        path: gpu_flutter_dependencies/flutter_core_image_filters
+      - uses: actions/checkout@v3
+        name: Downloading GPU Video sources
+        repository: nikolaydymura/flutter_gpu_video_filters
+        path: gpu_flutter_dependencies/flutter_gpu_video_filters
+      - uses: actions/checkout@v3
+        name: Downloading Image Filters sources
+        repository: nikolaydymura/flutter_image_filters
+        path: gpu_flutter_dependencies/flutter_image_filters
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
           flutter-version: '3.3.4'
           channel: 'stable'
       - run: |
-          sed -i -E 's/path: \.\.\/(.*)/git: https:\/\/github.com\/nikolaydymura\/\1/g' pubspec.yaml
+          sed -i -E 's/\.\./gpu_flutter_dependencies/g' pubspec.yaml
           flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
         name: Building application
       - uses: actions/upload-artifact@v3
@@ -48,6 +60,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Downloading sources
+      - uses: actions/checkout@v3
+        name: Downloading Core Image sources
+        repository: nikolaydymura/flutter_core_image_filters
+        path: gpu_flutter_dependencies/flutter_core_image_filters
+      - uses: actions/checkout@v3
+        name: Downloading GPU Video sources
+        repository: nikolaydymura/flutter_gpu_video_filters
+        path: gpu_flutter_dependencies/flutter_gpu_video_filters
+      - uses: actions/checkout@v3
+        name: Downloading Image Filters sources
+        repository: nikolaydymura/flutter_image_filters
+        path: gpu_flutter_dependencies/flutter_image_filters
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
@@ -66,7 +90,7 @@ jobs:
           security unlock-keychain -p "" ~/Library/Keychains/flutter-build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/flutter-build.keychain
           
-          sed -i '' -E 's/path: \.\.\/(.*)/git: https:\/\/github.com\/nikolaydymura\/\1/g' pubspec.yaml
+          sed -i '' -E 's/\.\./gpu_flutter_dependencies/g' pubspec.yaml
           flutter build ipa --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --export-options-plist=ios/app-ios-export.plist
         name: Building application
       - uses: actions/upload-artifact@v3
