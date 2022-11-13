@@ -30,16 +30,19 @@ jobs:
         with:
           repository: nikolaydymura/flutter_core_image_filters
           path: gpu_flutter_dependencies/flutter_core_image_filters
+          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         name: Downloading GPU Video sources
         with:
           repository: nikolaydymura/flutter_gpu_video_filters
           path: gpu_flutter_dependencies/flutter_gpu_video_filters
+          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         name: Downloading Image Filters sources
         with:
           repository: nikolaydymura/flutter_image_filters
           path: gpu_flutter_dependencies/flutter_image_filters
+          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
@@ -68,16 +71,19 @@ jobs:
         with:
           repository: nikolaydymura/flutter_core_image_filters
           path: gpu_flutter_dependencies/flutter_core_image_filters
+          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         name: Downloading GPU Video sources
         with:
           repository: nikolaydymura/flutter_gpu_video_filters
           path: gpu_flutter_dependencies/flutter_gpu_video_filters
+          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         name: Downloading Image Filters sources
         with:
           repository: nikolaydymura/flutter_image_filters
           path: gpu_flutter_dependencies/flutter_image_filters
+          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
