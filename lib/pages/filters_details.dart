@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
-import 'package:image_filters/image_filters.dart';
+import 'package:flutter_image_filters/flutter_image_filters.dart';
+import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:image/image.dart' as img;
@@ -51,10 +52,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     if (configuration != null) {
       this.configuration = configuration;
     }
-    numController;
-    xController;
-    yController;
-    dropdownValue;
   }
 
   @override
@@ -88,7 +85,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                     });
                   },
                 );
-              } else if (e is SliderNumberParameter) {
+              } else if (e is RangeNumberParameter) {
                 return SliderNumberParameterWidget(
                   parameter: e,
                   onChanged: () {

@@ -1,15 +1,18 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:image_filters/image_filters.dart';
+import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
+import 'package:flutter_core_image_filters/flutter_core_image_filters.dart' as cif;
 
+import 'ci_filter_details.dart';
 import 'filters_details.dart';
 
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
 
-  List<String> get _items =>
-      SplayTreeSet<String>.from(availableShaders.keys).toList();
+  List<String> get _items => SplayTreeSet<String>.from(
+        [...imf.availableShaders.keys, ...cif.availableFilters.keys],
+      ).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,12 @@ class FiltersListScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          FilterDetailsScreen(filterName: item),
+                      builder: (context) {
+                        if (imf.availableShaders.containsKey(item)) {
+                          return FilterDetailsScreen(filterName: item);
+                        }
+                        return CIFilterDetailsPage(filterName: item);
+                      },
                     ),
                   );
                 },

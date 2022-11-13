@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_filters/image_filters.dart';
+import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 
 class NumberParameterWidget extends StatelessWidget {
   final NumberParameter parameter;
