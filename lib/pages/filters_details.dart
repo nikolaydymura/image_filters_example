@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:image/image.dart' as img;
 
+import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/color_parameter.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/size_parameter.dart';
@@ -15,43 +17,30 @@ import '../widgets/slider_number_parameter.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
   final String filterName;
+  final ShaderConfiguration filterConfiguration;
 
-  const FilterDetailsScreen({super.key, required this.filterName});
+  const FilterDetailsScreen({
+    super.key,
+    required this.filterName,
+    required this.filterConfiguration,
+  });
 
   @override
   State<FilterDetailsScreen> createState() => _FilterDetailsScreenState();
 }
 
 class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
-  TextEditingController numController = TextEditingController();
-  TextEditingController xController = TextEditingController();
-  TextEditingController yController = TextEditingController();
-  late final ShaderConfiguration configuration;
+  late final TextEditingController numController = TextEditingController();
+  late final TextEditingController xController = TextEditingController();
+  late final TextEditingController yController = TextEditingController();
 
-  final List<String> luts = [
-    'lut/filter_lut_1.png',
-    'lut/filter_lut_2.png',
-    'lut/filter_lut_3.png',
-    'lut/filter_lut_4.png',
-    'lut/filter_lut_5.png',
-    'lut/filter_lut_6.png',
-    'lut/filter_lut_7.png',
-    'lut/filter_lut_8.png',
-    'lut/filter_lut_9.png',
-    'lut/filter_lut_10.png',
-    'lut/filter_lut_11.png',
-    'lut/filter_lut_12.png',
-    'lut/filter_lut_13.png',
-  ];
-  String dropdownValue = 'lut/filter_lut_1.png';
+  ShaderConfiguration get configuration => widget.filterConfiguration;
+
+  bool get displayParameters => configuration is LookupTableShaderConfiguration;
 
   @override
   void initState() {
     super.initState();
-    final configuration = availableShaders[widget.filterName]?.call();
-    if (configuration != null) {
-      this.configuration = configuration;
-    }
   }
 
   @override
@@ -75,8 +64,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
           children: <Widget>[
             ...configuration.parameters.map((e) {
               if (e is ColorParameter) {
-                //e.value = Colors.blue;
-                //e.update(configuration);
                 return ColorParameterWidget(
                   parameter: e,
                   onChanged: () {
@@ -129,70 +116,51 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               }
               return const Offstage();
             }),
-            if (configuration is LookupTableShaderConfiguration)
-              DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 8,
-                style: TextStyle(color: Theme.of(context).primaryColor),
-                underline: Container(
-                  color: Theme.of(context).primaryColor,
-                ),
-                onChanged: (String? value) {
-                  if (value != null) {
-                    setState(() {
-                      dropdownValue = value;
-                    });
-                  }
-                },
-                items: luts.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(value),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                            child: Text(
-                              value.substring(4),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
+            BlocBuilder<Image1Bloc, SourceImageState>(
+              builder: (context, state) {
+                if (state is LUTSourceImage) {
+                  return _lutDropDown(context, state.selected);
+                } else if (state is LutSourceImageReady) {
+                  return _lutDropDown(context, state.selected);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
             const SizedBox(
               height: 8.0,
             ),
             Expanded(
-              child: FutureBuilder(
-                future: _textures,
-                builder: (context, snapshot) {
-                  final data = snapshot.data;
-                  if (snapshot.hasData && data != null) {
+              child: BlocBuilder<SourceImageBloc, SourceImageState>(
+                builder: (context, state) {
+                  if (state is SourceImageReady) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.60,
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
                         beforeImage: ImageShaderPreview(
-                          textures: [data.whereType<TextureSource>().first],
+                          textures: [state.textureSource],
                           configuration: NoneShaderConfiguration(),
                         ),
-                        afterImage: ImageShaderPreview(
-                          textures: data.whereType<TextureSource>(),
-                          configuration: configuration,
+                        afterImage: BlocBuilder<Image1Bloc, SourceImageState>(
+                          builder: (context, textureState) {
+                            if (textureState is SourceImageReady) {
+                              return ImageShaderPreview(
+                                textures: [
+                                  state.textureSource,
+                                  textureState.textureSource
+                                ],
+                                configuration: configuration,
+                              );
+                            } else if (textureState is ImageEmpty) {
+                              return ImageShaderPreview(
+                                textures: [state.textureSource],
+                                configuration: configuration,
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
                         ),
                       ),
                     );
@@ -215,16 +183,47 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     );
   }
 
-  Future<Iterable<TextureSource>> get _textures async {
-    final textures = <TextureSource>[];
-    final source = await TextureSource.fromAsset('images/test.jpg');
-    textures.add(source);
-
-    if (configuration is LookupTableShaderConfiguration) {
-      final lut = await TextureSource.fromAsset(dropdownValue);
-      textures.add(lut);
-    }
-    return textures;
+  Widget _lutDropDown(BuildContext context, Lut selected) {
+    return DropdownButton<Lut>(
+      value: selected,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 8,
+      style: TextStyle(color: Theme.of(context).primaryColor),
+      underline: Container(
+        color: Theme.of(context).primaryColor,
+      ),
+      onChanged: (Lut? value) {
+        if (value != null) {
+          context.read<Image1Bloc>().changeLut(value);
+        }
+      },
+      items: kLutImages.map<DropdownMenuItem<Lut>>((Lut value) {
+        return DropdownMenuItem<Lut>(
+          value: value,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(value.asset),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Text(
+                    value.asset.substring(4),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
   }
 
   Future<void> _exportImage() async {
