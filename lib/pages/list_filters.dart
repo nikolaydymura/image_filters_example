@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +14,18 @@ import 'filters_details.dart';
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
 
-  List<String> get _items => SplayTreeSet<String>.from(
-        [...imf.availableShaders.keys, ...cif.availableFilters.keys],
+  List<String> get _shaderItems => SplayTreeSet<String>.from(
+        [
+          ...imf.availableShaders.keys,
+        ],
+      ).toList();
+
+  List<String> get _ciFilterItems => SplayTreeSet<String>.from(
+        [...cif.availableFilters.keys],
+      ).toList();
+
+  List<String> get _gpuVideoFilterItems => SplayTreeSet<String>.from(
+        [],
       ).toList();
 
   @override
@@ -42,7 +53,7 @@ class FiltersListScreen extends StatelessWidget {
                     ),
                     child: const Align(
                       alignment: Alignment.center,
-                      child: Text('IMAGE'),
+                      child: Text('Image Shaders'),
                     ),
                   ),
                 ),
@@ -58,9 +69,9 @@ class FiltersListScreen extends StatelessWidget {
                         width: 1,
                       ),
                     ),
-                    child: const Align(
+                    child: Align(
                       alignment: Alignment.center,
-                      child: Text('VIDEO'),
+                      child: Text(Platform.isIOS ? 'CI Filters' : 'GPUVideo'),
                     ),
                   ),
                 ),
@@ -68,13 +79,13 @@ class FiltersListScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TabBarView(
+            children: [
+              ListView.builder(
                 itemBuilder: (context, index) {
-                  final item = _items[index];
+                  final item = _shaderItems[index];
 
                   return Card(
                     child: ListTile(
@@ -88,19 +99,19 @@ class FiltersListScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              if (imf.availableShaders.containsKey(item)) {
-                                final configuration =
-                                    imf.availableShaders[item]!.call();
-                                return BlocProvider(
-                                  create: (context) =>
-                                      Image1Cubit(configuration),
-                                  child: FilterDetailsScreen(
-                                    filterName: item,
-                                    filterConfiguration: configuration,
-                                  ),
-                                );
+                              final configuration =
+                              imf.availableShaders[item]?.call();
+                              if (configuration == null) {
+                                throw UnsupportedError('$item not supported');
                               }
-                              return CIFilterDetailsPage(filterName: item);
+                              return BlocProvider(
+                                create: (context) =>
+                                    Image1Cubit(configuration),
+                                child: FilterDetailsScreen(
+                                  filterName: item,
+                                  filterConfiguration: configuration,
+                                ),
+                              );
                             },
                           ),
                         );
@@ -108,18 +119,55 @@ class FiltersListScreen extends StatelessWidget {
                     ),
                   );
                 },
-                itemCount: _items.length,
+                itemCount: _shaderItems.length,
               ),
-            ),
-            const Center(
-              child: Text(
-                'Here are the video filters',
-                style: TextStyle(
-                  fontSize: 40,
+              if (Platform.isIOS)
+                ListView.builder(
+                  itemBuilder: (context, index) {
+                    final item = _ciFilterItems[index];
+
+                    return Card(
+                      child: ListTile(
+                        title: Text(item),
+                        trailing: Icon(
+                          Icons.navigate_next,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return CIFilterDetailsPage(filterName: item);
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  itemCount: _ciFilterItems.length,
                 ),
-              ),
-            )
-          ],
+              if (Platform.isAndroid)
+                ListView.builder(
+                  itemBuilder: (context, index) {
+                    final item = _gpuVideoFilterItems[index];
+
+                    return Card(
+                      child: ListTile(
+                        title: Text(item),
+                        trailing: Icon(
+                          Icons.navigate_next,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onTap: () {},
+                      ),
+                    );
+                  },
+                  itemCount: _gpuVideoFilterItems.length,
+                ),
+            ],
+          ),
         ),
       ),
     );

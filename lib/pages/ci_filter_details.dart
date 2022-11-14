@@ -23,6 +23,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   TextEditingController xController = TextEditingController();
   TextEditingController yController = TextEditingController();
   late final CIFilterConfiguration configuration;
+  late final CIImagePreviewController sourceController;
+  late final CIImagePreviewController destinationController;
+  var _controllersReady = false;
 
   @override
   void initState() {
@@ -31,12 +34,23 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     if (configuration != null) {
       this.configuration = configuration;
     }
+    _prepare().whenComplete(() => setState(() {}));
   }
 
   @override
   void dispose() {
     super.dispose();
     numController.dispose();
+  }
+
+  Future<void> _prepare() async {
+    sourceController =
+        await CIImagePreviewController.fromAsset('images/test.jpg');
+    destinationController =
+        await CIImagePreviewController.fromAsset('images/test.jpg');
+    await configuration.prepare();
+    await destinationController.update(configuration);
+    _controllersReady = true;
   }
 
   @override
@@ -105,25 +119,23 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
               height: 8.0,
             ),
             Expanded(
-              child: FutureBuilder(
-                future: configuration.prepare(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return SizedBox(
+              child: _controllersReady
+                  ? SizedBox(
                       height: MediaQuery.of(context).size.height * 0.61,
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
-                        beforeImage: Image.asset('images/test.jpg'),
-                        afterImage: CIImagePreview(configuration: configuration,),
+                        beforeImage: CIImagePreview(
+                          controller: sourceController,
+                        ),
+                        afterImage: CIImagePreview(
+                          controller: destinationController,
+                        ),
                       ),
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
           ],
         ),
