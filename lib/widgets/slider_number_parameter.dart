@@ -13,11 +13,12 @@ class SliderNumberParameterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             parameter.displayName,
             style: const TextStyle(
@@ -26,27 +27,32 @@ class SliderNumberParameterWidget extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Text(
-            parameter.value.toStringAsFixed(3),
-            style: const TextStyle(
-              fontSize: 16,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                parameter.value.toStringAsFixed(3),
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
             ),
-          ),
+            Expanded(
+              child: Slider(
+                label: parameter.value.toDouble().toStringAsFixed(3),
+                value: parameter.value.toDouble(),
+                max: parameter.max?.toDouble() ?? double.infinity,
+                min: parameter.min?.toDouble() ?? double.minPositive,
+                onChanged: (value) {
+                  parameter.value = value;
+                  onChanged.call();
+                },
+              ),
+            )
+          ],
         ),
-        Expanded(
-          child: Slider(
-            label: parameter.value.toDouble().toStringAsFixed(3),
-            value: parameter.value.toDouble(),
-            max: parameter.max?.toDouble() ?? double.infinity,
-            min: parameter.min?.toDouble() ?? double.minPositive,
-            onChanged: (value) {
-              parameter.value = value;
-              onChanged.call();
-            },
-          ),
-        )
       ],
     );
   }

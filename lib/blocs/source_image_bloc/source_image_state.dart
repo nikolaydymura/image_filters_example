@@ -22,7 +22,7 @@ abstract class SourceImageState extends Equatable {
 
 class SourceImageInitial extends SourceImageState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class SourceImageReady extends SourceImageState {
@@ -33,7 +33,7 @@ class SourceImageReady extends SourceImageState {
   const SourceImageReady(this.textureSource, this.path, this.asset);
 
   @override
-  List<Object> get props => [path, asset];
+  List<Object?> get props => [path, asset];
 }
 
 class ImageEmpty extends SourceImageState {
@@ -41,11 +41,22 @@ class ImageEmpty extends SourceImageState {
   List<Object?> get props => [];
 }
 
-class LUTSourceImage extends SourceImageState {
-  final Lut selected;
+abstract class AdditionalSourceImageState<T extends ExternalImageTexture> extends SourceImageState {
+  final T selected;
+
+  List<T> get items;
+
+  const AdditionalSourceImageState(this.selected);
+
+}
+
+class LUTSourceImage extends AdditionalSourceImageState<Lut> {
   static Lut lastSelected = kLutImages.first;
 
-  LUTSourceImage(this.selected) {
+  @override
+  List<Lut> get items => kLutImages;
+
+  LUTSourceImage(super.selected) {
     lastSelected = selected;
   }
 
@@ -53,19 +64,22 @@ class LUTSourceImage extends SourceImageState {
   List<Object?> get props => [selected];
 }
 
-class LutSourceImageReady extends SourceImageReady {
-  final Lut selected;
+class LutSourceImageReady extends AdditionalSourceImageState<Lut>
+    implements SourceImageReady {
+  @override
+  final TextureSource textureSource;
 
-  LutSourceImageReady(this.selected, TextureSource textureSource)
-      : super(textureSource, selected.asset, true);
+  const LutSourceImageReady(super.selected, this.textureSource);
 
-}
+  @override
+  bool get asset => true;
 
-class Lut {
-  final String asset;
-  final int size;
-  final int rows;
-  final int columns;
+  @override
+  List<Lut> get items => kLutImages;
 
-  const Lut(this.asset, this.size, this.rows, this.columns);
+  @override
+  String get path => selected.asset;
+
+  @override
+  List<Object?> get props => [selected];
 }

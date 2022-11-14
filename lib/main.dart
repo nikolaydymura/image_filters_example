@@ -8,8 +8,8 @@ void main() {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<SourceImageBloc>(
-          create: (context) => SourceImageBloc(),
+        BlocProvider<SourceImageCubit>(
+          create: (context) => SourceImageCubit(),
         ),
       ],
       child: const MyApp(),

@@ -45,7 +45,7 @@ class FiltersListScreen extends StatelessWidget {
                           final configuration =
                               imf.availableShaders[item]!.call();
                           return BlocProvider(
-                            create: (context) => Image1Bloc(configuration),
+                            create: (context) => Image1Cubit(configuration),
                             child: FilterDetailsScreen(
                               filterName: item,
                               filterConfiguration: configuration,

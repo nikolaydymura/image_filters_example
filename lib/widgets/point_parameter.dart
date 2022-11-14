@@ -6,26 +6,21 @@ import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart
 class PointParameterWidget extends StatelessWidget {
   final PointParameter parameter;
   final VoidCallback onChanged;
-  final TextEditingController xController;
-  final TextEditingController yController;
 
   const PointParameterWidget({
     Key? key,
     required this.parameter,
     required this.onChanged,
-    required this.xController,
-    required this.yController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double xPoint = parameter.value.x;
-    double yPoint = parameter.value.y;
-    return Row(
-      mainAxisSize: MainAxisSize.max,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             parameter.displayName,
             style: const TextStyle(
@@ -34,38 +29,85 @@ class PointParameterWidget extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: TextField(
-            onChanged: (value) {
-              xPoint = double.parse(value);
-            },
-            keyboardType: TextInputType.number,
-            controller: xController.text.isNotEmpty
-                ? xController
-                : TextEditingController(text: parameter.value.x.toString()),
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      parameter.value -= const Point<double>(0.05, 0.0);
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_downward,
+                    ),
+                  ),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      parameter.value += const Point<double>(0.05, 0.0);
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_upward,
+                    ),
+                  ),
+                ),
+                onSubmitted: (inputValue) {
+                  final value = double.tryParse(inputValue);
+                  if (value != null) {
+                    parameter.value = Point<double>(value, parameter.value.y);
+                    onChanged.call();
+                  }
+                },
+                keyboardType: TextInputType.number,
+                controller: TextEditingController(
+                  text: parameter.value.x.toStringAsFixed(3),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      parameter.value -= const Point<double>(0.00, 0.05);
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_downward,
+                    ),
+                  ),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      parameter.value += const Point<double>(0.0, 0.05);
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_upward,
+                    ),
+                  ),
+                ),
+                onSubmitted: (inputValue) {
+                  final value = double.tryParse(inputValue);
+                  if (value != null) {
+                    parameter.value = Point<double>(parameter.value.x, value);
+                    onChanged.call();
+                  }
+                },
+                keyboardType: TextInputType.number,
+                controller: TextEditingController(
+                  text: parameter.value.y.toStringAsFixed(3),
+                ),
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: TextField(
-            onChanged: (value) {
-              yPoint = double.parse(value);
-            },
-            keyboardType: TextInputType.number,
-            controller: yController.text.isNotEmpty
-                ? yController
-                : TextEditingController(text: parameter.value.y.toString()),
-          ),
-        ),
-        TextButton(
-          onPressed: () => _setPoint(xPoint, yPoint),
-          child: const Text('APPLY'),
-        )
       ],
     );
-  }
-
-  void _setPoint(double xPoint, double yPoint) {
-    parameter.value = Point(xPoint, yPoint);
-    onChanged.call();
   }
 }

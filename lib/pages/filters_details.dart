@@ -9,7 +9,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
 
 import '../blocs/source_image_bloc/source_image_bloc.dart';
+import '../models/lut.dart';
 import '../widgets/color_parameter.dart';
+import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/size_parameter.dart';
 import '../widgets/point_parameter.dart';
@@ -30,10 +32,6 @@ class FilterDetailsScreen extends StatefulWidget {
 }
 
 class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
-  late final TextEditingController numController = TextEditingController();
-  late final TextEditingController xController = TextEditingController();
-  late final TextEditingController yController = TextEditingController();
-
   ShaderConfiguration get configuration => widget.filterConfiguration;
 
   bool get displayParameters => configuration is LookupTableShaderConfiguration;
@@ -46,16 +44,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   @override
   void dispose() {
     super.dispose();
-    numController.dispose();
-    xController.dispose();
-    yController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preview'),
+        title: Text(widget.filterName),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -89,7 +84,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                       e.update(configuration);
                     });
                   },
-                  controller: numController,
                 );
               } else if (e is PointParameter) {
                 return PointParameterWidget(
@@ -99,8 +93,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                       e.update(configuration);
                     });
                   },
-                  xController: xController,
-                  yController: yController,
                 );
               } else if (e is SizeParameter) {
                 return SizeParameterWidget(
@@ -110,18 +102,26 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                       e.update(configuration);
                     });
                   },
-                  widthController: xController,
-                  heightController: yController,
                 );
               }
               return const Offstage();
             }),
-            BlocBuilder<Image1Bloc, SourceImageState>(
+            BlocSelector<Image1Cubit, SourceImageState,
+                AdditionalSourceImageState<Lut>?>(
+              selector: (state) {
+                if (state is AdditionalSourceImageState<Lut>) {
+                  return state;
+                }
+                return null;
+              },
               builder: (context, state) {
-                if (state is LUTSourceImage) {
-                  return _lutDropDown(context, state.selected);
-                } else if (state is LutSourceImageReady) {
-                  return _lutDropDown(context, state.selected);
+                if (state != null) {
+                  return ImageDropdownButtonWidget(
+                    state: state,
+                    onChanged: (value) {
+                      context.read<Image1Cubit>().changeImage(value);
+                    },
+                  );
                 }
                 return const SizedBox.shrink();
               },
@@ -130,7 +130,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               height: 8.0,
             ),
             Expanded(
-              child: BlocBuilder<SourceImageBloc, SourceImageState>(
+              child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
                   if (state is SourceImageReady) {
                     return SizedBox(
@@ -142,7 +142,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                           textures: [state.textureSource],
                           configuration: NoneShaderConfiguration(),
                         ),
-                        afterImage: BlocBuilder<Image1Bloc, SourceImageState>(
+                        afterImage: BlocBuilder<Image1Cubit, SourceImageState>(
                           builder: (context, textureState) {
                             if (textureState is SourceImageReady) {
                               return ImageShaderPreview(
@@ -180,49 +180,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
         },
         child: const Icon(Icons.save),
       ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  Widget _lutDropDown(BuildContext context, Lut selected) {
-    return DropdownButton<Lut>(
-      value: selected,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 8,
-      style: TextStyle(color: Theme.of(context).primaryColor),
-      underline: Container(
-        color: Theme.of(context).primaryColor,
-      ),
-      onChanged: (Lut? value) {
-        if (value != null) {
-          context.read<Image1Bloc>().changeLut(value);
-        }
-      },
-      items: kLutImages.map<DropdownMenuItem<Lut>>((Lut value) {
-        return DropdownMenuItem<Lut>(
-          value: value,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(value.asset),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: Text(
-                    value.asset.substring(4),
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
     );
   }
 

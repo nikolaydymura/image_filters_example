@@ -79,7 +79,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                       e.update(configuration);
                     });
                   },
-                  controller: numController,
                 );
               } else if (e is PointParameter) {
                 return PointParameterWidget(
@@ -89,8 +88,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                       e.update(configuration);
                     });
                   },
-                  xController: xController,
-                  yController: yController,
                 );
               } else if (e is SizeParameter) {
                 return SizeParameterWidget(
@@ -100,8 +97,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                       e.update(configuration);
                     });
                   },
-                  widthController: xController,
-                  heightController: yController,
                 );
               }
               return const Offstage();

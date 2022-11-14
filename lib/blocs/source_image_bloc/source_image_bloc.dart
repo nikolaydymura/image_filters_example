@@ -7,12 +7,13 @@ import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:rxdart/rxdart.dart';
 
-part 'source_image_event.dart';
+import '../../models/external_image_texture.dart';
+import '../../models/lut.dart';
 
 part 'source_image_state.dart';
 
-class SourceImageBloc extends Cubit<SourceImageState> {
-  SourceImageBloc() : super(SourceImageInitial());
+class SourceImageCubit extends Cubit<SourceImageState> {
+  SourceImageCubit() : super(SourceImageInitial());
 
   @override
   Stream<SourceImageState> get stream => super.stream.doOnListen(() {
@@ -32,18 +33,24 @@ class SourceImageBloc extends Cubit<SourceImageState> {
   }
 }
 
-class Image1Bloc extends SourceImageBloc {
-  Image1Bloc(FilterConfiguration configuration) {
+class Image1Cubit extends SourceImageCubit {
+  Image1Cubit(FilterConfiguration configuration) {
     if (configuration is LookupTableShaderConfiguration) {
-      changeLut(LUTSourceImage.lastSelected);
+      changeImage(LUTSourceImage.lastSelected);
     } else {
       emit(ImageEmpty());
     }
   }
 
-  void changeLut(Lut value) async {
-    emit(LUTSourceImage(value));
-    final texture = await TextureSource.fromAsset(value.asset);
-    emit(LutSourceImageReady(value, texture));
+  void changeImage(ExternalImageTexture value) async {
+    if (value is AssetExternalImageTexture) {
+      if (value is Lut) {
+        emit(LUTSourceImage(value));
+        final texture = await TextureSource.fromAsset(value.asset);
+        emit(LutSourceImageReady(value, texture));
+      }
+    } else if (value is FileExternalImageTexture) {
+
+    }
   }
 }

@@ -4,26 +4,21 @@ import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart
 class SizeParameterWidget extends StatelessWidget {
   final SizeParameter parameter;
   final VoidCallback onChanged;
-  final TextEditingController widthController;
-  final TextEditingController heightController;
 
   const SizeParameterWidget({
     Key? key,
     required this.parameter,
     required this.onChanged,
-    required this.widthController,
-    required this.heightController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double width = parameter.value.width;
-    double height = parameter.value.height;
-    return Row(
-      mainAxisSize: MainAxisSize.max,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             parameter.displayName,
             style: const TextStyle(
@@ -32,40 +27,89 @@ class SizeParameterWidget extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: TextField(
-            onChanged: (value) {
-              width = double.parse(value);
-            },
-            keyboardType: TextInputType.number,
-            controller: widthController.text.isNotEmpty
-                ? widthController
-                : TextEditingController(text: parameter.value.width.toString()),
-          ),
-        ),
-        Expanded(
-          child: TextField(
-            onChanged: (value) {
-              height = double.parse(value);
-            },
-            keyboardType: TextInputType.number,
-            controller: heightController.text.isNotEmpty
-                ? heightController
-                : TextEditingController(
-                    text: parameter.value.height.toString(),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      parameter.value =
+                          (parameter.value - const Offset(0.05, 0.0)) as Size;
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_downward,
+                    ),
                   ),
-          ),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      parameter.value =
+                          parameter.value + const Offset(0.05, 0.0);
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_upward,
+                    ),
+                  ),
+                ),
+                onSubmitted: (inputValue) {
+                  final value = double.tryParse(inputValue);
+                  if (value != null) {
+                    parameter.value = Size(value, parameter.value.width);
+                    onChanged.call();
+                  }
+                },
+                keyboardType: TextInputType.number,
+                controller: TextEditingController(
+                  text: parameter.value.width.toStringAsFixed(3),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      parameter.value =
+                          (parameter.value - const Offset(0.0, 0.05)) as Size;
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_downward,
+                    ),
+                  ),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      parameter.value =
+                          parameter.value + const Offset(0.0, 0.05);
+                      onChanged.call();
+                    },
+                    child: const Icon(
+                      Icons.arrow_upward,
+                    ),
+                  ),
+                ),
+                onSubmitted: (inputValue) {
+                  final value = double.tryParse(inputValue);
+                  if (value != null) {
+                    parameter.value = Size(parameter.value.width, value);
+                    onChanged.call();
+                  }
+                },
+                keyboardType: TextInputType.number,
+                controller: TextEditingController(
+                  text: parameter.value.height.toStringAsFixed(3),
+                ),
+              ),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () => _setSize(width, height),
-          child: const Text('APPLY'),
-        )
       ],
     );
-  }
-
-  void _setSize(double width, double height) {
-    parameter.value = Size(width, height);
-    onChanged.call();
   }
 }
