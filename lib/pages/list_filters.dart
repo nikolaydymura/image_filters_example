@@ -2,14 +2,13 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart'
     as cif;
 
-import '../blocs/source_image_bloc/source_image_bloc.dart';
+import '../widgets/list_supported_filters_widget.dart';
+import '../widgets/tabs_widget.dart';
 import 'ci_filter_details.dart';
-import 'filters_details.dart';
 
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
@@ -39,42 +38,11 @@ class FiltersListScreen extends StatelessWidget {
           bottom: TabBar(
             indicatorColor: Theme.of(context).primaryColor,
             indicatorSize: TabBarIndicatorSize.label,
-            tabs: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Tab(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColorLight,
-                        width: 1,
-                      ),
-                    ),
-                    child: const Align(
-                      alignment: Alignment.center,
-                      child: Text('Image Shaders'),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Tab(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColorLight,
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(Platform.isIOS ? 'CI Filters' : 'GPUVideo'),
-                    ),
-                  ),
-                ),
+            tabs: const [
+              TabsWidget(outputText: Text('Image Shaders')),
+              TabsWidget(
+                outputText:
+                    Text(/*Platform.isIOS ? 'CI Filters' :*/ 'GPUVideo'),
               ),
             ],
           ),
@@ -83,44 +51,7 @@ class FiltersListScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TabBarView(
             children: [
-              ListView.builder(
-                itemBuilder: (context, index) {
-                  final item = _shaderItems[index];
-
-                  return Card(
-                    child: ListTile(
-                      title: Text(item),
-                      trailing: Icon(
-                        Icons.navigate_next,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              final configuration =
-                              imf.availableShaders[item]?.call();
-                              if (configuration == null) {
-                                throw UnsupportedError('$item not supported');
-                              }
-                              return BlocProvider(
-                                create: (context) =>
-                                    Image1Cubit(configuration),
-                                child: FilterDetailsScreen(
-                                  filterName: item,
-                                  filterConfiguration: configuration,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-                itemCount: _shaderItems.length,
-              ),
+              ListSupportedFiltersWidget(items: _shaderItems),
               if (Platform.isIOS)
                 ListView.builder(
                   itemBuilder: (context, index) {
