@@ -6,20 +6,21 @@ class TabsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Tab(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Theme.of(context).primaryColorLight,
-                width: 1,
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Tab(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Theme.of(context).primaryColorLight,
+              width: 1,
             ),
-            child: Align(
-              alignment: Alignment.center,
+          ),
+          child: Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: outputText,
             ),
           ),

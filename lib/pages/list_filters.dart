@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart'
@@ -30,20 +31,25 @@ class FiltersListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: kDebugMode ? 3 : 2,
       child: Scaffold(
         appBar: AppBar(
           elevation: 1,
           title: const Center(child: Text('Available filters')),
           bottom: TabBar(
+            isScrollable: true,
             indicatorColor: Theme.of(context).primaryColor,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: const [
-              TabsWidget(outputText: Text('Image Shaders')),
-              TabsWidget(
-                outputText:
-                    Text(/*Platform.isIOS ? 'CI Filters' :*/ 'GPUVideo'),
-              ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            tabs: [
+              const TabsWidget(outputText: Text('Shader Image')),
+              if (kDebugMode || Platform.isIOS)
+                const TabsWidget(
+                  outputText: Text('Core Image'),
+                ),
+              if (kDebugMode || Platform.isAndroid)
+                const TabsWidget(
+                  outputText: Text('GPU Video'),
+                ),
             ],
           ),
         ),
@@ -52,7 +58,7 @@ class FiltersListScreen extends StatelessWidget {
           child: TabBarView(
             children: [
               ListSupportedFiltersWidget(items: _shaderItems),
-              if (Platform.isIOS)
+              if (kDebugMode || Platform.isIOS)
                 ListView.builder(
                   itemBuilder: (context, index) {
                     final item = _ciFilterItems[index];
@@ -79,7 +85,7 @@ class FiltersListScreen extends StatelessWidget {
                   },
                   itemCount: _ciFilterItems.length,
                 ),
-              if (Platform.isAndroid)
+              if (kDebugMode || Platform.isAndroid)
                 ListView.builder(
                   itemBuilder: (context, index) {
                     final item = _gpuVideoFilterItems[index];
