@@ -48,8 +48,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
         await CIImagePreviewController.fromAsset('images/test.jpg');
     destinationController =
         await CIImagePreviewController.fromAsset('images/test.jpg');
-    await configuration.prepare();
-    await destinationController.update(configuration);
+    await destinationController.connect(configuration);
     _controllersReady = true;
   }
 
@@ -66,23 +65,21 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           children: <Widget>[
             ...configuration.parameters.map((e) {
               if (e is ColorParameter) {
-                //e.value = Colors.blue;
-                //e.update(configuration);
                 return ColorParameterWidget(
                   parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
+                  onChanged: () async {
+                    await e.update(configuration);
+                    await destinationController.update();
+                    setState(() {});
                   },
                 );
               } else if (e is RangeNumberParameter) {
                 return SliderNumberParameterWidget(
                   parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
+                  onChanged: () async {
+                    await e.update(configuration);
+                    await destinationController.update();
+                    setState(() {});
                   },
                 );
               } else if (e is NumberParameter) {
