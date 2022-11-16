@@ -1,9 +1,12 @@
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 
+import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../widgets/color_parameter.dart';
+import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/point_parameter.dart';
 import '../widgets/size_parameter.dart';
@@ -19,9 +22,6 @@ class CIFilterDetailsPage extends StatefulWidget {
 }
 
 class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
-  TextEditingController numController = TextEditingController();
-  TextEditingController xController = TextEditingController();
-  TextEditingController yController = TextEditingController();
   late final CIFilterConfiguration configuration;
   late final CIImagePreviewController sourceController;
   late final CIImagePreviewController destinationController;
@@ -40,7 +40,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   @override
   void dispose() {
     super.dispose();
-    numController.dispose();
   }
 
   Future<void> _prepare() async {
@@ -64,12 +63,19 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ...configuration.parameters.map((e) {
+              if (e is DataParameter) {
+                return BlocProvider(
+                  create: (context) => DataBlocCubit(e, configuration),
+                  child: DataDropdownButtonWidget(
+                    parameter: e,
+                  ),
+                );
+              }
               if (e is ColorParameter) {
                 return ColorParameterWidget(
                   parameter: e,
                   onChanged: () async {
                     await e.update(configuration);
-                    await destinationController.update();
                     setState(() {});
                   },
                 );
@@ -78,17 +84,15 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                   parameter: e,
                   onChanged: () async {
                     await e.update(configuration);
-                    await destinationController.update();
                     setState(() {});
                   },
                 );
               } else if (e is NumberParameter) {
                 return NumberParameterWidget(
                   parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
+                  onChanged: () async {
+                    await e.update(configuration);
+                    setState(() {});
                   },
                 );
               } else if (e is PointParameter) {
