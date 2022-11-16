@@ -39,6 +39,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
 
   @override
   void dispose() {
+    sourceController.dispose();
+    destinationController.dispose();
+    configuration.dispose();
     super.dispose();
   }
 

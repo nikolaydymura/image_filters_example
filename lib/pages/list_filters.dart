@@ -10,6 +10,7 @@ import 'package:flutter_core_image_filters/flutter_core_image_filters.dart'
 import '../widgets/list_supported_filters_widget.dart';
 import '../widgets/tabs_widget.dart';
 import 'ci_filter_details.dart';
+import 'ci_filter_video_details.dart';
 
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
@@ -66,20 +67,39 @@ class FiltersListScreen extends StatelessWidget {
                     return Card(
                       child: ListTile(
                         title: Text(item),
-                        trailing: Icon(
-                          Icons.navigate_next,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return CIFilterDetailsPage(filterName: item);
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.video_file_outlined),
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return CIFilterVideoDetailsPage(filterName: item);
+                                    },
+                                  ),
+                                );
                               },
                             ),
-                          );
-                        },
+                            IconButton(
+                              icon: const Icon(Icons.image_outlined),
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return CIFilterDetailsPage(filterName: item);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
