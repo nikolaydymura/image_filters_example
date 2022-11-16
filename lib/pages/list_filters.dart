@@ -7,6 +7,8 @@ import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart'
     as cif;
 
+import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart' as gpuf;
+
 import '../widgets/list_supported_filters_widget.dart';
 import '../widgets/tabs_widget.dart';
 import 'ci_filter_details.dart';
@@ -26,7 +28,7 @@ class FiltersListScreen extends StatelessWidget {
       ).toList();
 
   List<String> get _gpuVideoFilterItems => SplayTreeSet<String>.from(
-        [],
+        [...gpuf.availableFilters.keys],
       ).toList();
 
   @override
