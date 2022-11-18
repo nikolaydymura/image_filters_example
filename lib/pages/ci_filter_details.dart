@@ -30,7 +30,8 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   @override
   void initState() {
     super.initState();
-    final configuration = availableFilters[widget.filterName]?.call();
+    final configuration =
+        FlutterCoreImageFilters.createFilter(displayName: widget.filterName);
     if (configuration != null) {
       this.configuration = configuration;
     }
@@ -47,9 +48,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
 
   Future<void> _prepare() async {
     sourceController =
-        await CIImagePreviewController.fromAsset('images/test.jpg');
+        await CIImagePreviewController.fromAsset('images/inputImage.jpg');
     destinationController =
-        await CIImagePreviewController.fromAsset('images/test.jpg');
+        await CIImagePreviewController.fromAsset('images/inputImage.jpg');
     await destinationController.connect(configuration);
     _controllersReady = true;
   }

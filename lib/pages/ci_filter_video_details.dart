@@ -28,7 +28,8 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
   @override
   void initState() {
     super.initState();
-    final configuration = availableFilters[widget.filterName]?.call();
+    final configuration =
+        FlutterCoreImageFilters.createFilter(displayName: widget.filterName);
     if (configuration != null) {
       this.configuration = configuration;
     }

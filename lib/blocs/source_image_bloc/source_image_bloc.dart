@@ -18,7 +18,7 @@ class SourceImageCubit extends Cubit<SourceImageState> {
   @override
   Stream<SourceImageState> get stream => super.stream.doOnListen(() {
         if (state is SourceImageInitial) {
-          loadAsset('images/test.jpg');
+          loadAsset('images/inputImage.jpg');
         }
       });
 

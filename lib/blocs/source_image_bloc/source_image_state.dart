@@ -14,6 +14,8 @@ const List<Lut> kLutImages = [
   Lut('lut/filter_lut_11.png', 8, 64, 8),
   Lut('lut/filter_lut_12.png', 8, 64, 8),
   Lut('lut/filter_lut_13.png', 16, 1, 16),
+  Lut('lut/lookup_demo.png', 8, 8, 8),
+  Lut('lut/img.png', 8, 64, 8),
 ];
 
 abstract class SourceImageState extends Equatable {

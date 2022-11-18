@@ -57,7 +57,15 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ...configuration.parameters.map((e) {
+            ...configuration.parameters.where((element) {
+              if (configuration is LookupTableShaderConfiguration) {
+                if (element.name == 'inputIntensity') {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            }).map((e) {
               if (e is ColorParameter) {
                 return ColorParameterWidget(
                   parameter: e,
@@ -184,7 +192,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   }
 
   Future<void> _exportImage() async {
-    const asset = 'images/test.jpg';
+    const asset = 'images/inputImage.jpg';
     final texture = await TextureSource.fromAsset(asset);
     final directory = await getTemporaryDirectory();
     final output =

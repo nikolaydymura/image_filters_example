@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
@@ -18,6 +17,8 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     if (parameter.name == 'inputCubeData' &&
         configuration.name == 'CIColorCube') {
       emit(DataBlocState(_lutImages.first, _lutImages));
+    } else if (parameter.name == 'inputBackgroundImage') {
+      emit(DataBlocState(_backgroundImages.first, _backgroundImages));
     }
   }
 
@@ -32,6 +33,11 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     await parameter.update(configuration);
     emit(state.copyWith(selected: value));
   }
+
+  static final List<DataItem> _backgroundImages = [
+    _defaultItem,
+    ImageAssetDataItem('images/inputBackgroundImage.png')
+  ];
 
   static final List<DataItem> _lutImages = [
     _defaultItem,
@@ -48,6 +54,8 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     LutAssetDataItem('lut/filter_lut_11.png', metadata: LutMetadata(8, 64, 8)),
     LutAssetDataItem('lut/filter_lut_12.png', metadata: LutMetadata(8, 64, 8)),
     LutAssetDataItem('lut/filter_lut_13.png', metadata: LutMetadata(16, 1, 16)),
+    LutAssetDataItem('lut/lookup_demo.png', metadata: LutMetadata(8, 8, 8)),
+    LutAssetDataItem('lut/img.png', metadata: LutMetadata(8, 64, 8)),
   ];
 
   void addItem(FileDataItem item) {
