@@ -4,18 +4,22 @@ import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
+import 'package:flutter_image_filters/flutter_image_filters.dart';
 
 part 'data_bloc_state.dart';
 
 class DataBlocCubit extends Cubit<DataBlocState> {
   static final _defaultItem = DefaultDataItem();
   final DataParameter parameter;
-  final CIFilterConfiguration configuration;
+  final FilterConfiguration configuration;
 
   DataBlocCubit(this.parameter, this.configuration)
       : super(DataBlocState(_defaultItem, [_defaultItem])) {
     if (parameter.name == 'inputCubeData' &&
-        configuration.name == 'CIColorCube') {
+        configuration is CIColorCubeConfiguration) {
+      emit(DataBlocState(_lutImages.first, _lutImages));
+    } else if (parameter.name == 'inputTextureCubeData' &&
+        configuration is LookupTableShaderConfiguration) {
       emit(DataBlocState(_lutImages.first, _lutImages));
     } else if (parameter.name == 'inputBackgroundImage') {
       emit(DataBlocState(_backgroundImages.first, _backgroundImages));
@@ -29,6 +33,17 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       parameter.file = value.file;
     } else if (value is BinaryDataItem) {
       parameter.data = value.bytes;
+    }
+    final metadata = value.metadata;
+    if (metadata is LutMetadata) {
+      final config = configuration;
+      if (config is CIColorCubeConfiguration) {
+        config.cubeDimension = 64;
+      } else if (config is LookupTableShaderConfiguration) {
+        config.size = metadata.size.toDouble();
+        config.rows = metadata.rows.toDouble();
+        config.columns = metadata.columns.toDouble();
+      }
     }
     await parameter.update(configuration);
     emit(state.copyWith(selected: value));
@@ -60,7 +75,10 @@ class DataBlocCubit extends Cubit<DataBlocState> {
 
   void addItem(FileDataItem item) {
     if (parameter.name == 'inputCubeData' &&
-        configuration.name == 'CIColorCube') {
+        configuration is CIColorCubeConfiguration) {
+      _lutImages.add(item);
+    } else if (parameter.name == 'inputTextureCubeData' &&
+        configuration is LookupTableShaderConfiguration) {
       _lutImages.add(item);
     }
   }

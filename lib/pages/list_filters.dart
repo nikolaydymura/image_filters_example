@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
+import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart' as gpuf;
@@ -19,7 +19,7 @@ class FiltersListScreen extends StatelessWidget {
 
   List<String> get _shaderItems => SplayTreeSet<String>.from(
         [
-          ...imf.availableShaders.keys,
+          ...FlutterImageFilters.availableFilters,
         ],
       ).toList();
 

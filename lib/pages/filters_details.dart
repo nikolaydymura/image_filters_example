@@ -8,10 +8,10 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:image/image.dart' as img;
 
+import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../blocs/source_image_bloc/source_image_bloc.dart';
-import '../models/lut.dart';
 import '../widgets/color_parameter.dart';
-import '../widgets/image_dropdown_button_widget.dart';
+import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/size_parameter.dart';
 import '../widgets/point_parameter.dart';
@@ -59,13 +59,23 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
           children: <Widget>[
             ...configuration.parameters.where((element) {
               if (configuration is LookupTableShaderConfiguration) {
-                if (element.name == 'inputIntensity') {
-                  return true;
+                if (element.name == 'inputSize' ||
+                    element.name == 'inputRows' ||
+                    element.name == 'inputColumns') {
+                  return false;
                 }
-                return false;
+                return true;
               }
               return true;
             }).map((e) {
+              if (e is DataParameter) {
+                return BlocProvider(
+                  create: (context) => DataBlocCubit(e, configuration),
+                  child: DataDropdownButtonWidget(
+                    parameter: e,
+                  ),
+                );
+              }
               if (e is ColorParameter) {
                 return ColorParameterWidget(
                   parameter: e,
@@ -114,26 +124,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               }
               return const Offstage();
             }),
-            BlocSelector<Image1Cubit, SourceImageState,
-                AdditionalSourceImageState<Lut>?>(
-              selector: (state) {
-                if (state is AdditionalSourceImageState<Lut>) {
-                  return state;
-                }
-                return null;
-              },
-              builder: (context, state) {
-                if (state != null) {
-                  return ImageDropdownButtonWidget(
-                    state: state,
-                    onChanged: (value) {
-                      context.read<Image1Cubit>().changeImage(value);
-                    },
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
             const SizedBox(
               height: 8.0,
             ),
@@ -147,28 +137,12 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
                         beforeImage: ImageShaderPreview(
-                          textures: [state.textureSource],
+                          texture: state.textureSource,
                           configuration: NoneShaderConfiguration(),
                         ),
-                        afterImage: BlocBuilder<Image1Cubit, SourceImageState>(
-                          builder: (context, textureState) {
-                            if (textureState is SourceImageReady) {
-                              return ImageShaderPreview(
-                                textures: [
-                                  state.textureSource,
-                                  textureState.textureSource
-                                ],
-                                configuration: configuration,
-                              );
-                            } else if (textureState is ImageEmpty) {
-                              return ImageShaderPreview(
-                                textures: [state.textureSource],
-                                configuration: configuration,
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
+                        afterImage: ImageShaderPreview(
+                          texture: state.textureSource,
+                          configuration: configuration,
                         ),
                       ),
                     );
@@ -199,8 +173,8 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
         File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
     final watch = Stopwatch();
     watch.start();
-    final image = await configuration.exportImage(
-      [texture],
+    final image = await configuration.export(
+      texture,
       Size(texture.width.toDouble(), texture.height.toDouble()),
     );
     final bytes = await image.toByteData();

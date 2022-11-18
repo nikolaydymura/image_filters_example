@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_image_filters/flutter_image_filters.dart' as imf;
+import 'package:flutter_image_filters/flutter_image_filters.dart';
 
 import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../pages/filters_details.dart';
@@ -27,7 +27,7 @@ class ListSupportedFiltersWidget extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    final configuration = imf.availableShaders[item]?.call();
+                    final configuration = FlutterImageFilters.createFilter(displayName: item);
                     if (configuration == null) {
                       throw UnsupportedError('$item not supported');
                     }
