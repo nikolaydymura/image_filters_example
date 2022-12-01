@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_core_image_filters: 4f41ed113773a915a9f559fab71495b35bc28345
+  flutter_core_image_filters: 61e0c8d2dd9757b6945ec4bed111b2955ccb0140
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3

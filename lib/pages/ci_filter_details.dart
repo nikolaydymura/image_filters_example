@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../widgets/color_parameter.dart';
@@ -155,5 +159,51 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     );
   }
 
-  Future<void> _exportImage() async {}
+  Future<void> _exportImage() async {
+    const asset = 'images/inputImage.jpg';
+    final directory = await getTemporaryDirectory();
+    final output =
+        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    final watch = Stopwatch();
+    watch.start();
+    final image = await configuration.export(
+      AssetInputSource(asset),
+      format: ImageExportFormat.jpeg,
+    );
+    final bytes = await image.toByteData();
+    debugPrint(
+      'Exporting image took ${watch.elapsedMilliseconds} milliseconds',
+    );
+    if (bytes == null) {
+      throw UnsupportedError('Failed to extract bytes for image');
+    }
+    final image1 = img.Image.fromBytes(
+      image.width,
+      image.height,
+      bytes.buffer.asUint8List(),
+    );
+    img.JpegEncoder encoder = img.JpegEncoder();
+    final data = encoder.encodeImage(image1);
+    await output.writeAsBytes(data);
+    debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
+    debugPrint('Exported: ${output.absolute}');
+  }
+
+  Future<void> _exportNativeImage() async {
+    const asset = 'images/inputImage.jpg';
+    final directory = await getTemporaryDirectory();
+    final output =
+        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    final watch = Stopwatch();
+    watch.start();
+    await configuration.exportImageFile(
+      ImageExportConfig(
+        AssetInputSource(asset),
+        output,
+        format: ImageExportFormat.jpeg,
+      ),
+    );
+    debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
+    debugPrint('Exported: ${output.absolute}');
+  }
 }

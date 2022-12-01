@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../widgets/color_parameter.dart';
@@ -142,5 +145,20 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
     );
   }
 
-  Future<void> _exportVideo() async {}
+  Future<void> _exportVideo() async {
+    const asset = 'videos/BigBuckBunny.mp4';
+    final directory = await getTemporaryDirectory();
+    final output =
+        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4');
+    final watch = Stopwatch();
+    watch.start();
+    await configuration.exportVideoFile(
+      VideoExportConfig(
+        AssetInputSource(asset),
+        output,
+      ),
+    );
+    debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
+    debugPrint('Exported: ${output.absolute}');
+  }
 }
