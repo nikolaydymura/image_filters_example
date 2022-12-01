@@ -21,7 +21,11 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     } else if (parameter.name == 'inputTextureCubeData' &&
         configuration is LookupTableShaderConfiguration) {
       emit(DataBlocState(_lutImages.first, _lutImages));
-    } else if (parameter.name == 'inputBackgroundImage') {
+    } else if (parameter.name == 'inputImage2' &&
+        configuration is CILookupTableConfiguration) {
+      emit(DataBlocState(_lutImages.first, _lutImages));
+    } else if (parameter.name == 'inputBackgroundImage' ||
+        parameter.name == 'inputImage2') {
       emit(DataBlocState(_backgroundImages.first, _backgroundImages));
     }
   }
@@ -43,6 +47,10 @@ class DataBlocCubit extends Cubit<DataBlocState> {
         config.size = metadata.size.toDouble();
         config.rows = metadata.rows.toDouble();
         config.columns = metadata.columns.toDouble();
+      } else if (config is CILookupTableConfiguration) {
+        config.size = metadata.size;
+        config.rows = metadata.rows;
+        config.columns = metadata.columns;
       }
     }
     await parameter.update(configuration);
@@ -79,6 +87,9 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       _lutImages.add(item);
     } else if (parameter.name == 'inputTextureCubeData' &&
         configuration is LookupTableShaderConfiguration) {
+      _lutImages.add(item);
+    } else if (parameter.name == 'inputImage2' &&
+        configuration is CILookupTableConfiguration) {
       _lutImages.add(item);
     }
   }

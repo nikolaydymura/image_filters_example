@@ -51,6 +51,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
         await CIImagePreviewController.fromAsset('images/inputImage.jpg');
     destinationController =
         await CIImagePreviewController.fromAsset('images/inputImage.jpg');
+    await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
   }

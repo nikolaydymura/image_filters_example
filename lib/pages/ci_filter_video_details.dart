@@ -38,12 +38,17 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
 
   @override
   void dispose() {
+    sourceController
+        .disconnect(configuration)
+        .then((_) => sourceController.dispose())
+        .whenComplete(() => configuration.dispose());
     super.dispose();
   }
 
   Future<void> _prepare() async {
     sourceController =
         await CIVideoPreviewController.fromAsset('videos/BigBuckBunny.mp4');
+    await configuration.prepare();
     await sourceController.connect(configuration);
     _controllersReady = true;
   }
