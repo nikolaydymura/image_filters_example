@@ -33,8 +33,7 @@ class FilterDetailsScreen extends StatefulWidget {
 
 class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   ShaderConfiguration get configuration => widget.filterConfiguration;
-
-  bool get displayParameters => configuration is LookupTableShaderConfiguration;
+  late final noConfiguration = NoneShaderConfiguration();
 
   @override
   void initState() {
@@ -57,17 +56,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ...configuration.parameters.where((element) {
-              if (configuration is LookupTableShaderConfiguration) {
-                if (element.name == 'inputSize' ||
-                    element.name == 'inputRows' ||
-                    element.name == 'inputColumns') {
-                  return false;
-                }
-                return true;
-              }
-              return true;
-            }).map((e) {
+            ...configuration.parameters.map((e) {
               if (e is DataParameter) {
                 return BlocProvider(
                   create: (context) => DataBlocCubit(e, configuration),
@@ -138,7 +127,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                         thumbColor: Colors.transparent,
                         beforeImage: ImageShaderPreview(
                           texture: state.textureSource,
-                          configuration: NoneShaderConfiguration(),
+                          configuration: noConfiguration,
                         ),
                         afterImage: ImageShaderPreview(
                           texture: state.textureSource,

@@ -35,19 +35,25 @@ class SourceImageCubit extends Cubit<SourceImageState> {
 
 class Image1Cubit extends SourceImageCubit {
   Image1Cubit(FilterConfiguration configuration) {
-    if (configuration is LookupTableShaderConfiguration) {
-      changeImage(LUTSourceImage.lastSelected);
+    if (configuration is SquareLookupTableShaderConfiguration) {
+      changeImage(LUTSourceImage.lastSquareSelected);
+    } else if (configuration is HALDLookupTableShaderConfiguration) {
+      changeImage(LUTSourceImage.lastHALDSelected);
     } else {
       emit(ImageEmpty());
     }
   }
 
-  void changeImage(ExternalImageTexture value) async {
+  Future<void> changeImage(ExternalImageTexture value) async {
     if (value is AssetExternalImageTexture) {
-      if (value is Lut) {
-        emit(LUTSourceImage(value));
+      if (value is HALDLut) {
+        emit(LUTSourceImage(value, false));
         final texture = await TextureSource.fromAsset(value.asset);
-        emit(LutSourceImageReady(value, texture));
+        emit(LutSourceImageReady(value, texture, false));
+      } else if (value is SquareLut) {
+        emit(LUTSourceImage(value, true));
+        final texture = await TextureSource.fromAsset(value.asset);
+        emit(LutSourceImageReady(value, texture, true));
       }
     } else if (value is FileExternalImageTexture) {
 

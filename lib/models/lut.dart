@@ -1,12 +1,17 @@
 import 'external_image_texture.dart';
 
-class Lut extends AssetExternalImageTexture {
-  final int size;
-  final int rows;
-  final int columns;
+abstract class Lut extends AssetExternalImageTexture {
 
-  const Lut(super.asset, this.size, this.rows, this.columns);
+  const Lut(super.asset);
 
   @override
   String get name => asset.split('/').last.split('.').first;
+}
+
+class HALDLut extends Lut {
+  const HALDLut(super.asset);
+}
+
+class SquareLut extends Lut {
+  const SquareLut(super.asset);
 }

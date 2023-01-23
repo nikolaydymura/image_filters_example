@@ -1,21 +1,23 @@
 part of 'source_image_bloc.dart';
 
-const List<Lut> kLutImages = [
-  Lut('lut/filter_lut_1.png', 8, 8, 8),
-  Lut('lut/filter_lut_2.png', 8, 8, 8),
-  Lut('lut/filter_lut_3.png', 8, 8, 8),
-  Lut('lut/filter_lut_4.png', 8, 8, 8),
-  Lut('lut/filter_lut_5.png', 8, 8, 8),
-  Lut('lut/filter_lut_6.png', 8, 64, 8),
-  Lut('lut/filter_lut_7.png', 8, 64, 8),
-  Lut('lut/filter_lut_8.png', 8, 64, 8),
-  Lut('lut/filter_lut_9.png', 8, 64, 8),
-  Lut('lut/filter_lut_10.png', 8, 64, 8),
-  Lut('lut/filter_lut_11.png', 8, 64, 8),
-  Lut('lut/filter_lut_12.png', 8, 64, 8),
-  Lut('lut/filter_lut_13.png', 16, 1, 16),
-  Lut('lut/lookup_demo.png', 8, 8, 8),
-  Lut('lut/img.png', 8, 64, 8),
+const List<Lut> kSquareImages = [
+  SquareLut('lut/filter_lut_1.png'),
+  SquareLut('lut/filter_lut_2.png'),
+  SquareLut('lut/filter_lut_3.png'),
+  SquareLut('lut/filter_lut_4.png'),
+  SquareLut('lut/filter_lut_5.png'),
+  SquareLut('lut/lookup_demo.png'),
+];
+
+const List<Lut> kHALDImages = [
+  HALDLut('lut/filter_lut_6.png'),
+  HALDLut('lut/filter_lut_7.png'),
+  HALDLut('lut/filter_lut_8.png'),
+  HALDLut('lut/filter_lut_9.png'),
+  HALDLut('lut/filter_lut_10.png'),
+  HALDLut('lut/filter_lut_11.png'),
+  HALDLut('lut/filter_lut_12.png'),
+  HALDLut('lut/img.png'),
 ];
 
 abstract class SourceImageState extends Equatable {
@@ -53,31 +55,39 @@ abstract class AdditionalSourceImageState<T extends ExternalImageTexture> extend
 }
 
 class LUTSourceImage extends AdditionalSourceImageState<Lut> {
-  static Lut lastSelected = kLutImages.first;
+  static Lut lastSquareSelected = kSquareImages.first;
+  static Lut lastHALDSelected = kHALDImages.first;
+
+  final bool square;
 
   @override
-  List<Lut> get items => kLutImages;
+  List<Lut> get items => square ? kSquareImages : kHALDImages;
 
-  LUTSourceImage(super.selected) {
-    lastSelected = selected;
+  LUTSourceImage(super.selected, this.square) {
+    if (square) {
+      lastSquareSelected = selected;
+    } else {
+      lastHALDSelected = selected;
+    }
   }
 
   @override
-  List<Object?> get props => [selected];
+  List<Object?> get props => [selected, square];
 }
 
 class LutSourceImageReady extends AdditionalSourceImageState<Lut>
     implements SourceImageReady {
   @override
   final TextureSource textureSource;
+  final bool square;
 
-  const LutSourceImageReady(super.selected, this.textureSource);
+  const LutSourceImageReady(super.selected, this.textureSource, this.square);
 
   @override
   bool get asset => true;
 
   @override
-  List<Lut> get items => kLutImages;
+  List<Lut> get items => square ? kSquareImages : kHALDImages;
 
   @override
   String get path => selected.asset;

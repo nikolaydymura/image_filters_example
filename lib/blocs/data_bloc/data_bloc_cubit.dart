@@ -17,13 +17,16 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       : super(DataBlocState(_defaultItem, [_defaultItem])) {
     if (parameter.name == 'inputCubeData' &&
         configuration is CIColorCubeConfiguration) {
-      emit(DataBlocState(_lutImages.first, _lutImages));
+      emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
     } else if (parameter.name == 'inputTextureCubeData' &&
-        configuration is LookupTableShaderConfiguration) {
-      emit(DataBlocState(_lutImages.first, _lutImages));
+        configuration is SquareLookupTableShaderConfiguration) {
+      emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
+    } else if (parameter.name == 'inputTextureCubeData' &&
+        configuration is HALDLookupTableShaderConfiguration) {
+      emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
     } else if (parameter.name == 'inputImage2' &&
         configuration is CILookupTableConfiguration) {
-      emit(DataBlocState(_lutImages.first, _lutImages));
+      emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
     } else if (parameter.name == 'inputBackgroundImage' ||
         parameter.name == 'inputImage2') {
       emit(DataBlocState(_backgroundImages.first, _backgroundImages));
@@ -43,10 +46,6 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       final config = configuration;
       if (config is CIColorCubeConfiguration) {
         config.cubeDimension = 64;
-      } else if (config is LookupTableShaderConfiguration) {
-        config.size = metadata.size.toDouble();
-        config.rows = metadata.rows.toDouble();
-        config.columns = metadata.columns.toDouble();
       } else if (config is CILookupTableConfiguration) {
         config.size = metadata.size;
         config.rows = metadata.rows;
@@ -62,13 +61,8 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     ImageAssetDataItem('images/inputBackgroundImage.png')
   ];
 
-  static final List<DataItem> _lutImages = [
+  static final List<DataItem> _lutHALDImages = [
     _defaultItem,
-    LutAssetDataItem('lut/filter_lut_1.png', metadata: LutMetadata(8, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_2.png', metadata: LutMetadata(8, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_3.png', metadata: LutMetadata(8, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_4.png', metadata: LutMetadata(8, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_5.png', metadata: LutMetadata(8, 8, 8)),
     LutAssetDataItem('lut/filter_lut_6.png', metadata: LutMetadata(8, 64, 8)),
     LutAssetDataItem('lut/filter_lut_7.png', metadata: LutMetadata(8, 64, 8)),
     LutAssetDataItem('lut/filter_lut_8.png', metadata: LutMetadata(8, 64, 8)),
@@ -76,21 +70,33 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     LutAssetDataItem('lut/filter_lut_10.png', metadata: LutMetadata(8, 64, 8)),
     LutAssetDataItem('lut/filter_lut_11.png', metadata: LutMetadata(8, 64, 8)),
     LutAssetDataItem('lut/filter_lut_12.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_13.png', metadata: LutMetadata(16, 1, 16)),
-    LutAssetDataItem('lut/lookup_demo.png', metadata: LutMetadata(8, 8, 8)),
     LutAssetDataItem('lut/img.png', metadata: LutMetadata(8, 64, 8)),
+  ];
+
+  static final List<DataItem> _lutSquareImages = [
+    _defaultItem,
+    LutAssetDataItem('lut/filter_lut_1.png', metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem('lut/filter_lut_2.png', metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem('lut/filter_lut_3.png', metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem('lut/filter_lut_4.png', metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem('lut/lookup_amatorka.png',
+        metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem('lut/lookup_demo.png', metadata: LutMetadata(64, 8, 8)),
   ];
 
   void addItem(FileDataItem item) {
     if (parameter.name == 'inputCubeData' &&
         configuration is CIColorCubeConfiguration) {
-      _lutImages.add(item);
+      _lutHALDImages.add(item);
     } else if (parameter.name == 'inputTextureCubeData' &&
-        configuration is LookupTableShaderConfiguration) {
-      _lutImages.add(item);
+        configuration is SquareLookupTableShaderConfiguration) {
+      _lutSquareImages.add(item);
+    } else if (parameter.name == 'inputTextureCubeData' &&
+        configuration is HALDLookupTableShaderConfiguration) {
+      _lutHALDImages.add(item);
     } else if (parameter.name == 'inputImage2' &&
         configuration is CILookupTableConfiguration) {
-      _lutImages.add(item);
+      _lutSquareImages.add(item);
     }
   }
 }

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_filters/flutter_image_filters.dart';
 
 import 'blocs/source_image_bloc/source_image_bloc.dart';
+import 'brightness_contrast_shader_configuration.dart';
+import 'brightness_contrast_sprv.dart';
 import 'pages/list_filters.dart';
 
 void main() {
+  FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(() => brightnessContrastFragmentProgram());
   runApp(
     MultiBlocProvider(
       providers: [
