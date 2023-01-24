@@ -30,6 +30,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   late final CIImagePreviewController sourceController;
   late final CIImagePreviewController destinationController;
   var _controllersReady = false;
+  static const _assetPath = 'images/inputImage1.jpg';
 
   @override
   void initState() {
@@ -51,10 +52,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   }
 
   Future<void> _prepare() async {
-    sourceController =
-        await CIImagePreviewController.fromAsset('images/inputImage.jpg');
+    sourceController = await CIImagePreviewController.fromAsset(_assetPath);
     destinationController =
-        await CIImagePreviewController.fromAsset('images/inputImage.jpg');
+        await CIImagePreviewController.fromAsset(_assetPath);
     await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
@@ -150,20 +150,42 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _exportImage();
-        },
-        child: const Icon(Icons.save),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                _exportImage();
+              },
+              tooltip: 'Export as binary data and compress on Flutter side',
+              child: const Icon(Icons.save),
+            ),
+            FloatingActionButton(
+              heroTag: null,
+              tooltip: 'Export as file using swift coce',
+              onPressed: () {
+                _exportNativeImage();
+              },
+              child: const Icon(Icons.save_as),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
   Future<void> _exportImage() async {
-    const asset = 'images/inputImage.jpg';
+    const asset = _assetPath;
     final directory = await getTemporaryDirectory();
-    final output =
-        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    final output = File(
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.${asset.split('.').last}',
+    );
     final watch = Stopwatch();
     watch.start();
     final image = await configuration.export(
@@ -190,10 +212,11 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   }
 
   Future<void> _exportNativeImage() async {
-    const asset = 'images/inputImage.jpg';
+    const asset = _assetPath;
     final directory = await getTemporaryDirectory();
-    final output =
-        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    final output = File(
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.${asset.split('.').last}',
+    );
     final watch = Stopwatch();
     watch.start();
     await configuration.exportImageFile(

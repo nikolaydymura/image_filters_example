@@ -27,6 +27,7 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
   late final CIFilterConfiguration configuration;
   late final CIVideoPreviewController sourceController;
   var _controllersReady = false;
+  static const _assetPath = 'videos/BigBuckBunny.mp4';
 
   @override
   void initState() {
@@ -42,15 +43,14 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
   @override
   void dispose() {
     sourceController
-        .disconnect(configuration)
+        .disconnect()
         .then((_) => sourceController.dispose())
         .whenComplete(() => configuration.dispose());
     super.dispose();
   }
 
   Future<void> _prepare() async {
-    sourceController =
-        await CIVideoPreviewController.fromAsset('videos/BigBuckBunny.mp4');
+    sourceController = await CIVideoPreviewController.fromAsset(_assetPath);
     await configuration.prepare();
     await sourceController.connect(configuration);
     _controllersReady = true;
@@ -141,15 +141,16 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
           _exportVideo();
         },
         child: const Icon(Icons.save),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 
   Future<void> _exportVideo() async {
-    const asset = 'videos/BigBuckBunny.mp4';
+    const asset = _assetPath;
     final directory = await getTemporaryDirectory();
-    final output =
-        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4');
+    final output = File(
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.${asset.split('.').last}',
+    );
     final watch = Stopwatch();
     watch.start();
     await configuration.exportVideoFile(
