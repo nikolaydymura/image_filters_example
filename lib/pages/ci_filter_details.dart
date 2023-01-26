@@ -17,16 +17,16 @@ import '../widgets/size_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
 class CIFilterDetailsPage extends StatefulWidget {
-  final String filterName;
+  final CIFilterConfiguration configuration;
 
-  const CIFilterDetailsPage({super.key, required this.filterName});
+  const CIFilterDetailsPage({super.key, required this.configuration});
 
   @override
   State<CIFilterDetailsPage> createState() => _CIFilterDetailsPageState();
 }
 
 class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
-  late final CIFilterConfiguration configuration;
+  late final CIFilterConfiguration configuration = widget.configuration;
   late final CIImagePreviewController sourceController;
   late final CIImagePreviewController destinationController;
   var _controllersReady = false;
@@ -35,11 +35,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   @override
   void initState() {
     super.initState();
-    final configuration =
-        FlutterCoreImageFilters.createFilter(displayName: widget.filterName);
-    if (configuration != null) {
-      this.configuration = configuration;
-    }
     _prepare().whenComplete(() => setState(() {}));
   }
 
@@ -64,7 +59,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preview'),
+        title: Text(widget.configuration.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

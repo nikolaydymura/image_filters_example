@@ -25,7 +25,8 @@ class FiltersListScreen extends StatelessWidget {
 
   List<String> get _ciFilterItems => SplayTreeSet<String>.from(
         [...FlutterCoreImageFilters.availableFilters],
-      ).toList();
+      ).toList()
+        ..insert(0, 'Color Monochrome');
 
   List<String> get _gpuVideoFilterItems => SplayTreeSet<String>.from(
         [...gpuf.availableFilters.keys],
@@ -76,28 +77,64 @@ class FiltersListScreen extends StatelessWidget {
                               icon: const Icon(Icons.video_file_outlined),
                               color: Theme.of(context).primaryColor,
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return CIFilterVideoDetailsPage(filterName: item);
-                                    },
-                                  ),
+                                final configuration =
+                                    FlutterCoreImageFilters.createFilter(
+                                  displayName: item,
                                 );
+                                if (configuration.categories
+                                        .contains(CICategory.video) &&
+                                    configuration.hasInputImage) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return CIFilterVideoDetailsPage(
+                                          configuration: configuration,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  const snackBar = SnackBar(
+                                    content: Text(
+                                      'Video processing is unavailable for current configuration',
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
                               },
                             ),
                             IconButton(
                               icon: const Icon(Icons.image_outlined),
                               color: Theme.of(context).primaryColor,
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return CIFilterDetailsPage(filterName: item);
-                                    },
-                                  ),
+                                final configuration =
+                                    FlutterCoreImageFilters.createFilter(
+                                  displayName: item,
                                 );
+                                if (configuration.categories
+                                        .contains(CICategory.stillImage) &&
+                                    configuration.hasInputImage) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return CIFilterDetailsPage(
+                                          configuration: configuration,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  const snackBar = SnackBar(
+                                    content: Text(
+                                      'Image processing is unavailable for current configuration',
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
                               },
                             ),
                           ],

@@ -15,16 +15,16 @@ import '../widgets/size_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
 class CIFilterVideoDetailsPage extends StatefulWidget {
-  final String filterName;
+  final CIFilterConfiguration configuration;
 
-  const CIFilterVideoDetailsPage({super.key, required this.filterName});
+  const CIFilterVideoDetailsPage({super.key, required this.configuration});
 
   @override
   State<CIFilterVideoDetailsPage> createState() => _CIFilterDetailsPageState();
 }
 
 class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
-  late final CIFilterConfiguration configuration;
+  late final CIFilterConfiguration configuration = widget.configuration;
   late final CIVideoPreviewController sourceController;
   var _controllersReady = false;
   static const _assetPath = 'videos/BigBuckBunny.mp4';
@@ -32,11 +32,6 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
   @override
   void initState() {
     super.initState();
-    final configuration =
-        FlutterCoreImageFilters.createFilter(displayName: widget.filterName);
-    if (configuration != null) {
-      this.configuration = configuration;
-    }
     _prepare().whenComplete(() => setState(() {}));
   }
 
@@ -60,7 +55,7 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preview'),
+        title: Text(widget.configuration.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
