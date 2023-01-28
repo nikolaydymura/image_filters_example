@@ -1,11 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 
-import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../widgets/color_parameter.dart';
-import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/point_parameter.dart';
 import '../widgets/size_parameter.dart';
