@@ -46,10 +46,6 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       final config = configuration;
       if (config is CIColorCubeConfiguration) {
         config.cubeDimension = 64;
-      } else if (config is CILookupTableConfiguration) {
-        config.size = metadata.size;
-        config.rows = metadata.rows;
-        config.columns = metadata.columns;
       }
     }
     await parameter.update(configuration);
@@ -79,8 +75,10 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     LutAssetDataItem('lut/filter_lut_2.png', metadata: LutMetadata(64, 8, 8)),
     LutAssetDataItem('lut/filter_lut_3.png', metadata: LutMetadata(64, 8, 8)),
     LutAssetDataItem('lut/filter_lut_4.png', metadata: LutMetadata(64, 8, 8)),
-    LutAssetDataItem('lut/lookup_amatorka.png',
-        metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem(
+      'lut/lookup_amatorka.png',
+      metadata: LutMetadata(64, 8, 8),
+    ),
     LutAssetDataItem('lut/lookup_demo.png', metadata: LutMetadata(64, 8, 8)),
   ];
 

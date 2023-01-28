@@ -148,12 +148,22 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
     );
     final watch = Stopwatch();
     watch.start();
-    await configuration.exportVideoFile(
+    final processStream = await configuration.exportVideoFile(
       VideoExportConfig(
         AssetInputSource(asset),
         output,
       ),
     );
+    await for(final progress in processStream) {
+      if (progress.isProcessingCompleted) {
+        break;
+      }
+      /*
+      setState(() {
+        progressValue = progress;
+      });
+      */
+    }
     debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
     debugPrint('Exported: ${output.absolute}');
   }
