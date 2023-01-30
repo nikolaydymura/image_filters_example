@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
+import 'package:path_provider/path_provider.dart';
 
+import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../widgets/color_parameter.dart';
+import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/point_parameter.dart';
 import '../widgets/size_parameter.dart';
@@ -20,6 +26,7 @@ class GPUFilterVideoDetailsPage extends StatefulWidget {
 class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
   late final GPUFilterConfiguration configuration;
   late final GPUVideoPreviewController sourceController;
+  static const _assetPath = 'videos/BigBuckBunny.mp4';
   var _controllersReady = false;
 
   @override
@@ -38,8 +45,7 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
   }
 
   Future<void> _prepare() async {
-    sourceController =
-        await GPUVideoPreviewController.fromAsset('videos/BigBuckBunny.mp4');
+    sourceController = await GPUVideoPreviewController.fromAsset(_assetPath);
     await sourceController.connect(configuration);
     _controllersReady = true;
   }
@@ -56,14 +62,14 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ...configuration.parameters.map((e) {
-              /*if (e is DataParameter) {
+              if (e is DataParameter) {
                 return BlocProvider(
                   create: (context) => DataBlocCubit(e, configuration),
                   child: DataDropdownButtonWidget(
                     parameter: e,
                   ),
                 );
-              }*/
+              }
               if (e is ColorParameter) {
                 return ColorParameterWidget(
                   parameter: e,
@@ -115,11 +121,11 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
             Expanded(
               child: _controllersReady
                   ? GPUVideoPreview(
-                      controller: sourceController,
-                    )
+                controller: sourceController,
+              )
                   : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                child: CircularProgressIndicator(),
+              ),
             ),
           ],
         ),
@@ -133,5 +139,29 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
     );
   }
 
-  Future<void> _exportVideo() async {}
+  Future<void> _exportVideo() async {
+    const asset = _assetPath;
+    final directory = await getTemporaryDirectory();
+    final output = File(
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.${asset.split('.').last}',
+    );
+    final watch = Stopwatch();
+    watch.start();
+    final processStream = await configuration.exportVideoFile(
+      VideoExportConfig(
+        AssetInputSource(asset),
+        output,
+      ),
+    );
+    await for (final progress in processStream) {
+      debugPrint('Exporting file ${progress.toInt()}%');
+      /*
+      setState(() {
+        progressValue = progress;
+      });
+      */
+    }
+    debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
+    debugPrint('Exported: ${output.absolute}');
+  }
 }
