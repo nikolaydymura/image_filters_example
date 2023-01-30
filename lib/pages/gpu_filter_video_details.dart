@@ -32,10 +32,7 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
   @override
   void initState() {
     super.initState();
-    final configuration = availableFilters[widget.filterName]?.call();
-    if (configuration != null) {
-      this.configuration = configuration;
-    }
+    configuration = FlutterVideoFilters.createFilter(displayName: widget.filterName);
     _prepare().whenComplete(() => setState(() {}));
   }
 
