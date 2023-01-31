@@ -25,15 +25,21 @@ class GPUFilterVideoDetailsPage extends StatefulWidget {
 
 class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
   late final GPUFilterConfiguration configuration;
-  late final GPUVideoPreviewController sourceController;
+  late final GPUVideoPreviewController sourceController1;
+  late final GPUVideoPreviewController sourceController2;
+  late final GPUVideoPreviewParams params2;
+  late final GPUVideoPreviewController sourceController3;
   static const _assetPath = 'videos/BigBuckBunny.mp4';
   var _controllersReady = false;
+  var _paramsReady = false;
 
   @override
   void initState() {
     super.initState();
-    configuration = FlutterVideoFilters.createFilter(displayName: widget.filterName);
-    _prepare().whenComplete(() => setState(() {}));
+    configuration =
+        FlutterVideoFilters.createFilter(displayName: widget.filterName);
+    _prepare1().whenComplete(() => setState(() {}));
+    _prepare2().whenComplete(() => setState(() {}));
   }
 
   @override
@@ -41,15 +47,21 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
     super.dispose();
   }
 
-  Future<void> _prepare() async {
-    sourceController = await GPUVideoPreviewController.fromAsset(_assetPath);
-    await sourceController.connect(configuration);
+  Future<void> _prepare1() async {
+    sourceController1 = await GPUVideoPreviewController.fromAsset(_assetPath);
+    await sourceController1.connect(configuration);
     _controllersReady = true;
+  }
+
+  Future<void> _prepare2() async {
+    params2 = await GPUVideoPreviewParams.create(configuration);
+    _paramsReady = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Preview'),
       ),
@@ -112,17 +124,42 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
               }
               return const Offstage();
             }),
+            Expanded(
+              child: _paramsReady
+                  ? GPUVideoNativePreview(
+                      params: params2,
+                      configuration: configuration,
+                      onViewCreated: (controller) {
+                        sourceController2 = controller;
+                        sourceController2.setVideoAsset(_assetPath);
+                      },
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
+/*            const SizedBox(
+              height: 8.0,
+            ),
+            Expanded(
+              child: GPUVideoSurfacePreview(
+                onViewCreated: (controller) {
+                  sourceController3 = controller;
+                  sourceController3.setVideoAsset(_assetPath);
+                },
+              ),
+            ),*/
             const SizedBox(
               height: 8.0,
             ),
             Expanded(
               child: _controllersReady
-                  ? GPUVideoPreview(
-                controller: sourceController,
-              )
+                  ? GPUVideoTexturePreview(
+                      controller: sourceController1,
+                    )
                   : const Center(
-                child: CircularProgressIndicator(),
-              ),
+                      child: CircularProgressIndicator(),
+                    ),
             ),
           ],
         ),

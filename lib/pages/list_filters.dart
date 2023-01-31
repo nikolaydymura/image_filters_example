@@ -29,7 +29,7 @@ class FiltersListScreen extends StatelessWidget {
 
   List<String> get _gpuVideoFilterItems => SplayTreeSet<String>.from(
         [...FlutterVideoFilters.availableFilters],
-      ).toList();
+      ).toList()..insert(0, 'Monochrome');
 
   @override
   Widget build(BuildContext context) {
