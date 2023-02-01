@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
+import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
 
 part 'data_bloc_state.dart';
@@ -19,10 +20,12 @@ class DataBlocCubit extends Cubit<DataBlocState> {
         configuration is CIColorCubeConfiguration) {
       emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
     } else if (parameter.name == 'inputTextureCubeData' &&
-        configuration is SquareLookupTableShaderConfiguration) {
+        (configuration is SquareLookupTableShaderConfiguration ||
+            configuration is GPUSquareLookupTableConfiguration)) {
       emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
     } else if (parameter.name == 'inputTextureCubeData' &&
-        configuration is HALDLookupTableShaderConfiguration) {
+        (configuration is HALDLookupTableShaderConfiguration ||
+            configuration is GPUHALDLookupTableConfiguration)) {
       emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
     } else if (parameter.name == 'inputImage2' &&
         configuration is CILookupTableConfiguration) {
@@ -87,10 +90,12 @@ class DataBlocCubit extends Cubit<DataBlocState> {
         configuration is CIColorCubeConfiguration) {
       _lutHALDImages.add(item);
     } else if (parameter.name == 'inputTextureCubeData' &&
-        configuration is SquareLookupTableShaderConfiguration) {
+        (configuration is SquareLookupTableShaderConfiguration ||
+            configuration is GPUSquareLookupTableConfiguration)) {
       _lutSquareImages.add(item);
     } else if (parameter.name == 'inputTextureCubeData' &&
-        configuration is HALDLookupTableShaderConfiguration) {
+        (configuration is HALDLookupTableShaderConfiguration ||
+            configuration is GPUHALDLookupTableConfiguration)) {
       _lutHALDImages.add(item);
     } else if (parameter.name == 'inputImage2' &&
         configuration is CILookupTableConfiguration) {
