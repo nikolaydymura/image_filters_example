@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
@@ -38,13 +39,19 @@ class _GPUFilterDetailsPageState extends State<GPUFilterVideoDetailsPage> {
     super.initState();
     configuration =
         FlutterVideoFilters.createFilter(displayName: widget.filterName);
-    _prepare1().whenComplete(() => setState(() {}));
+    if (kDebugMode) {
+      _prepare1().whenComplete(() => setState(() {}));
+    }
     _prepare2().whenComplete(() => setState(() {}));
   }
 
   @override
   void dispose() {
     super.dispose();
+    if (kDebugMode) {
+      sourceController1.dispose();
+    }
+    sourceController2.dispose();
   }
 
   Future<void> _prepare1() async {
