@@ -31,7 +31,8 @@ class DataBlocCubit extends Cubit<DataBlocState> {
         configuration is CILookupTableConfiguration) {
       emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
     } else if (parameter.name == 'inputBackgroundImage' ||
-        parameter.name == 'inputImage2') {
+        parameter.name == 'inputImage2' ||
+        parameter.name == 'inputImageTexture2') {
       emit(DataBlocState(_backgroundImages.first, _backgroundImages));
     }
   }
