@@ -13,6 +13,7 @@ import '../widgets/color_parameter.dart';
 import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/point_parameter.dart';
+import '../widgets/rect_parameter.dart';
 import '../widgets/size_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 
@@ -108,7 +109,17 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                     });
                   },
                 );
-              } else if (e is SizeParameter) {
+              }else if (e is RectParameter) {
+                return RectParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                );
+              }
+              else if (e is SizeParameter) {
                 return SizeParameterWidget(
                   parameter: e,
                   onChanged: () {
