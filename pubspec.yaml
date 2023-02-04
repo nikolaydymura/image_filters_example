@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_gpu_filters_interface: ^0.0.5
-  flutter_image_filters: ^0.0.6
+  flutter_image_filters: ^0.0.7
   flutter_core_image_filters: ^0.0.1
   flutter_gpu_video_filters:
     path: gpu_flutter_dependencies/flutter_gpu_video_filters
@@ -67,7 +67,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  shaders:
+    - shaders/brightness_contrast.frag
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

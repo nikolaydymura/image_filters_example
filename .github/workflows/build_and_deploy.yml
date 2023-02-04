@@ -13,7 +13,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: '3.3.4'
+          flutter-version: '3.7.1'
           channel: 'stable'
       - run: flutter analyze
         continue-on-error: true
@@ -46,7 +46,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: '3.3.4'
+          flutter-version: '3.7.1'
           channel: 'stable'
       - run: |
           sed -i -E 's/\.\./gpu_flutter_dependencies/g' pubspec.yaml
@@ -87,7 +87,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: '3.3.4'
+          flutter-version: '3.7.1'
           channel: 'stable'
       - run: |
           ./generate_ios_plist.sh
