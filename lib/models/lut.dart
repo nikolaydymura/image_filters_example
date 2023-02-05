@@ -1,7 +1,6 @@
 import 'external_image_texture.dart';
 
 abstract class Lut extends AssetExternalImageTexture {
-
   const Lut(super.asset);
 
   @override

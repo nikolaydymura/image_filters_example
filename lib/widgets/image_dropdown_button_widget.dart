@@ -8,7 +8,8 @@ class ImageDropdownButtonWidget<T extends ExternalImageTexture>
   final AdditionalSourceImageState<T> state;
   final void Function(T) onChanged;
 
-  const ImageDropdownButtonWidget({super.key, required this.state, required this.onChanged});
+  const ImageDropdownButtonWidget(
+      {super.key, required this.state, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

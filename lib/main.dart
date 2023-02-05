@@ -9,7 +9,8 @@ import 'brightness_contrast_shader_configuration.dart';
 import 'pages/list_filters.dart';
 
 void main() {
-  FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(() => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'));
+  FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(
+      () => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'));
   runApp(
     MultiBlocProvider(
       providers: [

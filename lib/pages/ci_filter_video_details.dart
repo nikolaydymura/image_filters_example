@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../widgets/color_parameter.dart';
 import '../widgets/data_dropdown_button_widget.dart';
+import '../widgets/export_video_button.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/point_parameter.dart';
 import '../widgets/size_parameter.dart';
@@ -131,40 +129,10 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _exportVideo();
-        },
-        child: const Icon(Icons.save),
+      floatingActionButton: ExportVideoButton(
+        sourceBuilder: () => AssetInputSource(_assetPath),
+        configuration: configuration,
       ),
     );
-  }
-
-  Future<void> _exportVideo() async {
-    const asset = _assetPath;
-    final directory = await getTemporaryDirectory();
-    final output = File(
-      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.${asset.split('.').last}',
-    );
-    final watch = Stopwatch();
-    watch.start();
-    final processStream = await configuration.exportVideoFile(
-      VideoExportConfig(
-        AssetInputSource(asset),
-        output,
-      ),
-    );
-    await for(final progress in processStream) {
-      if (progress.isProcessingCompleted) {
-        break;
-      }
-      /*
-      setState(() {
-        progressValue = progress;
-      });
-      */
-    }
-    debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
-    debugPrint('Exported: ${output.absolute}');
   }
 }

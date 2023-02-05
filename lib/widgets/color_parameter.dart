@@ -50,7 +50,9 @@ class ColorParameterWidget extends StatelessWidget {
                     TextEditingController(text: parameter.value.red.toString()),
                 onSubmitted: (value) {
                   final colorValue = int.tryParse(value);
-                  if (colorValue != null && colorValue >= 0 && colorValue <= 256) {
+                  if (colorValue != null &&
+                      colorValue >= 0 &&
+                      colorValue <= 256) {
                     parameter.value = parameter.value.withRed(colorValue);
                     onChanged.call();
                   }
@@ -71,11 +73,13 @@ class ColorParameterWidget extends StatelessWidget {
                   ),
                 ),
                 textAlign: TextAlign.center,
-                controller:
-                    TextEditingController(text: parameter.value.green.toString()),
+                controller: TextEditingController(
+                    text: parameter.value.green.toString()),
                 onSubmitted: (value) {
                   final colorValue = int.tryParse(value);
-                  if (colorValue != null && colorValue >= 0 && colorValue <= 256) {
+                  if (colorValue != null &&
+                      colorValue >= 0 &&
+                      colorValue <= 256) {
                     parameter.value = parameter.value.withGreen(colorValue);
                     onChanged.call();
                   }
@@ -96,11 +100,13 @@ class ColorParameterWidget extends StatelessWidget {
                   ),
                 ),
                 textAlign: TextAlign.center,
-                controller:
-                    TextEditingController(text: parameter.value.blue.toString()),
+                controller: TextEditingController(
+                    text: parameter.value.blue.toString()),
                 onSubmitted: (value) {
                   final colorValue = int.tryParse(value);
-                  if (colorValue != null && colorValue >= 0 && colorValue <= 256) {
+                  if (colorValue != null &&
+                      colorValue >= 0 &&
+                      colorValue <= 256) {
                     parameter.value = parameter.value.withBlue(colorValue);
                     onChanged.call();
                   }

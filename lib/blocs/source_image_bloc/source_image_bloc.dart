@@ -55,8 +55,6 @@ class Image1Cubit extends SourceImageCubit {
         final texture = await TextureSource.fromAsset(value.asset);
         emit(LutSourceImageReady(value, texture, true));
       }
-    } else if (value is FileExternalImageTexture) {
-
-    }
+    } else if (value is FileExternalImageTexture) {}
   }
 }

@@ -109,7 +109,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                     });
                   },
                 );
-              }else if (e is RectParameter) {
+              } else if (e is RectParameter) {
                 return RectParameterWidget(
                   parameter: e,
                   onChanged: () {
@@ -118,8 +118,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                     });
                   },
                 );
-              }
-              else if (e is SizeParameter) {
+              } else if (e is SizeParameter) {
                 return SizeParameterWidget(
                   parameter: e,
                   onChanged: () {

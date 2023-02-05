@@ -55,8 +55,8 @@ class DataDropdownButtonWidget extends StatelessWidget {
                   context.read<DataBlocCubit>().change(value);
                 }
               },
-              items: state.items
-                  .map<DropdownMenuItem<DataItem>>((DataItem value) {
+              items:
+                  state.items.map<DropdownMenuItem<DataItem>>((DataItem value) {
                 return DropdownMenuItem<DataItem>(
                   value: value,
                   child: SizedBox(

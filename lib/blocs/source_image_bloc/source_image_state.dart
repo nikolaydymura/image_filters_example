@@ -45,13 +45,13 @@ class ImageEmpty extends SourceImageState {
   List<Object?> get props => [];
 }
 
-abstract class AdditionalSourceImageState<T extends ExternalImageTexture> extends SourceImageState {
+abstract class AdditionalSourceImageState<T extends ExternalImageTexture>
+    extends SourceImageState {
   final T selected;
 
   List<T> get items;
 
   const AdditionalSourceImageState(this.selected);
-
 }
 
 class LUTSourceImage extends AdditionalSourceImageState<Lut> {
