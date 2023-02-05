@@ -13,7 +13,6 @@ class RectParameterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double valueDouble = 10.0;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,178 +27,227 @@ class RectParameterWidget extends StatelessWidget {
             ),
           ),
         ),
-        Row(
+        Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(valueDouble++, 0.0, 0.0, 0.0);
-                      onChanged.call();
-                    },
-                    child: const Icon(
-                      Icons.arrow_downward,
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left - 10.0,
+                            parameter.value.top,
+                            parameter.value.width,
+                            parameter.value.height,
+                          );
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_downward,
+                        ),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left + 10,
+                            parameter.value.top,
+                            parameter.value.width,
+                            parameter.value.height,
+                          );
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_upward,
+                        ),
+                      ),
                     ),
-                  ),
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(valueDouble--, 0.0, 0.0, 0.0);
+                    onSubmitted: (inputValue) {
+                      final value = double.tryParse(inputValue);
+                      if (value != null) {
+                        parameter.value = Rect.fromLTWH(
+                          parameter.value.left,
+                          value,
+                          value,
+                          value,
+                        );
+                        onChanged.call();
+                      }
                     },
-                    child: const Icon(
-                      Icons.arrow_upward,
+                    keyboardType: TextInputType.number,
+                    controller: TextEditingController(
+                      text: parameter.value.left.toStringAsFixed(3),
                     ),
                   ),
                 ),
-                onSubmitted: (inputValue) {
-                  final value = double.tryParse(inputValue);
-                  if (value != null) {
-                    parameter.value = Rect.fromLTWH(
-                      parameter.value.left,
-                      value,
-                      value,
-                      value,
-                    );
-                    onChanged.call();
-                  }
-                },
-                keyboardType: TextInputType.number,
-                controller: TextEditingController(
-                  text: parameter.value.left.toStringAsFixed(3),
+                const SizedBox(
+                  width: 8,
                 ),
-              ),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left,
+                            parameter.value.top - 10,
+                            parameter.value.width,
+                            parameter.value.height,
+                          );
+
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_downward,
+                        ),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left,
+                            parameter.value.top + 10,
+                            parameter.value.width,
+                            parameter.value.height,
+                          );
+
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_upward,
+                        ),
+                      ),
+                    ),
+                    onSubmitted: (inputValue) {
+                      final value = double.tryParse(inputValue);
+                      if (value != null) {
+                        parameter.value = Rect.fromLTWH(
+                          value,
+                          parameter.value.top,
+                          value,
+                          value,
+                        );
+                        onChanged.call();
+                      }
+                    },
+                    keyboardType: TextInputType.number,
+                    controller: TextEditingController(
+                      text: parameter.value.top.toStringAsFixed(3),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(0.0, valueDouble++, 0.0, 0.0);
-                      onChanged.call();
-                    },
-                    child: const Icon(
-                      Icons.arrow_downward,
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left,
+                            parameter.value.top,
+                            parameter.value.width - 10,
+                            parameter.value.height,
+                          );
+
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_downward,
+                        ),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left,
+                            parameter.value.top,
+                            parameter.value.width + 10,
+                            parameter.value.height,
+                          );
+
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_upward,
+                        ),
+                      ),
                     ),
-                  ),
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(0.0, valueDouble--, 0.0, 0.0);
+                    onSubmitted: (inputValue) {
+                      final value = double.tryParse(inputValue);
+                      if (value != null) {
+                        parameter.value = Rect.fromLTWH(
+                          value,
+                          value,
+                          parameter.value.width,
+                          value,
+                        );
+                        onChanged.call();
+                      }
                     },
-                    child: const Icon(
-                      Icons.arrow_upward,
-                    ),
-                  ),
-                ),
-                onSubmitted: (inputValue) {
-                  final value = double.tryParse(inputValue);
-                  if (value != null) {
-                    parameter.value = Rect.fromLTWH(
-                      value,
-                      parameter.value.left,
-                      value,
-                      value,
-                    );
-                    onChanged.call();
-                  }
-                },
-                keyboardType: TextInputType.number,
-                controller: TextEditingController(
-                  text: parameter.value.top.toStringAsFixed(3),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(0.0, 0.0, valueDouble++,  0.0);
-                      onChanged.call();
-                    },
-                    child: const Icon(
-                      Icons.arrow_downward,
-                    ),
-                  ),
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(0.0, 0.0, valueDouble--, 0.0);
-                    },
-                    child: const Icon(
-                      Icons.arrow_upward,
+                    keyboardType: TextInputType.number,
+                    controller: TextEditingController(
+                      text: parameter.value.width.toStringAsFixed(3),
                     ),
                   ),
                 ),
-                onSubmitted: (inputValue) {
-                  final value = double.tryParse(inputValue);
-                  if (value != null) {
-                    parameter.value = Rect.fromLTWH(
-                      value,
-                      value,
-                      parameter.value.left,
-                      value,
-                    );
-                    onChanged.call();
-                  }
-                },
-                keyboardType: TextInputType.number,
-                controller: TextEditingController(
-                  text: parameter.value.width.toStringAsFixed(3),
+                const SizedBox(
+                  width: 8,
                 ),
-              ),
-            ),
-            Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(0.0, 0.0, 0.0, valueDouble++);
-                      onChanged.call();
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left,
+                            parameter.value.top,
+                            parameter.value.width,
+                            parameter.value.height - 10,
+                          );
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_downward,
+                        ),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          parameter.value = Rect.fromLTWH(
+                            parameter.value.left,
+                            parameter.value.top,
+                            parameter.value.width,
+                            parameter.value.height + 10,
+                          );
+
+                          onChanged.call();
+                        },
+                        child: const Icon(
+                          Icons.arrow_upward,
+                        ),
+                      ),
+                    ),
+                    onSubmitted: (inputValue) {
+                      final value = double.tryParse(inputValue);
+                      if (value != null) {
+                        parameter.value = Rect.fromLTWH(
+                          value,
+                          value,
+                          parameter.value.height,
+                          value,
+                        );
+                        onChanged.call();
+                      }
                     },
-                    child: const Icon(
-                      Icons.arrow_downward,
+                    keyboardType: TextInputType.number,
+                    controller: TextEditingController(
+                      text: parameter.value.height.toStringAsFixed(3),
                     ),
                   ),
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      parameter.value =
-                          Rect.fromLTWH(0.0, 0.0, 0.0, valueDouble--);
-                    },
-                    child: const Icon(
-                      Icons.arrow_upward,
-                    ),
-                  ),
                 ),
-                onSubmitted: (inputValue) {
-                  final value = double.tryParse(inputValue);
-                  if (value != null) {
-                    parameter.value = Rect.fromLTWH(
-                      value,
-                      value,
-                      parameter.value.left,
-                      value,
-                    );
-                    onChanged.call();
-                  }
-                },
-                keyboardType: TextInputType.number,
-                controller: TextEditingController(
-                  text: parameter.value.height.toStringAsFixed(3),
-                ),
-              ),
+              ],
             ),
           ],
         ),
