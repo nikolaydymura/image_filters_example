@@ -19,25 +19,21 @@ import 'filter_video_details.dart';
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
 
-  List<String> get _shaderItems =>
-      SplayTreeSet<String>.from(
-        [
-          ...FlutterImageFilters.availableFilters,
-          'Brightness + Contrast',
-          'Brightness + Saturation',
-        ],
+  List<String> get _shaderItems => SplayTreeSet<String>.from(
+        FlutterImageFilters.availableFilters,
       ).toList();
 
-  List<String> get _ciFilterItems =>
-      SplayTreeSet<String>.from(
-        [...FlutterCoreImageFilters.availableFilters],
+  List<String> get _ciImageFilterItems => SplayTreeSet<String>.from(
+        FlutterCoreImageFilters.availableImageOnlyFilters,
       ).toList();
 
-  List<String> get _gpuVideoFilterItems =>
-      SplayTreeSet<String>.from(
-        [...FlutterVideoFilters.availableFilters],
+  List<String> get _ciVideoFilterItems => SplayTreeSet<String>.from(
+        FlutterCoreImageFilters.availableVideoOnlyFilters,
       ).toList();
 
+  List<String> get _gpuVideoFilterItems => SplayTreeSet<String>.from(
+        FlutterVideoFilters.availableFilters,
+      ).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -49,52 +45,62 @@ class FiltersListScreen extends StatelessWidget {
           title: const Center(child: Text('Available filters')),
           bottom: TabBar(
             isScrollable: true,
-            indicatorColor: Theme
-                .of(context)
-                .primaryColor,
+            indicatorColor: Theme.of(context).primaryColor,
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               TabsWidget(
-                outputText: Row(
+                outputText: Column(
                   children: const [
-                    Text('Shaders'),
+                    Icon(Icons.image),
                     SizedBox(
-                      width: 8.0,
+                      height: 4.0,
                     ),
-                    Icon(Icons.image)
+                    Text(
+                      'Shaders',
+                      style: TextStyle(fontSize: 11),
+                    )
                   ],
                 ),
               ),
               TabsWidget(
-                outputText: Row(
+                outputText: Column(
                   children: const [
-                    Text('CI'),
+                    Icon(Icons.image),
                     SizedBox(
-                      width: 8.0,
+                      height: 4.0,
                     ),
-                    Icon(Icons.image)
+                    Text(
+                      'Core Image',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ],
                 ),
               ),
               TabsWidget(
-                outputText: Row(
+                outputText: Column(
                   children: const [
-                    Text('CI'),
+                    Icon(Icons.video_camera_back),
                     SizedBox(
-                      width: 8.0,
+                      height: 4.0,
                     ),
-                    Icon(Icons.video_camera_back)
+                    Text(
+                      'Core Image',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ],
                 ),
               ),
               TabsWidget(
-                outputText: Row(
+                outputText: Column(
                   children: const [
-                    Text('GPU'),
+                    Icon(Icons.video_camera_back),
                     SizedBox(
-                      width: 8.0,
+                      height: 4.0,
                     ),
-                    Icon(Icons.video_camera_back)
+                    Text(
+                      'GPU Video',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ],
                 ),
               ),
@@ -105,38 +111,38 @@ class FiltersListScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TabBarView(
             children: [
-            ListSupportedFiltersWidget(
-            items: _shaderItems,
-            configuration: 'ShaderConfiguration',
-            onItemTap: (name) {
-              handleImageShaderTap(context, name);
-            },
+              ListSupportedFiltersWidget(
+                items: _shaderItems,
+                configuration: 'ShaderConfiguration',
+                onItemTap: (name) {
+                  handleImageShaderTap(context, name);
+                },
+              ),
+              ListSupportedFiltersWidget(
+                items: _ciImageFilterItems,
+                configuration: 'CIFilterConfiguration',
+                onItemTap: (name) {
+                  handleCIImageTap(context, name);
+                },
+              ),
+              ListSupportedFiltersWidget(
+                items: _ciVideoFilterItems,
+                configuration: 'CIFilterConfiguration',
+                onItemTap: (name) {
+                  handleCIVideoTap(context, name);
+                },
+              ),
+              ListSupportedFiltersWidget(
+                items: _gpuVideoFilterItems,
+                configuration: 'GPUFilterConfiguration',
+                onItemTap: (name) {
+                  handleGPUVideoTap(context, name);
+                },
+              ),
+            ],
           ),
-          ListSupportedFiltersWidget(
-              items: _ciFilterItems,
-              configuration:'CIFilterConfiguration',
-              onItemTap: (name) {
-        handleCIImageTap(context, name);
-        },
         ),
-        ListSupportedFiltersWidget(
-          items: _ciFilterItems,
-          configuration: 'CIFilterConfiguration',
-          onItemTap: (name) {
-            handleCIVideoTap(context, name);
-          },
-        ),
-        ListSupportedFiltersWidget(
-          items: _gpuVideoFilterItems,
-          configuration: 'GPUFilterConfiguration',
-          onItemTap: (name) {
-            handleGPUVideoTap(context, name);
-          },
-        ),
-        ],
       ),
-    ),)
-    ,
     );
   }
 }
@@ -145,7 +151,7 @@ extension on FiltersListScreen {
   void handleGPUVideoTap(BuildContext context, String name) {
     _pushPage(
       context,
-          (context) {
+      (context) {
         return BlocProvider(
           create: (context) => ExportCubit(),
           child: VideoDetailsPage(
@@ -165,7 +171,7 @@ extension on FiltersListScreen {
         configuration.hasInputImage) {
       _pushPage(
         context,
-            (context) {
+        (context) {
           return BlocProvider(
             create: (context) => ExportCubit(),
             child: VideoDetailsPage(
@@ -188,7 +194,7 @@ extension on FiltersListScreen {
         configuration.hasInputImage) {
       _pushPage(
         context,
-            (context) {
+        (context) {
           return CIFilterDetailsPage(
             configuration: configuration,
           );
@@ -212,7 +218,7 @@ extension on FiltersListScreen {
       } else {
         _pushPage(
           context,
-              (context) {
+          (context) {
             return FilterGroupDetailsScreen(
               filterName1: 'Brightness',
               filterName2: 'Saturation',
@@ -235,7 +241,7 @@ extension on FiltersListScreen {
     } else {
       _pushPage(
         context,
-            (context) {
+        (context) {
           return BlocProvider(
             create: (context) => Image1Cubit(configuration!),
             child: FilterDetailsScreen(
