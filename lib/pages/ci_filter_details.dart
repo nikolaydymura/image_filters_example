@@ -119,7 +119,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                     });
                   },
                 );
-              }else if (e is VectorParameter) {
+              } else if (e is VectorParameter) {
                 return VectorParameterWidget(
                   parameter: e,
                   onChanged: () {
@@ -128,8 +128,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                     });
                   },
                 );
-              }
-              else if (e is SizeParameter) {
+              } else if (e is SizeParameter) {
                 return SizeParameterWidget(
                   parameter: e,
                   onChanged: () {

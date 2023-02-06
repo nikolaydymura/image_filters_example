@@ -74,7 +74,8 @@ class ColorParameterWidget extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
                 controller: TextEditingController(
-                    text: parameter.value.green.toString()),
+                  text: parameter.value.green.toString(),
+                ),
                 onSubmitted: (value) {
                   final colorValue = int.tryParse(value);
                   if (colorValue != null &&
@@ -101,7 +102,8 @@ class ColorParameterWidget extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
                 controller: TextEditingController(
-                    text: parameter.value.blue.toString()),
+                  text: parameter.value.blue.toString(),
+                ),
                 onSubmitted: (value) {
                   final colorValue = int.tryParse(value);
                   if (colorValue != null &&

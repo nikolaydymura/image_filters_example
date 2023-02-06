@@ -85,9 +85,10 @@ class VectorParameterWidget extends StatelessWidget {
                       ),
                     ),
                     suffixIcon: InkWell(
-                      onTap: () {setState(() {
-                        parameter.value[index] += 0.5;
-                      });
+                      onTap: () {
+                        setState(() {
+                          parameter.value[index] += 0.5;
+                        });
                         onChanged.call();
                       },
                       child: const Icon(

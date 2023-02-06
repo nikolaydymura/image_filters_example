@@ -12,10 +12,9 @@ import '../brightness_contrast_shader_configuration.dart';
 import '../widgets/list_supported_filters_widget.dart';
 import '../widgets/tabs_widget.dart';
 import 'ci_filter_details.dart';
-import 'ci_filter_video_details.dart';
 import 'filter_group_details.dart';
 import 'filters_details.dart';
-import 'gpu_filter_video_details.dart';
+import 'filter_video_details.dart';
 
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
@@ -54,15 +53,16 @@ class FiltersListScreen extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               TabsWidget(
-                  outputText: Row(
-                children: const [
-                  Text('Shaders'),
-                  SizedBox(
-                    width: 8.0,
-                  ),
-                  Icon(Icons.image)
-                ],
-              )),
+                outputText: Row(
+                  children: const [
+                    Text('Shaders'),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Icon(Icons.image)
+                  ],
+                ),
+              ),
               TabsWidget(
                 outputText: Row(
                   children: const [
@@ -142,8 +142,9 @@ extension on FiltersListScreen {
       (context) {
         return BlocProvider(
           create: (context) => ExportCubit(),
-          child: GPUFilterVideoDetailsPage(
+          child: VideoDetailsPage(
             filterName: name,
+            gpu: true,
           ),
         );
       },
@@ -161,8 +162,9 @@ extension on FiltersListScreen {
         (context) {
           return BlocProvider(
             create: (context) => ExportCubit(),
-            child: CIFilterVideoDetailsPage(
-              configuration: configuration,
+            child: VideoDetailsPage(
+              filterName: name,
+              gpu: false,
             ),
           );
         },
