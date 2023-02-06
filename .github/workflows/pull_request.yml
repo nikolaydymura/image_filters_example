@@ -1,0 +1,32 @@
+name: Verify Pull Request
+on:
+  pull_request:
+    types: [ opened, synchronize, edited, reopened ]
+
+jobs:
+  verify_formatting:
+    name: Flutter Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Downloading sources
+      - uses: subosito/flutter-action@v2
+        name: Preparing Flutter SDK
+        with:
+          flutter-version: '3.7.1'
+          channel: 'stable'
+      - name: Format
+        run: flutter format --set-exit-if-changed lib
+  analyze_code:
+    name: Flutter Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Downloading sources
+      - uses: subosito/flutter-action@v2
+        name: Preparing Flutter SDK
+        with:
+          flutter-version: '3.7.1'
+          channel: 'stable'
+      - name: Analyze
+        run: flutter analyze lib
