@@ -19,7 +19,8 @@ import 'filter_video_details.dart';
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
 
-  List<String> get _shaderItems => SplayTreeSet<String>.from(
+  List<String> get _shaderItems =>
+      SplayTreeSet<String>.from(
         [
           ...FlutterImageFilters.availableFilters,
           'Brightness + Contrast',
@@ -27,17 +28,17 @@ class FiltersListScreen extends StatelessWidget {
         ],
       ).toList();
 
-  List<String> get _ciFilterItems => SplayTreeSet<String>.from(
+  List<String> get _ciFilterItems =>
+      SplayTreeSet<String>.from(
         [...FlutterCoreImageFilters.availableFilters],
-      ).toList()
-        ..insert(0, 'Color Monochrome');
+      ).toList();
 
-  List<String> get _gpuVideoFilterItems => SplayTreeSet<String>.from(
+  List<String> get _gpuVideoFilterItems =>
+      SplayTreeSet<String>.from(
         [...FlutterVideoFilters.availableFilters],
       ).toList()
-        ..insert(0, 'Monochrome')
-        ..insert(0, 'Square Lookup Table')
-        ..insert(0, 'HALD Lookup Table');
+        ..insert(0, 'Monochrome')..insert(0, 'Square Lookup Table')..insert(
+          0, 'HALD Lookup Table');
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,9 @@ class FiltersListScreen extends StatelessWidget {
           title: const Center(child: Text('Available filters')),
           bottom: TabBar(
             isScrollable: true,
-            indicatorColor: Theme.of(context).primaryColor,
+            indicatorColor: Theme
+                .of(context)
+                .primaryColor,
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               TabsWidget(
@@ -103,34 +106,38 @@ class FiltersListScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TabBarView(
             children: [
-              ListSupportedFiltersWidget(
-                items: _shaderItems,
-                onItemTap: (name) {
-                  handleImageShaderTap(context, name);
-                },
-              ),
-              ListSupportedFiltersWidget(
-                items: _ciFilterItems,
-                onItemTap: (name) {
-                  handleCIImageTap(context, name);
-                },
-              ),
-              ListSupportedFiltersWidget(
-                items: _ciFilterItems,
-                onItemTap: (name) {
-                  handleCIVideoTap(context, name);
-                },
-              ),
-              ListSupportedFiltersWidget(
-                items: _gpuVideoFilterItems,
-                onItemTap: (name) {
-                  handleGPUVideoTap(context, name);
-                },
-              ),
-            ],
+            ListSupportedFiltersWidget(
+            items: _shaderItems,
+            configuration: 'ShaderConfiguration',
+            onItemTap: (name) {
+              handleImageShaderTap(context, name);
+            },
           ),
+          ListSupportedFiltersWidget(
+              items: _ciFilterItems,
+              configuration:'CIFilterConfiguration',
+              onItemTap: (name) {
+        handleCIImageTap(context, name);
+        },
         ),
+        ListSupportedFiltersWidget(
+          items: _ciFilterItems,
+          configuration: 'CIFilterConfiguration',
+          onItemTap: (name) {
+            handleCIVideoTap(context, name);
+          },
+        ),
+        ListSupportedFiltersWidget(
+          items: _gpuVideoFilterItems,
+          configuration: 'GPUFilterConfiguration',
+          onItemTap: (name) {
+            handleGPUVideoTap(context, name);
+          },
+        ),
+        ],
       ),
+    ),)
+    ,
     );
   }
 }
@@ -139,7 +146,7 @@ extension on FiltersListScreen {
   void handleGPUVideoTap(BuildContext context, String name) {
     _pushPage(
       context,
-      (context) {
+          (context) {
         return BlocProvider(
           create: (context) => ExportCubit(),
           child: VideoDetailsPage(
@@ -159,7 +166,7 @@ extension on FiltersListScreen {
         configuration.hasInputImage) {
       _pushPage(
         context,
-        (context) {
+            (context) {
           return BlocProvider(
             create: (context) => ExportCubit(),
             child: VideoDetailsPage(
@@ -182,7 +189,7 @@ extension on FiltersListScreen {
         configuration.hasInputImage) {
       _pushPage(
         context,
-        (context) {
+            (context) {
           return CIFilterDetailsPage(
             configuration: configuration,
           );
@@ -206,7 +213,7 @@ extension on FiltersListScreen {
       } else {
         _pushPage(
           context,
-          (context) {
+              (context) {
             return FilterGroupDetailsScreen(
               filterName1: 'Brightness',
               filterName2: 'Saturation',
@@ -229,7 +236,7 @@ extension on FiltersListScreen {
     } else {
       _pushPage(
         context,
-        (context) {
+            (context) {
           return BlocProvider(
             create: (context) => Image1Cubit(configuration!),
             child: FilterDetailsScreen(
