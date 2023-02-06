@@ -9,8 +9,10 @@ import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/export_video_button.dart';
 import '../widgets/number_parameter.dart';
 import '../widgets/point_parameter.dart';
+import '../widgets/rect_parameter.dart';
 import '../widgets/size_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
+import '../widgets/vector_parameter.dart';
 
 class CIFilterVideoDetailsPage extends StatefulWidget {
   final CIFilterConfiguration configuration;
@@ -95,6 +97,24 @@ class _CIFilterDetailsPageState extends State<CIFilterVideoDetailsPage> {
                 );
               } else if (e is PointParameter) {
                 return PointParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                );
+              } else if (e is RectParameter) {
+                return RectParameterWidget(
+                  parameter: e,
+                  onChanged: () {
+                    setState(() {
+                      e.update(configuration);
+                    });
+                  },
+                );
+              } else if (e is VectorParameter) {
+                return VectorParameterWidget(
                   parameter: e,
                   onChanged: () {
                     setState(() {
