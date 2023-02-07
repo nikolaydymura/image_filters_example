@@ -1,21 +1,21 @@
 import 'dart:io';
+
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
-import 'package:path_provider/path_provider.dart';
-
+import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 import '../blocs/data_bloc/data_bloc_cubit.dart';
 import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/color_parameter.dart';
 import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/number_parameter.dart';
+import '../widgets/point_parameter.dart';
 import '../widgets/rect_parameter.dart';
 import '../widgets/size_parameter.dart';
-import '../widgets/point_parameter.dart';
 import '../widgets/slider_number_parameter.dart';
 import '../widgets/vector_parameter.dart';
 
@@ -166,9 +166,11 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           _exportImage();
         },
+        tooltip: 'Export as binary data and compress on Flutter side',
         child: const Icon(Icons.save),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

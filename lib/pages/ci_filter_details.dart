@@ -183,7 +183,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
             ),
             FloatingActionButton(
               heroTag: null,
-              tooltip: 'Export as file using swift coce',
+              tooltip: 'Export as file using swift code',
               onPressed: () {
                 _exportNativeImage();
               },

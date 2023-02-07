@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
@@ -168,6 +169,13 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
 
   @override
   Widget build(BuildContext context) {
+    final numbers = configuration.parameters
+        .whereType<NumberParameter>()
+        .whereNot((e) => e is RangeNumberParameter);
+    final datas = configuration.parameters.whereType<DataParameter>();
+    final params = configuration.parameters
+        .whereNot((e) => e is NumberParameter && e is! RangeNumberParameter)
+        .whereNot((e) => e is DataParameter);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -177,16 +185,33 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ...configuration.parameters.map((e) {
-              if (e is DataParameter) {
-                return BlocProvider(
-                  create: (context) => DataBlocCubit(e, configuration),
-                  child: DataDropdownButtonWidget(
-                    parameter: e,
+            if (numbers.isNotEmpty || datas.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                runSpacing: 12,
+                children: [
+                  ...numbers.map(
+                    (e) => NumberParameterWidget(
+                      parameter: e,
+                      onChanged: () async {
+                        await e.update(configuration);
+                        setState(() {});
+                      },
+                    ),
                   ),
-                );
-              }
+                  ...datas.map(
+                        (e) => BlocProvider(
+                      create: (context) => DataBlocCubit(e, configuration),
+                      child: DataDropdownButtonWidget(
+                        parameter: e,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ...params.map((e) {
               if (e is ColorParameter) {
                 return ColorParameterWidget(
                   parameter: e,

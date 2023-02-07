@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 
@@ -13,53 +15,47 @@ class NumberParameterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        TextField(
-          decoration: InputDecoration(
-            prefixIcon: InkWell(
-              onTap: () {
-                parameter.value -= 0.05;
-                onChanged.call();
-              },
-              child: const Icon(
-                Icons.arrow_downward,
-              ),
-            ),
-            suffixIcon: InkWell(
-              onTap: () {
-                parameter.value += 0.05;
-                onChanged.call();
-              },
-              child: const Icon(
-                Icons.arrow_upward,
-              ),
-            ),
-          ),
-          onSubmitted: (inputValue) {
-            final value = double.tryParse(inputValue);
-            if (value != null) {
-              parameter.value = value;
+    return ConstrainedBox(
+      constraints:
+          BoxConstraints(maxWidth: max(MediaQuery.of(context).size.width / 2 - 16, 170)),
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: parameter.displayName,
+          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          prefixIcon: InkWell(
+            onTap: () {
+              parameter.value -= 0.05;
               onChanged.call();
-            }
-          },
-          keyboardType: TextInputType.number,
-          controller:
-              TextEditingController(text: parameter.value.toStringAsFixed(3)),
+            },
+            child: const Icon(
+              Icons.arrow_downward,
+            ),
+          ),
+          contentPadding: EdgeInsets.zero,
+          prefixIconColor: Theme.of(context).primaryColor,
+          suffixIconColor: Theme.of(context).primaryColor,
+          suffixIcon: InkWell(
+            onTap: () {
+              parameter.value += 0.05;
+              onChanged.call();
+            },
+            child: const Icon(
+              Icons.arrow_upward,
+            ),
+          ),
         ),
-      ],
+        onSubmitted: (inputValue) {
+          final value = double.tryParse(inputValue);
+          if (value != null) {
+            parameter.value = value;
+            onChanged.call();
+          }
+        },
+        keyboardType: TextInputType.number,
+        controller:
+            TextEditingController(text: parameter.value.toStringAsFixed(3)),
+      ),
     );
   }
 }

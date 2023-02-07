@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ListSupportedFiltersWidget extends StatelessWidget {
+import '../blocs/search_bloc/search_bloc.dart';
+
+class ListSupportedFiltersWidget<T extends SearchableBloc>
+    extends StatelessWidget {
   final String configuration;
-  final List<String> items;
   final Function(String) onItemTap;
 
   const ListSupportedFiltersWidget({
     super.key,
-    required this.items,
     required this.onItemTap,
     required this.configuration,
   });
@@ -36,52 +38,109 @@ class ListSupportedFiltersWidget extends StatelessWidget {
       ],
     };
     final List<String> filters = favorites[configuration] ?? [];
-    return CustomScrollView(
-      slivers: [
-        SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final item = filters[index];
-              return Card(
-                color: Colors.greenAccent[200],
-                child: ListTile(
-                  trailing: const Icon(
-                    Icons.navigate_next,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BlocBuilder<T, SearchState>(
+            builder: (context, state) {
+              return TextField(
+                controller: TextEditingController(text: state.term)
+                  ..selection =
+                      TextSelection.collapsed(offset: state.term.length),
+                onChanged: (value) => context.read<T>().search(value),
+                focusNode: state.focusNode,
+                maxLines: 1,
+                textAlignVertical: TextAlignVertical.center,
+                textCapitalization: TextCapitalization.none,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
                   ),
-                  title: Text(
-                    item,
+                  prefixIconColor: Theme.of(context).primaryColor,
+                  suffix: InkWell(
+                    onTap: () => context.read<T>().reset(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Icon(
+                        Icons.close,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
                   ),
-                  onTap: () {
-                    onItemTap(item);
-                  },
+                  hintStyle: TextStyle(color: Theme.of(context).cardTheme.color),
+                  labelText: 'Search',
+                  hintText: 'Type filter name',
                 ),
               );
             },
-            childCount: filters.length, // 1000 list items
           ),
-          itemExtent: 64,
         ),
-        SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final item = items[index];
-              return Card(
-                child: ListTile(
-                  title: Text(item),
-                  trailing: Icon(
-                    Icons.navigate_next,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onTap: () {
-                    onItemTap(item);
+        Expanded(
+          child: CustomScrollView(
+            slivers: [
+              SliverFixedExtentList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = filters[index];
+                    return Card(
+                      color: Theme.of(context).primaryColor,
+                      child: ListTile(
+                        trailing: const Icon(
+                          Icons.navigate_next,
+                        ),
+                        title: Text(
+                          item,
+                        ),
+                        onTap: () {
+                          onItemTap(item);
+                        },
+                      ),
+                    );
                   },
+                  childCount: filters.length, // 1000 list items
                 ),
-              );
-            },
-            childCount: items.length,
+                itemExtent: 64,
+              ),
+              BlocBuilder<T, SearchState>(
+                builder: (context, state) {
+                  if (state is SearchSucceeded) {
+                    final items = state.items;
+                    return SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final item = items[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(item),
+                              trailing: Icon(
+                                Icons.navigate_next,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onTap: () {
+                                onItemTap(item);
+                              },
+                            ),
+                          );
+                        },
+                        childCount: items.length,
+                      ),
+                      itemExtent: 64,
+                    );
+                  }
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'Founded nothing',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  );
+                },
+              )
+            ],
           ),
-          itemExtent: 64,
-        )
+        ),
       ],
     );
   }
