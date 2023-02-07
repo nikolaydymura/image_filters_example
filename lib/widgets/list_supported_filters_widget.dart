@@ -185,9 +185,6 @@ class ListSupportedFiltersWidget extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(
-          height: 1,
-        ),
       ],
     );
   }
