@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/search_bloc/search_bloc.dart';
 
-class ListSupportedFiltersWidget extends StatelessWidget {
+class ListSupportedFiltersWidget<T extends SearchableBloc>
+    extends StatelessWidget {
   final String configuration;
-  final List<String> items;
   final Function(String) onItemTap;
 
   const ListSupportedFiltersWidget({
     super.key,
-    required this.items,
     required this.onItemTap,
     required this.configuration,
   });
@@ -41,123 +40,73 @@ class ListSupportedFiltersWidget extends StatelessWidget {
     final List<String> filters = favorites[configuration] ?? [];
     return Column(
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.94,
-          height: 54.0,
-          child: TextField(
-            onChanged: (value) =>
-                context.read<SearchBloc>().search(items, value),
-            decoration: InputDecoration(
-              prefix: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.search_outlined),
-              ),
-              fillColor: Theme.of(context).cardColor,
-              hintText: 'Search',
-              filled: true,
-              border: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BlocBuilder<T, SearchState>(
+            builder: (context, state) {
+              return TextField(
+                controller: TextEditingController(text: state.term)
+                  ..selection =
+                      TextSelection.collapsed(offset: state.term.length),
+                onChanged: (value) => context.read<T>().search(value),
+                focusNode: state.focusNode,
+                maxLines: 1,
+                textAlignVertical: TextAlignVertical.center,
+                textCapitalization: TextCapitalization.none,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
+                  ),
+                  prefixIconColor: Theme.of(context).primaryColor,
+                  suffix: InkWell(
+                    onTap: () => context.read<T>().reset(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Icon(
+                        Icons.close,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  hintStyle: TextStyle(color: Theme.of(context).cardTheme.color),
+                  labelText: 'Search',
+                  hintText: 'Type filter name',
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
         Expanded(
-          child: BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, state) {
-              if (state is SearchEmpty) {
-                return const Center(
-                  child: Text(
-                    'Founded nothing',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                );
-              } else if (state is SearchSucceeded) {
-                return CustomScrollView(
-                  slivers: [
-                    SliverFixedExtentList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final item = state.items[index];
-                          return Card(
-                            color: Colors.greenAccent[200],
-                            child: ListTile(
-                              trailing: const Icon(
-                                Icons.navigate_next,
-                              ),
-                              title: Text(
-                                item,
-                              ),
-                              onTap: () {
-                                onItemTap(item);
-                              },
-                            ),
-                          );
+          child: CustomScrollView(
+            slivers: [
+              SliverFixedExtentList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = filters[index];
+                    return Card(
+                      color: Theme.of(context).primaryColor,
+                      child: ListTile(
+                        trailing: const Icon(
+                          Icons.navigate_next,
+                        ),
+                        title: Text(
+                          item,
+                        ),
+                        onTap: () {
+                          onItemTap(item);
                         },
-                        childCount: state.items.length, // 1000 list items
                       ),
-                      itemExtent: 64,
-                    ),
-                    SliverFixedExtentList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final item = state.items[index];
-                          return Card(
-                            child: ListTile(
-                              title: Text(item),
-                              trailing: Icon(
-                                Icons.navigate_next,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onTap: () {
-                                onItemTap(item);
-                              },
-                            ),
-                          );
-                        },
-                        childCount: state.items.length,
-                      ),
-                      itemExtent: 64,
-                    )
-                  ],
-                );
-              } else if (state is SearchInitial) {
-                return CustomScrollView(
-                  slivers: [
-                    SliverFixedExtentList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (state is SearchEmpty) {
-                            return const Center(
-                              child: Text(
-                                'Founded nothing',
-                                style: TextStyle(fontSize: 24),
-                              ),
-                            );
-                          }
-                          final item = filters[index];
-                          return Card(
-                            color: Colors.greenAccent[200],
-                            child: ListTile(
-                              trailing: const Icon(
-                                Icons.navigate_next,
-                              ),
-                              title: Text(
-                                item,
-                              ),
-                              onTap: () {
-                                onItemTap(item);
-                              },
-                            ),
-                          );
-                        },
-                        childCount: filters.length, // 1000 list items
-                      ),
-                      itemExtent: 64,
-                    ),
-                    SliverFixedExtentList(
+                    );
+                  },
+                  childCount: filters.length, // 1000 list items
+                ),
+                itemExtent: 64,
+              ),
+              BlocBuilder<T, SearchState>(
+                builder: (context, state) {
+                  if (state is SearchSucceeded) {
+                    final items = state.items;
+                    return SliverFixedExtentList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final item = items[index];
@@ -177,12 +126,19 @@ class ListSupportedFiltersWidget extends StatelessWidget {
                         childCount: items.length,
                       ),
                       itemExtent: 64,
-                    )
-                  ],
-                );
-              }
-              return const CircularProgressIndicator();
-            },
+                    );
+                  }
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'Founded nothing',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  );
+                },
+              )
+            ],
           ),
         ),
       ],

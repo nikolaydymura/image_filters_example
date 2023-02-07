@@ -8,11 +8,14 @@ abstract class SearchEvent extends Equatable {
 }
 
 class StartSearchEvent extends SearchEvent {
-  final List<String> filters;
   final String term;
 
-  const StartSearchEvent(this.filters, this.term);
+  const StartSearchEvent(this.term);
 
   @override
-  List<Object?> get props => [filters, term];
+  List<Object?> get props => [term];
+}
+
+class ResetSearchEvent extends SearchEvent {
+  const ResetSearchEvent();
 }

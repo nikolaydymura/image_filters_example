@@ -1,32 +1,25 @@
 part of 'search_bloc.dart';
 
 abstract class SearchState extends Equatable {
-  @override
-  List<Object> get props => [];
+  final String term;
+  final FocusNode focusNode;
 
-  const SearchState();
+  @override
+  List<Object> get props => [term];
+
+  const SearchState(this.term, this.focusNode);
 }
 
-class SearchInitial extends SearchState {}
-
-class SearchEmpty extends SearchState {}
-
-class SearchInProcessing extends SearchState {}
+class SearchEmpty extends SearchState {
+  const SearchEmpty(super.term, super.focusNode);
+}
 
 class SearchSucceeded extends SearchState {
   final List<String> items;
 
-  const SearchSucceeded._(this.items);
+  const SearchSucceeded._(super.term, super.focusNode, this.items);
 
   @override
-  List<Object> get props => [items];
+  List<Object> get props => [term, items];
 }
 
-class SearchFailed extends SearchState {
-  final String errorMessage;
-
-  const SearchFailed(this.errorMessage);
-
-  @override
-  List<Object> get props => [errorMessage];
-}
