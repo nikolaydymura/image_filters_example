@@ -16,19 +16,9 @@ class DataBlocCubit extends Cubit<DataBlocState> {
 
   DataBlocCubit(this.parameter, this.configuration)
       : super(DataBlocState(_defaultItem, [_defaultItem])) {
-    if (parameter.name == 'inputCubeData' &&
-        configuration is CIColorCubeConfiguration) {
+    if (isHALDCube(parameter, configuration)) {
       emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
-    } else if (parameter.name == 'inputTextureCubeData' &&
-        (configuration is SquareLookupTableShaderConfiguration ||
-            configuration is GPUSquareLookupTableConfiguration)) {
-      emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
-    } else if (parameter.name == 'inputTextureCubeData' &&
-        (configuration is HALDLookupTableShaderConfiguration ||
-            configuration is GPUHALDLookupTableConfiguration)) {
-      emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
-    } else if (parameter.name == 'inputImage2' &&
-        configuration is CILookupTableConfiguration) {
+    } else if (isSquareCube(parameter, configuration)) {
       emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
     } else if (parameter.name == 'inputBackgroundImage' ||
         parameter.name == 'inputImage2' ||
@@ -87,20 +77,63 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   ];
 
   void addItem(FileDataItem item) {
-    if (parameter.name == 'inputCubeData' &&
-        configuration is CIColorCubeConfiguration) {
+    if (isHALDCube(parameter, configuration)) {
       _lutHALDImages.add(item);
-    } else if (parameter.name == 'inputTextureCubeData' &&
-        (configuration is SquareLookupTableShaderConfiguration ||
-            configuration is GPUSquareLookupTableConfiguration)) {
-      _lutSquareImages.add(item);
-    } else if (parameter.name == 'inputTextureCubeData' &&
-        (configuration is HALDLookupTableShaderConfiguration ||
-            configuration is GPUHALDLookupTableConfiguration)) {
-      _lutHALDImages.add(item);
-    } else if (parameter.name == 'inputImage2' &&
-        configuration is CILookupTableConfiguration) {
+    } else if (isSquareCube(parameter, configuration)) {
       _lutSquareImages.add(item);
     }
   }
+}
+
+bool isSquareCube(
+  DataParameter parameter,
+  FilterConfiguration configuration,
+) {
+  if (parameter.name == 'inputTextureCubeData' &&
+      configuration is SquareLookupTableShaderConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputTextureCubeData' &&
+      configuration is GPUSquareLookupTableConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputImage2' &&
+      configuration is CILookupTableConfiguration) {
+    return true;
+  }
+
+  return false;
+}
+
+bool isHALDCube(
+  DataParameter parameter,
+  FilterConfiguration configuration,
+) {
+  if (parameter.name == 'inputCubeData' &&
+      configuration is CIColorCubeConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputCubeData' &&
+      configuration is CIColorCubeWithColorSpaceConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputCube0Data' &&
+      configuration is CIColorCubesMixedWithMaskConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputCube1Data' &&
+      configuration is CIColorCubesMixedWithMaskConfiguration) {
+    return true;
+  }
+
+  if (parameter.name == 'inputTextureCubeData' &&
+      configuration is HALDLookupTableShaderConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputTextureCubeData' &&
+      configuration is GPUHALDLookupTableConfiguration) {
+    return true;
+  }
+
+  return false;
 }

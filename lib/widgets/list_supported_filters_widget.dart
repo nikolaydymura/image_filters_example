@@ -3,6 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/search_bloc/search_bloc.dart';
 
+const Map<String, List<String>> favorites = {
+  'CIFilterConfiguration': [
+    'Color Cube',
+    'Color Cubes Mixed With Mask',
+    'Color Cube with ColorSpace',
+    'Color Monochrome',
+    'Lookup Table',
+  ],
+  'GPUFilterConfiguration': [
+    'HALD Lookup Table',
+    'Monochrome',
+    'Square Lookup Table',
+  ],
+  'ShaderConfiguration': [
+    'Brightness + Contrast',
+    'Brightness + Saturation',
+    'HALD Lookup Table',
+    'Monochrome',
+    'Square Lookup Table',
+  ],
+};
+
 class ListSupportedFiltersWidget<T extends SearchableBloc>
     extends StatelessWidget {
   final String configuration;
@@ -16,27 +38,6 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
 
   @override
   Widget build(BuildContext context) {
-    Map<String, List<String>> favorites = {
-      'CIFilterConfiguration': [
-        'Color Cube',
-        'Color Cubes Mixed With Mask',
-        'Color Cube with ColorSpace',
-        'Color Monochrome',
-        'Lookup Table',
-      ],
-      'GPUFilterConfiguration': [
-        'HALD Lookup Table',
-        'Monochrome',
-        'Square Lookup Table',
-      ],
-      'ShaderConfiguration': [
-        'Brightness + Contrast',
-        'Brightness + Saturation',
-        'HALD Lookup Table',
-        'Monochrome',
-        'Square Lookup Table',
-      ],
-    };
     final List<String> filters = favorites[configuration] ?? [];
     return Column(
       children: [
