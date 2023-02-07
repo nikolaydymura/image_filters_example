@@ -39,53 +39,6 @@ class ListSupportedFiltersWidget extends StatelessWidget {
       ],
     };
     final List<String> filters = favorites[configuration] ?? [];
-    return CustomScrollView(
-      slivers: [
-        SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final item = filters[index];
-              return Card(
-                color: Colors.greenAccent[200],
-                child: ListTile(
-                  trailing: const Icon(
-                    Icons.navigate_next,
-                  ),
-                  title: Text(
-                    item,
-                  ),
-                  onTap: () {
-                    onItemTap(item);
-                  },
-                ),
-              );
-            },
-            childCount: filters.length, // 1000 list items
-          ),
-          itemExtent: 64,
-        ),
-        SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final item = items[index];
-              return Card(
-                child: ListTile(
-                  title: Text(item),
-                  trailing: Icon(
-                    Icons.navigate_next,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onTap: () {
-                    onItemTap(item);
-                  },
-                ),
-              );
-            },
-            childCount: items.length,
-          ),
-          itemExtent: 64,
-        )
-      ],
     return Column(
       children: [
         SizedBox(
@@ -109,6 +62,56 @@ class ListSupportedFiltersWidget extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+        Expanded(
+          child: CustomScrollView(
+            slivers: [
+              SliverFixedExtentList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = filters[index];
+                    return Card(
+                      color: Colors.greenAccent[200],
+                      child: ListTile(
+                        trailing: const Icon(
+                          Icons.navigate_next,
+                        ),
+                        title: Text(
+                          item,
+                        ),
+                        onTap: () {
+                          onItemTap(item);
+                        },
+                      ),
+                    );
+                  },
+                  childCount: filters.length, // 1000 list items
+                ),
+                itemExtent: 64,
+              ),
+              SliverFixedExtentList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = items[index];
+                    return Card(
+                      child: ListTile(
+                        title: Text(item),
+                        trailing: Icon(
+                          Icons.navigate_next,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onTap: () {
+                          onItemTap(item);
+                        },
+                      ),
+                    );
+                  },
+                  childCount: items.length,
+                ),
+                itemExtent: 64,
+              )
+            ],
           ),
         ),
         const SizedBox(
