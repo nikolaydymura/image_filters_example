@@ -2,19 +2,20 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
-import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
+import 'package:provider/provider.dart';
 
 import '../blocs/export_bloc/export_cubit.dart';
 import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../brightness_contrast_shader_configuration.dart';
 import '../widgets/list_supported_filters_widget.dart';
-import '../widgets/tabs_widget.dart';
+import '../widgets/screen_index_provider.dart';
 import 'ci_filter_details.dart';
 import 'filter_group_details.dart';
-import 'filters_details.dart';
 import 'filter_video_details.dart';
+import 'filters_details.dart';
 
 class FiltersListScreen extends StatelessWidget {
   const FiltersListScreen({Key? key}) : super(key: key);
@@ -37,111 +38,71 @@ class FiltersListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          title: const Center(child: Text('Available filters')),
-          bottom: TabBar(
-            isScrollable: true,
-            indicatorColor: Theme.of(context).primaryColor,
-            indicatorSize: TabBarIndicatorSize.tab,
-            tabs: [
-              TabsWidget(
-                outputText: Column(
-                  children: const [
-                    Icon(Icons.image),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Text(
-                      'Shaders',
-                      style: TextStyle(fontSize: 11),
-                    )
-                  ],
-                ),
-              ),
-              TabsWidget(
-                outputText: Column(
-                  children: const [
-                    Icon(Icons.image),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Text(
-                      'Core Image',
-                      style: TextStyle(fontSize: 11),
-                    ),
-                  ],
-                ),
-              ),
-              TabsWidget(
-                outputText: Column(
-                  children: const [
-                    Icon(Icons.video_camera_back),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Text(
-                      'Core Image',
-                      style: TextStyle(fontSize: 11),
-                    ),
-                  ],
-                ),
-              ),
-              TabsWidget(
-                outputText: Column(
-                  children: const [
-                    Icon(Icons.video_camera_back),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Text(
-                      'GPU Video',
-                      style: TextStyle(fontSize: 11),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    final screenIndexProvider = Provider.of<ScreenIndexProvider>(context);
+    final currentScreenIndex = screenIndexProvider.fetchCurrentScreenIndex;
+    List<Widget> widgetOptions = <Widget>[
+      ListSupportedFiltersWidget(
+        items: _shaderItems,
+        configuration: 'ShaderConfiguration',
+        onItemTap: (name) {
+          handleImageShaderTap(context, name);
+        },
+      ),
+      ListSupportedFiltersWidget(
+        items: _ciImageFilterItems,
+        configuration: 'CIFilterConfiguration',
+        onItemTap: (name) {
+          handleCIImageTap(context, name);
+        },
+      ),
+      ListSupportedFiltersWidget(
+        items: _ciVideoFilterItems,
+        configuration: 'CIFilterConfiguration',
+        onItemTap: (name) {
+          handleCIVideoTap(context, name);
+        },
+      ),
+      ListSupportedFiltersWidget(
+        items: _gpuVideoFilterItems,
+        configuration: 'GPUFilterConfiguration',
+        onItemTap: (name) {
+          handleGPUVideoTap(context, name);
+        },
+      ),
+    ];
+    int selectedIndex = 0;
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 1,
+        title: const Center(child: Text('Available filters')),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: true,
+        elevation: 1.5,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.image),
+            label: 'Shaders',
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TabBarView(
-            children: [
-              ListSupportedFiltersWidget(
-                items: _shaderItems,
-                configuration: 'ShaderConfiguration',
-                onItemTap: (name) {
-                  handleImageShaderTap(context, name);
-                },
-              ),
-              ListSupportedFiltersWidget(
-                items: _ciImageFilterItems,
-                configuration: 'CIFilterConfiguration',
-                onItemTap: (name) {
-                  handleCIImageTap(context, name);
-                },
-              ),
-              ListSupportedFiltersWidget(
-                items: _ciVideoFilterItems,
-                configuration: 'CIFilterConfiguration',
-                onItemTap: (name) {
-                  handleCIVideoTap(context, name);
-                },
-              ),
-              ListSupportedFiltersWidget(
-                items: _gpuVideoFilterItems,
-                configuration: 'GPUFilterConfiguration',
-                onItemTap: (name) {
-                  handleGPUVideoTap(context, name);
-                },
-              ),
-            ],
+          BottomNavigationBarItem(
+            icon: Icon(Icons.image),
+            label: 'Core Image',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.video_camera_back),
+            label: 'Core Image',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.video_camera_back),
+            label: 'GPU Video',
+          ),
+        ],
+        currentIndex: selectedIndex,
+        onTap: (value) => screenIndexProvider.updateScreenIndex(value),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: widgetOptions[currentScreenIndex],
       ),
     );
   }

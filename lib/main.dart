@@ -3,18 +3,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
+import 'package:provider/provider.dart';
 
 import 'blocs/search_bloc/search_bloc.dart';
 import 'blocs/source_image_bloc/source_image_bloc.dart';
 import 'brightness_contrast_shader_configuration.dart';
 import 'pages/list_filters.dart';
+import 'widgets/screen_index_provider.dart';
 
 void main() {
   FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(
     () => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'),
   );
   runApp(
-    MultiBlocProvider(
+    MultiProvider(
       providers: [
         BlocProvider<SourceImageCubit>(
           create: (context) => SourceImageCubit(),
@@ -22,6 +24,7 @@ void main() {
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(),
         ),
+        ChangeNotifierProvider(create: (context) => ScreenIndexProvider())
       ],
       child: const MyApp(),
     ),

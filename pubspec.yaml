@@ -50,6 +50,7 @@ dependencies:
   equatable: ^2.0.5
   rxdart: ^0.27.6
   stream_transform: ^2.1.0
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
