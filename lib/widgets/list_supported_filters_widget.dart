@@ -65,59 +65,6 @@ class ListSupportedFiltersWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverFixedExtentList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = filters[index];
-                    return Card(
-                      color: Colors.greenAccent[200],
-                      child: ListTile(
-                        trailing: const Icon(
-                          Icons.navigate_next,
-                        ),
-                        title: Text(
-                          item,
-                        ),
-                        onTap: () {
-                          onItemTap(item);
-                        },
-                      ),
-                    );
-                  },
-                  childCount: filters.length, // 1000 list items
-                ),
-                itemExtent: 64,
-              ),
-              SliverFixedExtentList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = items[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(item),
-                        trailing: Icon(
-                          Icons.navigate_next,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onTap: () {
-                          onItemTap(item);
-                        },
-                      ),
-                    );
-                  },
-                  childCount: items.length,
-                ),
-                itemExtent: 64,
-              )
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 1,
-        ),
-        Expanded(
           child: BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               if (state is SearchEmpty) {
@@ -127,50 +74,119 @@ class ListSupportedFiltersWidget extends StatelessWidget {
                     style: TextStyle(fontSize: 24),
                   ),
                 );
-              }
-              if (state is SearchSucceeded) {
-                final filters = state.items;
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    final item = filters[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(item),
-                        trailing: Icon(
-                          Icons.navigate_next,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onTap: () {
-                          onItemTap(item);
+              } else if (state is SearchSucceeded) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final item = state.items[index];
+                          return Card(
+                            color: Colors.greenAccent[200],
+                            child: ListTile(
+                              trailing: const Icon(
+                                Icons.navigate_next,
+                              ),
+                              title: Text(
+                                item,
+                              ),
+                              onTap: () {
+                                onItemTap(item);
+                              },
+                            ),
+                          );
                         },
+                        childCount: state.items.length, // 1000 list items
                       ),
-                    );
-                  },
-                  itemCount: filters.length,
+                      itemExtent: 64,
+                    ),
+                    SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final item = state.items[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(item),
+                              trailing: Icon(
+                                Icons.navigate_next,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onTap: () {
+                                onItemTap(item);
+                              },
+                            ),
+                          );
+                        },
+                        childCount: state.items.length,
+                      ),
+                      itemExtent: 64,
+                    )
+                  ],
                 );
               } else if (state is SearchInitial) {
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(item),
-                        trailing: Icon(
-                          Icons.navigate_next,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onTap: () {
-                          onItemTap(item);
+                return CustomScrollView(
+                  slivers: [
+                    SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          if (state is SearchEmpty) {
+                            return const Center(
+                              child: Text(
+                                'Founded nothing',
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            );
+                          }
+                          final item = filters[index];
+                          return Card(
+                            color: Colors.greenAccent[200],
+                            child: ListTile(
+                              trailing: const Icon(
+                                Icons.navigate_next,
+                              ),
+                              title: Text(
+                                item,
+                              ),
+                              onTap: () {
+                                onItemTap(item);
+                              },
+                            ),
+                          );
                         },
+                        childCount: filters.length, // 1000 list items
                       ),
-                    );
-                  },
-                  itemCount: items.length,
+                      itemExtent: 64,
+                    ),
+                    SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final item = items[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(item),
+                              trailing: Icon(
+                                Icons.navigate_next,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onTap: () {
+                                onItemTap(item);
+                              },
+                            ),
+                          );
+                        },
+                        childCount: items.length,
+                      ),
+                      itemExtent: 64,
+                    )
+                  ],
                 );
               }
               return const CircularProgressIndicator();
             },
           ),
+        ),
+        const SizedBox(
+          height: 1,
         ),
       ],
     );
