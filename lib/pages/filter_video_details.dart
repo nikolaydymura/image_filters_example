@@ -1,22 +1,12 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 
-import '../blocs/data_bloc/data_bloc_cubit.dart';
-import '../widgets/color_parameter.dart';
-import '../widgets/data_dropdown_button_widget.dart';
 import '../widgets/export_video_button.dart';
-import '../widgets/number_parameter.dart';
-import '../widgets/point_parameter.dart';
-import '../widgets/rect_parameter.dart';
-import '../widgets/size_parameter.dart';
-import '../widgets/slider_number_parameter.dart';
-import '../widgets/vector_parameter.dart';
+import '../widgets/parameters_container.dart';
 
 class VideoDetailsPage extends StatelessWidget {
   final String filterName;
@@ -83,9 +73,12 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
   Widget get playerView => GPUVideoNativePreview(
         params: previewParams,
         configuration: configuration,
-        onViewCreated: (controller) {
+    onViewCreated: (controller, outputSizeStream) async {
           this.controller = controller;
           this.controller.setVideoAsset(_VideoDetailsPageState._assetPath);
+          await for (final size in outputSizeStream) {
+            setState(() {});
+          }
         },
       );
 
@@ -169,13 +162,6 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
 
   @override
   Widget build(BuildContext context) {
-    final numbers = configuration.parameters
-        .whereType<NumberParameter>()
-        .whereNot((e) => e is RangeNumberParameter);
-    final datas = configuration.parameters.whereType<DataParameter>();
-    final params = configuration.parameters
-        .whereNot((e) => e is NumberParameter && e is! RangeNumberParameter)
-        .whereNot((e) => e is DataParameter);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -187,93 +173,9 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (numbers.isNotEmpty || datas.isNotEmpty)
-              Wrap(
-                spacing: 8,
-                runSpacing: 12,
-                children: [
-                  ...numbers.map(
-                    (e) => NumberParameterWidget(
-                      parameter: e,
-                      onChanged: () async {
-                        await e.update(configuration);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                  ...datas.map(
-                        (e) => BlocProvider(
-                      create: (context) => DataBlocCubit(e, configuration),
-                      child: DataDropdownButtonWidget(
-                        parameter: e,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ...params.map((e) {
-              if (e is ColorParameter) {
-                return ColorParameterWidget(
-                  parameter: e,
-                  onChanged: () async {
-                    await e.update(configuration);
-                    setState(() {});
-                  },
-                );
-              } else if (e is RangeNumberParameter) {
-                return SliderNumberParameterWidget(
-                  parameter: e,
-                  onChanged: () async {
-                    await e.update(configuration);
-                    setState(() {});
-                  },
-                );
-              } else if (e is NumberParameter) {
-                return NumberParameterWidget(
-                  parameter: e,
-                  onChanged: () async {
-                    await e.update(configuration);
-                    setState(() {});
-                  },
-                );
-              } else if (e is PointParameter) {
-                return PointParameterWidget(
-                  parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
-                  },
-                );
-              } else if (e is RectParameter) {
-                return RectParameterWidget(
-                  parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
-                  },
-                );
-              } else if (e is VectorParameter) {
-                return VectorParameterWidget(
-                  parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
-                  },
-                );
-              } else if (e is SizeParameter) {
-                return SizeParameterWidget(
-                  parameter: e,
-                  onChanged: () {
-                    setState(() {
-                      e.update(configuration);
-                    });
-                  },
-                );
-              }
-              return const Offstage();
+            ...configuration.children((e) async {
+              await e.update(configuration);
+              setState(() {});
             }),
             Expanded(
               child: _previewReady

@@ -13,45 +13,36 @@ class SliderNumberParameterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Row(
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width / 3,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              parameter.displayName,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Text(
-                parameter.value.toStringAsFixed(3),
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Slider(
-                label: parameter.value.toDouble().toStringAsFixed(3),
-                value: parameter.value.toDouble(),
-                max: parameter.max?.toDouble() ?? double.infinity,
-                min: parameter.min?.toDouble() ?? double.minPositive,
-                onChanged: (value) {
-                  parameter.value = value;
-                  onChanged.call();
-                },
-              ),
-            )
-          ],
+        Expanded(
+          child: Slider(
+            label: parameter.value.toDouble().toStringAsFixed(3),
+            value: parameter.value.toDouble(),
+            max: parameter.max?.toDouble() ?? double.infinity,
+            min: parameter.min?.toDouble() ?? double.minPositive,
+            onChanged: (value) {
+              parameter.value = value;
+              onChanged.call();
+            },
+          ),
         ),
       ],
     );

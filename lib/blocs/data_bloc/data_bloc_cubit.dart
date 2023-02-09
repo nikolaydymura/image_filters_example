@@ -22,7 +22,8 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       emit(DataBlocState(_lutSquareImages.first, _lutSquareImages));
     } else if (parameter.name == 'inputBackgroundImage' ||
         parameter.name == 'inputImage2' ||
-        parameter.name == 'inputImageTexture2') {
+        parameter.name == 'inputImageTexture2' ||
+        parameter.name == 'inputTextureToneCurve') {
       emit(DataBlocState(_backgroundImages.first, _backgroundImages));
     }
   }
@@ -48,7 +49,8 @@ class DataBlocCubit extends Cubit<DataBlocState> {
 
   static final List<DataItem> _backgroundImages = [
     _defaultItem,
-    ImageAssetDataItem('images/inputBackgroundImage.png')
+    ImageAssetDataItem('images/inputBackgroundImage.png'),
+    ImageAssetDataItem('images/inputWatermarkImage.png'),
   ];
 
   static final List<DataItem> _lutHALDImages = [

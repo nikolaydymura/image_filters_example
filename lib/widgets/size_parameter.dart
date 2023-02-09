@@ -18,7 +18,7 @@ class SizeParameterWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Text(
             parameter.displayName,
             style: const TextStyle(
