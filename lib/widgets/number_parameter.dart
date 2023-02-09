@@ -17,7 +17,8 @@ class NumberParameterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-          maxWidth: max(MediaQuery.of(context).size.width / 2 - 16, 170)),
+        maxWidth: max(MediaQuery.of(context).size.width / 2 - 16, 170),
+      ),
       child: TextField(
         decoration: InputDecoration(
           labelText: parameter.displayName,

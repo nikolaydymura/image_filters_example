@@ -1,23 +1,27 @@
 part of 'source_image_bloc.dart';
 
 const List<Lut> kSquareImages = [
+  SquareLut('lut/lookup_demo.png'),
+  SquareLut('lut/lookup_amatorka.png'),
+  SquareLut('lut/lookup_miss_etikate.png'),
+  SquareLut('lut/lookup_soft_elegance_1.png'),
+  SquareLut('lut/lookup_soft_elegance_2.png'),
   SquareLut('lut/filter_lut_1.png'),
   SquareLut('lut/filter_lut_2.png'),
   SquareLut('lut/filter_lut_3.png'),
   SquareLut('lut/filter_lut_4.png'),
   SquareLut('lut/filter_lut_5.png'),
-  SquareLut('lut/lookup_demo.png'),
 ];
 
 const List<Lut> kHALDImages = [
-  HALDLut('lut/filter_lut_6.png'),
+  HALDLut('lut/ColorCubeReferenceImage64.png'),
+  HALDLut('lut/NightVisionColorCube.png'),
+  HALDLut('lut/JustBlueItColorCube.png'),
+  HALDLut('lut/HotBlackColorCube.png'),
+  HALDLut('lut/HighContrastBWColorCube.png'),
   HALDLut('lut/filter_lut_7.png'),
   HALDLut('lut/filter_lut_8.png'),
   HALDLut('lut/filter_lut_9.png'),
-  HALDLut('lut/filter_lut_10.png'),
-  HALDLut('lut/filter_lut_11.png'),
-  HALDLut('lut/filter_lut_12.png'),
-  HALDLut('lut/img.png'),
 ];
 
 abstract class SourceImageState extends Equatable {

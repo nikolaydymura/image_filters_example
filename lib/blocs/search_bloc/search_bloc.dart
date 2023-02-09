@@ -41,6 +41,7 @@ class SearchBloc extends SearchableBloc
           SearchSucceeded._(
             '',
             FocusNode(),
+            TextEditingController(),
             SplayTreeSet<String>.from(
               items,
             ).toList(),
@@ -65,6 +66,7 @@ class SearchBloc extends SearchableBloc
         SearchEmpty(
           event.term,
           state.focusNode,
+          state.controller,
         ),
       );
     } else {
@@ -72,6 +74,7 @@ class SearchBloc extends SearchableBloc
         SearchSucceeded._(
           event.term,
           state.focusNode,
+          state.controller,
           SplayTreeSet<String>.from(
             result,
           ).toList(),
@@ -85,6 +88,7 @@ class SearchBloc extends SearchableBloc
       SearchSucceeded._(
         '',
         state.focusNode,
+        state.controller,
         SplayTreeSet<String>.from(
           _items,
         ).toList(),

@@ -13,8 +13,9 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   static final _defaultItem = DefaultDataItem();
   final DataParameter parameter;
   final FilterConfiguration configuration;
+  final void Function(ConfigurationParameter)? onChanged;
 
-  DataBlocCubit(this.parameter, this.configuration)
+  DataBlocCubit(this.parameter, this.configuration, {this.onChanged})
       : super(DataBlocState(_defaultItem, [_defaultItem])) {
     if (isHALDCube(parameter, configuration)) {
       emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
@@ -39,8 +40,11 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     final metadata = value.metadata;
     if (metadata is LutMetadata) {
       final config = configuration;
-      if (config is CIColorCubeConfiguration) {
+      if (config is CubeDimensionMixin) {
         config.cubeDimension = 64;
+        final parameter = configuration.parameters
+            .firstWhere((e) => e.name == 'inputCubeDimension');
+        onChanged?.call(parameter);
       }
     }
     await parameter.update(configuration);
