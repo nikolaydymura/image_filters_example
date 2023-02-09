@@ -57,7 +57,7 @@ class PointParameterWidget extends StatelessWidget {
                 onSubmitted: (inputValue) {
                   final value = double.tryParse(inputValue);
                   if (value != null) {
-                    parameter.value = Point<double>(value, parameter.value.y);
+                    parameter.value = parameter.value.copyWith(x: value);
                     onChanged.call();
                   }
                 },
@@ -95,7 +95,7 @@ class PointParameterWidget extends StatelessWidget {
                 onSubmitted: (inputValue) {
                   final value = double.tryParse(inputValue);
                   if (value != null) {
-                    parameter.value = Point<double>(parameter.value.x, value);
+                    parameter.value = parameter.value.copyWith(y: value);
                     onChanged.call();
                   }
                 },

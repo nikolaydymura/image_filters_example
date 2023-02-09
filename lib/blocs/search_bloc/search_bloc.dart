@@ -34,17 +34,18 @@ class SearchBloc extends SearchableBloc
     with ShadersBloc, CIImageBloc, CIVideoBloc, GPUVideoBloc {
   final List<String> _items;
 
-  SearchBloc(Iterable<String> items,)
-      : _items = items.toList(),
+  SearchBloc(
+    Iterable<String> items,
+  )   : _items = items.toList(),
         super(
-        SearchSucceeded._(
-          '',
-          FocusNode(),
-          SplayTreeSet<String>.from(
-            items,
-          ).toList(),
-        ),
-      ) {
+          SearchSucceeded._(
+            '',
+            FocusNode(),
+            SplayTreeSet<String>.from(
+              items,
+            ).toList(),
+          ),
+        ) {
     on<StartSearchEvent>(
       _onSearchStart,
       transformer: debounceTime(const Duration(milliseconds: 100)),
@@ -52,8 +53,10 @@ class SearchBloc extends SearchableBloc
     on<ResetSearchEvent>(_resetSearch);
   }
 
-  void _onSearchStart(StartSearchEvent event,
-      Emitter<SearchState> emit,) {
+  void _onSearchStart(
+    StartSearchEvent event,
+    Emitter<SearchState> emit,
+  ) {
     final result = _items.where(
       (e) => e.toLowerCase().contains(event.term.toLowerCase()),
     );

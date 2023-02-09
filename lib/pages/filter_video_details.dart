@@ -73,7 +73,7 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
   Widget get playerView => GPUVideoNativePreview(
         params: previewParams,
         configuration: configuration,
-    onViewCreated: (controller, outputSizeStream) async {
+        onViewCreated: (controller, outputSizeStream) async {
           this.controller = controller;
           this.controller.setVideoAsset(_VideoDetailsPageState._assetPath);
           await for (final size in outputSizeStream) {

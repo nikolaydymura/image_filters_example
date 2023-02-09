@@ -37,12 +37,8 @@ class RectParameterWidget extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left - 10.0,
-                            parameter.value.top,
-                            parameter.value.width,
-                            parameter.value.height,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(left: parameter.value.left - 10.0);
                           onChanged.call();
                         },
                         child: const Icon(
@@ -51,12 +47,8 @@ class RectParameterWidget extends StatelessWidget {
                       ),
                       suffixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left + 10,
-                            parameter.value.top,
-                            parameter.value.width,
-                            parameter.value.height,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(left: parameter.value.left + 10.0);
                           onChanged.call();
                         },
                         child: const Icon(
@@ -67,18 +59,13 @@ class RectParameterWidget extends StatelessWidget {
                     onSubmitted: (inputValue) {
                       final value = double.tryParse(inputValue);
                       if (value != null) {
-                        parameter.value = Rect.fromLTWH(
-                          parameter.value.left,
-                          value,
-                          value,
-                          value,
-                        );
+                        parameter.value = parameter.value.copyWith(left: value);
                         onChanged.call();
                       }
                     },
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                      text: parameter.value.left.toStringAsFixed(3),
+                      text: parameter.value.left.toStringAsFixed(2),
                     ),
                   ),
                 ),
@@ -90,13 +77,8 @@ class RectParameterWidget extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left,
-                            parameter.value.top - 10,
-                            parameter.value.width,
-                            parameter.value.height,
-                          );
-
+                          parameter.value = parameter.value
+                              .copyWith(top: parameter.value.top - 10.0);
                           onChanged.call();
                         },
                         child: const Icon(
@@ -105,12 +87,8 @@ class RectParameterWidget extends StatelessWidget {
                       ),
                       suffixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left,
-                            parameter.value.top + 10,
-                            parameter.value.width,
-                            parameter.value.height,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(top: parameter.value.top + 10.0);
 
                           onChanged.call();
                         },
@@ -122,18 +100,13 @@ class RectParameterWidget extends StatelessWidget {
                     onSubmitted: (inputValue) {
                       final value = double.tryParse(inputValue);
                       if (value != null) {
-                        parameter.value = Rect.fromLTWH(
-                          value,
-                          parameter.value.top,
-                          value,
-                          value,
-                        );
+                        parameter.value = parameter.value.copyWith(top: value);
                         onChanged.call();
                       }
                     },
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                      text: parameter.value.top.toStringAsFixed(3),
+                      text: parameter.value.top.toStringAsFixed(2),
                     ),
                   ),
                 ),
@@ -146,12 +119,8 @@ class RectParameterWidget extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left,
-                            parameter.value.top,
-                            parameter.value.width - 10,
-                            parameter.value.height,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(width: parameter.value.width - 10.0);
 
                           onChanged.call();
                         },
@@ -161,12 +130,8 @@ class RectParameterWidget extends StatelessWidget {
                       ),
                       suffixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left,
-                            parameter.value.top,
-                            parameter.value.width + 10,
-                            parameter.value.height,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(width: parameter.value.width + 10.0);
 
                           onChanged.call();
                         },
@@ -178,18 +143,14 @@ class RectParameterWidget extends StatelessWidget {
                     onSubmitted: (inputValue) {
                       final value = double.tryParse(inputValue);
                       if (value != null) {
-                        parameter.value = Rect.fromLTWH(
-                          value,
-                          value,
-                          parameter.value.width,
-                          value,
-                        );
+                        parameter.value =
+                            parameter.value.copyWith(width: value);
                         onChanged.call();
                       }
                     },
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                      text: parameter.value.width.toStringAsFixed(3),
+                      text: parameter.value.width.toStringAsFixed(2),
                     ),
                   ),
                 ),
@@ -201,12 +162,8 @@ class RectParameterWidget extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left,
-                            parameter.value.top,
-                            parameter.value.width,
-                            parameter.value.height - 10,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(height: parameter.value.height - 10.0);
                           onChanged.call();
                         },
                         child: const Icon(
@@ -215,12 +172,8 @@ class RectParameterWidget extends StatelessWidget {
                       ),
                       suffixIcon: InkWell(
                         onTap: () {
-                          parameter.value = Rect.fromLTWH(
-                            parameter.value.left,
-                            parameter.value.top,
-                            parameter.value.width,
-                            parameter.value.height + 10,
-                          );
+                          parameter.value = parameter.value
+                              .copyWith(height: parameter.value.height + 10.0);
 
                           onChanged.call();
                         },
@@ -232,18 +185,14 @@ class RectParameterWidget extends StatelessWidget {
                     onSubmitted: (inputValue) {
                       final value = double.tryParse(inputValue);
                       if (value != null) {
-                        parameter.value = Rect.fromLTWH(
-                          value,
-                          value,
-                          parameter.value.height,
-                          value,
-                        );
+                        parameter.value =
+                            parameter.value.copyWith(height: value);
                         onChanged.call();
                       }
                     },
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                      text: parameter.value.height.toStringAsFixed(3),
+                      text: parameter.value.height.toStringAsFixed(2),
                     ),
                   ),
                 ),

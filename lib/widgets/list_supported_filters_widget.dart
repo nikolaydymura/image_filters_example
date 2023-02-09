@@ -69,7 +69,8 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
                       ),
                     ),
                   ),
-                  hintStyle: TextStyle(color: Theme.of(context).cardTheme.color),
+                  hintStyle:
+                      TextStyle(color: Theme.of(context).cardTheme.color),
                   labelText: 'Search',
                   hintText: 'Type filter name',
                 ),

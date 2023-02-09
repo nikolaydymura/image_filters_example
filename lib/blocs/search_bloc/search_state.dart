@@ -22,4 +22,3 @@ class SearchSucceeded extends SearchState {
   @override
   List<Object> get props => [term, items];
 }
-

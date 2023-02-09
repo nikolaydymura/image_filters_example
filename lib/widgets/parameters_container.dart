@@ -70,7 +70,8 @@ extension ParametersContainer on FilterConfiguration {
             onChanged.call(e);
           },
         );
-      }if (e is RectParameter) {
+      }
+      if (e is RectParameter) {
         return RectParameterWidget(
           parameter: e,
           onChanged: () {

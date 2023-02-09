@@ -35,8 +35,8 @@ class SizeParameterWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: InkWell(
                     onTap: () {
-                      parameter.value =
-                          (parameter.value - const Offset(0.05, 0.0)) as Size;
+                      parameter.value = parameter.value
+                          .copyWith(width: parameter.value.width - 0.05);
                       onChanged.call();
                     },
                     child: const Icon(
@@ -45,8 +45,8 @@ class SizeParameterWidget extends StatelessWidget {
                   ),
                   suffixIcon: InkWell(
                     onTap: () {
-                      parameter.value =
-                          parameter.value + const Offset(0.05, 0.0);
+                      parameter.value = parameter.value
+                          .copyWith(width: parameter.value.width + 0.05);
                       onChanged.call();
                     },
                     child: const Icon(
@@ -57,7 +57,7 @@ class SizeParameterWidget extends StatelessWidget {
                 onSubmitted: (inputValue) {
                   final value = double.tryParse(inputValue);
                   if (value != null) {
-                    parameter.value = Size(value, parameter.value.width);
+                    parameter.value = parameter.value.copyWith(width: value);
                     onChanged.call();
                   }
                 },
@@ -75,8 +75,8 @@ class SizeParameterWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: InkWell(
                     onTap: () {
-                      parameter.value =
-                          (parameter.value - const Offset(0.0, 0.05)) as Size;
+                      parameter.value = parameter.value
+                          .copyWith(height: parameter.value.height - 0.05);
                       onChanged.call();
                     },
                     child: const Icon(
@@ -85,8 +85,8 @@ class SizeParameterWidget extends StatelessWidget {
                   ),
                   suffixIcon: InkWell(
                     onTap: () {
-                      parameter.value =
-                          parameter.value + const Offset(0.0, 0.05);
+                      parameter.value = parameter.value
+                          .copyWith(height: parameter.value.height + 0.05);
                       onChanged.call();
                     },
                     child: const Icon(
@@ -97,7 +97,7 @@ class SizeParameterWidget extends StatelessWidget {
                 onSubmitted: (inputValue) {
                   final value = double.tryParse(inputValue);
                   if (value != null) {
-                    parameter.value = Size(parameter.value.width, value);
+                    parameter.value = parameter.value.copyWith(height: value);
                     onChanged.call();
                   }
                 },
