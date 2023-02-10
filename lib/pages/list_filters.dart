@@ -200,12 +200,9 @@ extension on FiltersListScreen {
       _pushPage(
         context,
         (context) {
-          return BlocProvider(
-            create: (context) => Image1Cubit(configuration!),
-            child: FilterDetailsScreen(
-              filterName: name,
-              filterConfiguration: configuration!,
-            ),
+          return FilterDetailsScreen(
+            filterName: name,
+            filterConfiguration: configuration!,
           );
         },
       );
