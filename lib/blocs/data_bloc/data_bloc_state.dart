@@ -73,11 +73,9 @@ class LutFileDataItem extends ImageFileDataItem {
 }
 
 class LutMetadata extends DataItemMetadata {
-  final int size;
-  final int rows;
-  final int columns;
+  final int dimension;
 
-  LutMetadata(this.size, this.rows, this.columns);
+  LutMetadata(this.dimension);
 }
 
 class DefaultDataItem extends DataItem {

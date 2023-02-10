@@ -13,8 +13,9 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   static final _defaultItem = DefaultDataItem();
   final DataParameter parameter;
   final FilterConfiguration configuration;
+  final void Function(ConfigurationParameter)? onChanged;
 
-  DataBlocCubit(this.parameter, this.configuration)
+  DataBlocCubit(this.parameter, this.configuration, {this.onChanged})
       : super(DataBlocState(_defaultItem, [_defaultItem])) {
     if (isHALDCube(parameter, configuration)) {
       emit(DataBlocState(_lutHALDImages.first, _lutHALDImages));
@@ -39,8 +40,11 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     final metadata = value.metadata;
     if (metadata is LutMetadata) {
       final config = configuration;
-      if (config is CIColorCubeConfiguration) {
-        config.cubeDimension = 64;
+      if (config is CubeDimensionMixin) {
+        config.cubeDimension = metadata.dimension;
+        final parameter = configuration.parameters
+            .firstWhere((e) => e.name == 'inputCubeDimension');
+        onChanged?.call(parameter);
       }
     }
     await parameter.update(configuration);
@@ -55,27 +59,74 @@ class DataBlocCubit extends Cubit<DataBlocState> {
 
   static final List<DataItem> _lutHALDImages = [
     _defaultItem,
-    LutAssetDataItem('lut/filter_lut_6.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_7.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_8.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_9.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_10.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_11.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/filter_lut_12.png', metadata: LutMetadata(8, 64, 8)),
-    LutAssetDataItem('lut/img.png', metadata: LutMetadata(8, 64, 8)),
+    LutAssetDataItem(
+      'lut/ColorCubeReferenceImage64.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/NightVisionColorCube.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/JustBlueItColorCube.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/HotBlackColorCube.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/HighContrastBWColorCube.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/filter_lut_7.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/filter_lut_8.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/filter_lut_9.png',
+      metadata: LutMetadata(64),
+    ),
   ];
 
   static final List<DataItem> _lutSquareImages = [
     _defaultItem,
-    LutAssetDataItem('lut/filter_lut_1.png', metadata: LutMetadata(64, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_2.png', metadata: LutMetadata(64, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_3.png', metadata: LutMetadata(64, 8, 8)),
-    LutAssetDataItem('lut/filter_lut_4.png', metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem(
+      'lut/lookup_demo.png',
+      metadata: LutMetadata(64),
+    ),
     LutAssetDataItem(
       'lut/lookup_amatorka.png',
-      metadata: LutMetadata(64, 8, 8),
+      metadata: LutMetadata(64),
     ),
-    LutAssetDataItem('lut/lookup_demo.png', metadata: LutMetadata(64, 8, 8)),
+    LutAssetDataItem(
+      'lut/lookup_miss_etikate.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/lookup_soft_elegance_1.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/lookup_soft_elegance_2.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/filter_lut_1.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/filter_lut_2.png',
+      metadata: LutMetadata(64),
+    ),
+    LutAssetDataItem(
+      'lut/filter_lut_3.png',
+      metadata: LutMetadata(64),
+    ),
   ];
 
   void addItem(FileDataItem item) {

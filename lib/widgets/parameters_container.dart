@@ -1,3 +1,4 @@
+import '../blocs/string_option_bloc/string_option_cubit.dart';
 import 'mat_parameter.dart';
 import 'number_parameter.dart';
 import 'point_parameter.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart
 import '../blocs/data_bloc/data_bloc_cubit.dart';
 import 'color_parameter.dart';
 import 'data_dropdown_button_widget.dart';
+import 'string_option_dropdown_button_widget.dart';
 
 extension ParametersContainer on FilterConfiguration {
   Iterable<Widget> children(void Function(ConfigurationParameter) onChanged) {
@@ -29,8 +31,23 @@ extension ParametersContainer on FilterConfiguration {
         );
     final datas = parameters.whereType<DataParameter>().map(
           (e) => BlocProvider(
-            create: (context) => DataBlocCubit(e, this),
+            create: (context) => DataBlocCubit(
+              e,
+              this,
+              onChanged: onChanged,
+            ),
             child: DataDropdownButtonWidget(
+              parameter: e,
+            ),
+          ),
+        );
+    final variations = parameters.whereType<OptionStringParameter>().map(
+          (e) => BlocProvider(
+            create: (context) => StringOptionCubit(
+              e,
+              this,
+            ),
+            child: StringOptionDropdownButtonWidget(
               parameter: e,
             ),
           ),
@@ -48,6 +65,7 @@ extension ParametersContainer on FilterConfiguration {
         .whereNot((e) => e is NumberParameter && e is! RangeNumberParameter)
         .whereNot((e) => e is DataParameter)
         .whereNot((e) => e is ColorParameter)
+        .whereNot((e) => e is OptionStringParameter)
         .map((e) {
       if (e is RangeNumberParameter) {
         return SliderNumberParameterWidget(
@@ -118,11 +136,14 @@ extension ParametersContainer on FilterConfiguration {
     });
 
     return [
-      if (numbers.isNotEmpty || datas.isNotEmpty || colors.isNotEmpty)
+      if (numbers.isNotEmpty ||
+          datas.isNotEmpty ||
+          colors.isNotEmpty ||
+          variations.isNotEmpty)
         Wrap(
           spacing: 8,
           runSpacing: 12,
-          children: [...numbers, ...datas, ...colors],
+          children: [...numbers, ...datas, ...colors, ...variations],
         ),
       ...params
     ];

@@ -6,7 +6,6 @@ import 'package:flutter_image_filters/flutter_image_filters.dart';
 import '../blocs/export_bloc/export_cubit.dart';
 import '../blocs/screen_index_cubit.dart';
 import '../blocs/search_bloc/search_bloc.dart';
-import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../brightness_contrast_shader_configuration.dart';
 import '../widgets/list_supported_filters_widget.dart';
 import 'ci_filter_details.dart';
@@ -200,12 +199,9 @@ extension on FiltersListScreen {
       _pushPage(
         context,
         (context) {
-          return BlocProvider(
-            create: (context) => Image1Cubit(configuration!),
-            child: FilterDetailsScreen(
-              filterName: name,
-              filterConfiguration: configuration!,
-            ),
+          return FilterDetailsScreen(
+            filterName: name,
+            filterConfiguration: configuration!,
           );
         },
       );

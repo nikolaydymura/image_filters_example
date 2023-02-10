@@ -76,7 +76,7 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
         onViewCreated: (controller, outputSizeStream) async {
           this.controller = controller;
           this.controller.setVideoAsset(_VideoDetailsPageState._assetPath);
-          await for (final size in outputSizeStream) {
+          await for (final _ in outputSizeStream) {
             setState(() {});
           }
         },

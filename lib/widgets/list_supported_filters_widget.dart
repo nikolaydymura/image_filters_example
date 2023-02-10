@@ -46,9 +46,7 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
           child: BlocBuilder<T, SearchState>(
             builder: (context, state) {
               return TextField(
-                controller: TextEditingController(text: state.term)
-                  ..selection =
-                      TextSelection.collapsed(offset: state.term.length),
+                controller: state.controller,
                 onChanged: (value) => context.read<T>().search(value),
                 focusNode: state.focusNode,
                 maxLines: 1,
