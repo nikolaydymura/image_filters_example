@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
+import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/parameters_container.dart';
 
 class CIFilterDetailsPage extends StatefulWidget {
@@ -97,6 +99,14 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                context.read<SourceImageCubit>().loadFile();
+              },
+              tooltip: 'Import file',
+              child: const Icon(Icons.add_a_photo),
+            ),
             FloatingActionButton(
               heroTag: null,
               onPressed: () {

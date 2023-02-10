@@ -51,6 +51,7 @@ dependencies:
   rxdart: ^0.27.6
   stream_transform: ^2.1.0
   provider: ^6.0.5
+  file_picker: ^5.2.5
 
 dev_dependencies:
   flutter_test:
