@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/parameters_container.dart';
 
 class CIFilterDetailsPage extends StatefulWidget {
@@ -22,8 +22,8 @@ class CIFilterDetailsPage extends StatefulWidget {
 
 class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   late final CIFilterConfiguration configuration = widget.configuration;
-  late final CIImagePreviewController sourceController;
-  late final CIImagePreviewController destinationController;
+  late CIImagePreviewController sourceController;
+  late CIImagePreviewController destinationController;
   var _controllersReady = false;
   static const _assetPath = 'images/inputImage1.jpg';
 
@@ -48,6 +48,21 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
+  }
+
+  Future<void> _loadImage() async {
+    ImagePicker? picker = ImagePicker();
+
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final Uint8List bytes = await image.readAsBytes();
+
+      sourceController = await CIImagePreviewController.fromMemory(bytes);
+      destinationController = await CIImagePreviewController.fromMemory(bytes);
+      await configuration.prepare();
+      await destinationController.connect(configuration);
+    }
   }
 
   @override
@@ -102,7 +117,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
             FloatingActionButton(
               heroTag: null,
               onPressed: () {
-                context.read<SourceImageCubit>().loadFile();
+                _loadImage().whenComplete(() => setState(() {}));
               },
               tooltip: 'Import file',
               child: const Icon(Icons.add_a_photo),
