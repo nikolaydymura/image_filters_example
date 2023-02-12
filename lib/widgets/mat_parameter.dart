@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
@@ -273,11 +275,12 @@ class ListParameterWidget extends StatelessWidget {
           ),
         ),
         ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 48),
+          constraints:
+              BoxConstraints(maxHeight: parameter.values.length <= 5 ? 48 : 96),
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: parameter.values.length,
+              crossAxisCount: max(5, parameter.values.length ~/ 2),
               childAspectRatio: 2.0,
             ),
             itemCount: parameter.values.length,

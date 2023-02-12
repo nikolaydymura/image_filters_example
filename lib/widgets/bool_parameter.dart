@@ -22,23 +22,13 @@ class BoolParameterWidget extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        TextButton(
-          onPressed: () {
-            if (parameter.value == false) {
-              parameter.value = true;
-            } else {
-              parameter.value = false;
-            }
+        Switch(
+          value: parameter.value,
+          onChanged: (value) {
+            parameter.value = value;
             onChanged.call();
           },
-          child: Text(
-            '${parameter.value}',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        )
       ],
     );
   }
