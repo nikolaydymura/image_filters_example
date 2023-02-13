@@ -1,18 +1,19 @@
-import '../blocs/string_option_bloc/string_option_cubit.dart';
-import 'mat_parameter.dart';
-import 'number_parameter.dart';
-import 'point_parameter.dart';
-import 'rect_parameter.dart';
-import 'size_parameter.dart';
 import 'package:collection/collection.dart';
-import 'slider_number_parameter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 
 import '../blocs/data_bloc/data_bloc_cubit.dart';
+import '../blocs/string_option_bloc/string_option_cubit.dart';
+import 'bool_parameter.dart';
 import 'color_parameter.dart';
 import 'data_dropdown_button_widget.dart';
+import 'mat_parameter.dart';
+import 'number_parameter.dart';
+import 'point_parameter.dart';
+import 'rect_parameter.dart';
+import 'size_parameter.dart';
+import 'slider_number_parameter.dart';
 import 'string_option_dropdown_button_widget.dart';
 
 extension ParametersContainer on FilterConfiguration {
@@ -119,6 +120,13 @@ extension ParametersContainer on FilterConfiguration {
         );
       } else if (e is Mat4Parameter) {
         return Mat4ParameterWidget(
+          parameter: e,
+          onChanged: () {
+            onChanged.call(e);
+          },
+        );
+      } else if (e is BoolParameter) {
+        return BoolParameterWidget(
           parameter: e,
           onChanged: () {
             onChanged.call(e);
