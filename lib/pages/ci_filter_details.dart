@@ -57,7 +57,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
 
     if (image != null) {
       final Uint8List bytes = await image.readAsBytes();
-
       sourceController = await CIImagePreviewController.fromMemory(bytes);
       destinationController = await CIImagePreviewController.fromMemory(bytes);
       await configuration.prepare();
@@ -120,7 +119,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
                 _loadImage().whenComplete(() => setState(() {}));
               },
               tooltip: 'Import file',
-              child: const Icon(Icons.add_a_photo),
+              child: const Icon(Icons.add_box_outlined),
             ),
             FloatingActionButton(
               heroTag: null,

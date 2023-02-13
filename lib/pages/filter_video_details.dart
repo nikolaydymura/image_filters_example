@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../widgets/export_video_button.dart';
 import '../widgets/parameters_container.dart';
@@ -70,6 +71,17 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
   }
 
   @override
+  Future<void> loadVideo() async {
+    ImagePicker? picker = ImagePicker();
+    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
+    if (video != null) {
+      controller = await GPUVideoPreviewController.fromAsset(video.path);
+      await configuration.prepare();
+      await controller.connect(configuration);
+    }
+  }
+
+  @override
   Widget get playerView => GPUVideoNativePreview(
         params: previewParams,
         configuration: configuration,
@@ -115,6 +127,17 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
   }
 
   @override
+  Future<void> loadVideo() async {
+    ImagePicker? picker = ImagePicker();
+    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
+    if (video != null) {
+      controller = await CIVideoPreviewController.fromAsset(video.path);
+      await configuration.prepare();
+      await controller.connect(configuration);
+    }
+  }
+
+  @override
   Widget get playerView => CIVideoPreview(
         controller: controller,
       );
@@ -140,6 +163,8 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
   Future<void> prepare();
 
   Future<void> release();
+
+  Future<void> loadVideo();
 
   Widget get playerView;
 
@@ -188,11 +213,31 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
         ),
       ),
       floatingActionButton: previewAvailable
-          ? ExportVideoButton(
-              sourceBuilder: () => AssetInputSource(_assetPath),
-              configuration: configuration,
+          ? Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: false,
+                  child: const Icon(Icons.add_box_outlined),
+                  onPressed: () {
+                    loadVideo();
+                    setState(() {});
+                  },
+                ),
+                ExportVideoButton(
+                  sourceBuilder: () => AssetInputSource(_assetPath),
+                  configuration: configuration,
+                ),
+              ],
             )
-          : null,
+          : FloatingActionButton(
+              heroTag: false,
+              onPressed: () {
+                loadVideo();
+                setState(() {});
+              },
+            ),
     );
   }
 }

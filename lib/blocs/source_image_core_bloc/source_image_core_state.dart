@@ -15,7 +15,10 @@ class SourceImageCoreReady extends SourceImageCoreState {
   final bool controllersReady;
 
   const SourceImageCoreReady(
-      this.sourceController, this.destinationController, this.controllersReady);
+    this.sourceController,
+    this.destinationController,
+    this.controllersReady,
+  );
 
   @override
   List<Object?> get props =>
@@ -28,7 +31,10 @@ class SourceImageCoreLoadReady extends SourceImageCoreState {
   final bool controllersReady;
 
   const SourceImageCoreLoadReady(
-      this.sourceController, this.destinationController, this.controllersReady);
+    this.sourceController,
+    this.destinationController,
+    this.controllersReady,
+  );
 
   @override
   List<Object?> get props =>
