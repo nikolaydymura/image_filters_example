@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:image/image.dart' as img;
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../blocs/source_image_bloc/source_image_bloc.dart';
+import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/parameters_container.dart';
 
 class CIFilterDetailsPage extends StatefulWidget {
@@ -42,26 +43,11 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   }
 
   Future<void> _prepare() async {
-    sourceController = await CIImagePreviewController.fromAsset(_assetPath);
-    destinationController =
-        await CIImagePreviewController.fromAsset(_assetPath);
+    sourceController = await CIImagePreviewController.initialize();
+    destinationController = await CIImagePreviewController.initialize();
     await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
-  }
-
-  Future<void> _loadImage() async {
-    ImagePicker? picker = ImagePicker();
-
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      final Uint8List bytes = await image.readAsBytes();
-      sourceController = await CIImagePreviewController.fromMemory(bytes);
-      destinationController = await CIImagePreviewController.fromMemory(bytes);
-      await configuration.prepare();
-      await destinationController.connect(configuration);
-    }
   }
 
   @override
@@ -76,6 +62,13 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                ImageDropdownButtonWidget(),
+              ],
+            ),
             ...configuration.children((e) async {
               await e.update(configuration);
               setState(() {});
@@ -85,16 +78,25 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
             ),
             Expanded(
               child: _controllersReady
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.61,
-                      child: BeforeAfter(
-                        thumbRadius: 0.0,
-                        thumbColor: Colors.transparent,
-                        beforeImage: CIImagePreview(
-                          controller: sourceController,
-                        ),
-                        afterImage: CIImagePreview(
-                          controller: destinationController,
+                  ? BlocListener<SourceImageCubit, SourceImageState>(
+                      listenWhen: (prev, next) =>
+                          prev.selectedIndex != next.selectedIndex,
+                      listener: (context, state) {
+                        final source = state.selected;
+                        sourceController.setImageSource(source);
+                        destinationController.setImageSource(source);
+                      },
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.61,
+                        child: BeforeAfter(
+                          thumbRadius: 0.0,
+                          thumbColor: Colors.transparent,
+                          beforeImage: CIImagePreview(
+                            controller: sourceController,
+                          ),
+                          afterImage: CIImagePreview(
+                            controller: destinationController,
+                          ),
                         ),
                       ),
                     )
@@ -107,20 +109,13 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: ConstrainedBox(
-        constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width / 2,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            FloatingActionButton(
-              heroTag: null,
-              onPressed: () {
-                _loadImage().whenComplete(() => setState(() {}));
-              },
-              tooltip: 'Import file',
-              child: const Icon(Icons.add_box_outlined),
-            ),
             FloatingActionButton(
               heroTag: null,
               onPressed: () {

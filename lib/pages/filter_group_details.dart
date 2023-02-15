@@ -7,7 +7,7 @@ import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
-import '../blocs/source_image_shader_bloc/source_image_shader_bloc.dart';
+import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/parameters_container.dart';
 
 class FilterGroupDetailsScreen extends StatefulWidget {
@@ -72,9 +72,9 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
             ),
             Expanded(
               child:
-                  BlocBuilder<SourceImageShaderCubit, SourceImageShaderState>(
+              BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
-                  if (state is SourceImageShaderReady) {
+                  if (state is SourceImageReady) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.60,
                       child: BeforeAfter(

@@ -1,0 +1,51 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
+import 'package:flutter_image_filters/flutter_image_filters.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:rxdart/rxdart.dart';
+
+part 'source_image_state.dart';
+
+class SourceImageCubit extends Cubit<SourceImageState> {
+  SourceImageCubit()
+      : super(
+          SourceImageInitial(
+            [AssetInputSource('images/inputImage.jpg')],
+            0,
+          ),
+        );
+
+  @override
+  Stream<SourceImageState> get stream => super.stream.doOnData((_) {
+        if (state is SourceImageInitial) {
+          prepare();
+        }
+      });
+
+  Future<void> loadFile() async {
+    ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final texture = await TextureSource.fromFile(File(image.path));
+      emit(
+        SourceImageReady(
+          [...state.sources, FileInputSource(File(image.path))],
+          state.sources.length,
+          texture,
+        ),
+      );
+    }
+  }
+
+  Future<void> prepare() async {
+    final source = state.selected;
+    if (source is PathInputSource) {
+      final texture = await TextureSource.fromAsset(source.path);
+      emit(SourceImageReady(state.sources, state.selectedIndex, texture));
+    }
+  }
+}

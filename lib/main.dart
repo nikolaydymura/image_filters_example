@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'blocs/screen_index_cubit.dart';
 import 'blocs/search_bloc/search_bloc.dart';
-import 'blocs/source_image_shader_bloc/source_image_shader_bloc.dart';
+import 'blocs/source_image_bloc/source_image_bloc.dart';
 import 'brightness_contrast_shader_configuration.dart';
 import 'pages/list_filters.dart';
 
@@ -21,8 +21,8 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider<SourceImageShaderCubit>(
-          create: (context) => SourceImageShaderCubit(),
+        BlocProvider<SourceImageCubit>(
+          create: (context) => SourceImageCubit(),
         ),
         BlocProvider<ScreenIndexCubit>(
           create: (context) => ScreenIndexCubit(),

@@ -7,7 +7,8 @@ import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
-import '../blocs/source_image_shader_bloc/source_image_shader_bloc.dart';
+import '../blocs/source_image_bloc/source_image_bloc.dart';
+import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/parameters_container.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
@@ -50,6 +51,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                ImageDropdownButtonWidget(),
+              ],
+            ),
             ...configuration.children((e) {
               e.update(configuration);
               setState(() {});
@@ -58,10 +66,9 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               height: 8.0,
             ),
             Expanded(
-              child:
-                  BlocBuilder<SourceImageShaderCubit, SourceImageShaderState>(
+              child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
-                  if (state is SourceImageShaderReady) {
+                  if (state is SourceImageReady) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.60,
                       child: BeforeAfter(

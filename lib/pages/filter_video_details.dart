@@ -218,7 +218,7 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FloatingActionButton(
-                  heroTag: false,
+                  heroTag: null,
                   child: const Icon(Icons.add_box_outlined),
                   onPressed: () {
                     loadVideo();
@@ -232,7 +232,7 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
               ],
             )
           : FloatingActionButton(
-              heroTag: false,
+        heroTag: null,
               onPressed: () {
                 loadVideo();
                 setState(() {});
