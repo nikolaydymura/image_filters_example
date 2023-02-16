@@ -21,45 +21,56 @@ class ImageDropdownButtonWidget extends StatelessWidget {
         children: [
           BlocBuilder<SourceImageCubit, SourceImageState>(
             builder: (context, state) {
-              return DropdownButton<InputSource>(
-                value: state.selected,
-                icon: const Icon(Icons.arrow_drop_down),
-                elevation: 8,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
-                underline: Container(
-                  color: Theme.of(context).primaryColor,
-                ),
-                onChanged: (InputSource? value) {
-                  if (value != null) {
-                    context.read<SourceImageCubit>().loadFile();
-                  }
-                },
-                items: state.sources
-                    .map<DropdownMenuItem<InputSource>>((InputSource value) {
-                  return DropdownMenuItem<InputSource>(
-                    value: value,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: max(
-                          MediaQuery.of(context).size.width / 2 - (32 + 24),
-                          120,
-                        ),
-                      ),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxWidth: 80,
-                          maxHeight: 80,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: _dataPreview(value),
-                        ),
-                      ),
+              return Row(
+                children: [
+                  IconButton(
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      context.read<SourceImageCubit>().loadFile();
+                    },
+                    icon: const Icon(Icons.add_circle),
+                  ),
+                  DropdownButton<InputSource>(
+                    value: state.selected,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    elevation: 8,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
                     ),
-                  );
-                }).toList(),
+                    underline: Container(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onChanged: (InputSource? value) {
+                      if (value != null) {
+                        context.read<SourceImageCubit>().takeFile(value);
+                      }
+                    },
+                    items: state.sources.map<DropdownMenuItem<InputSource>>(
+                        (InputSource value) {
+                      return DropdownMenuItem<InputSource>(
+                        value: value,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: max(
+                              MediaQuery.of(context).size.width / 2 - (32 + 24),
+                              120,
+                            ),
+                          ),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 80,
+                              maxHeight: 80,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: _dataPreview(value),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               );
             },
           )

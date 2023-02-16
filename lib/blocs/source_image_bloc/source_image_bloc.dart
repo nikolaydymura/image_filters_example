@@ -20,9 +20,9 @@ class SourceImageCubit extends Cubit<SourceImageState> {
         );
 
   @override
-  Stream<SourceImageState> get stream => super.stream.doOnData((_) {
+  Stream<SourceImageState> get stream => super.stream.doOnListen(() {
         if (state is SourceImageInitial) {
-          prepare();
+          _prepare();
         }
       });
 
@@ -41,7 +41,14 @@ class SourceImageCubit extends Cubit<SourceImageState> {
     }
   }
 
-  Future<void> prepare() async {
+  Future<void> takeFile(InputSource value) async {
+    if (value is PathInputSource) {
+      final texture = await TextureSource.fromAsset(value.path);
+      emit(SourceImageReady(state.sources, state.selectedIndex, texture));
+    }
+  }
+
+  Future<void> _prepare() async {
     final source = state.selected;
     if (source is PathInputSource) {
       final texture = await TextureSource.fromAsset(source.path);
