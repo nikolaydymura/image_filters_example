@@ -41,10 +41,11 @@ class SourceImageCubit extends Cubit<SourceImageState> {
     }
   }
 
-  Future<void> takeFile(InputSource value) async {
+  Future<void> changeInput(InputSource value) async {
     if (value is PathInputSource) {
       final texture = await TextureSource.fromAsset(value.path);
-      emit(SourceImageReady(state.sources, state.selectedIndex, texture));
+      final index = state.sources.indexOf(value);
+      emit(SourceImageReady(state.sources, index, texture));
     }
   }
 

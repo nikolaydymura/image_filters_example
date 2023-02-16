@@ -43,7 +43,10 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.filterName),
+        title: FittedBox(child: Text(widget.filterName)),
+        actions: const [
+          ImageDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -51,13 +54,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                ImageDropdownButtonWidget(),
-              ],
-            ),
             ...configuration.children((e) {
               e.update(configuration);
               setState(() {});

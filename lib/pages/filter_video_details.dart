@@ -232,7 +232,7 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
               ],
             )
           : FloatingActionButton(
-        heroTag: null,
+              heroTag: null,
               onPressed: () {
                 loadVideo();
                 setState(() {});
