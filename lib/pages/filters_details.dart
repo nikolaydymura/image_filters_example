@@ -8,6 +8,7 @@ import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
 import '../blocs/source_image_bloc/source_image_bloc.dart';
+import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/parameters_container.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
@@ -42,7 +43,10 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.filterName),
+        title: FittedBox(child: Text(widget.filterName)),
+        actions: const [
+          ImageDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

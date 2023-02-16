@@ -1,30 +1,59 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'source_image_state.dart';
 
 class SourceImageCubit extends Cubit<SourceImageState> {
-  SourceImageCubit() : super(SourceImageInitial());
+  SourceImageCubit()
+      : super(
+          SourceImageInitial(
+            [AssetInputSource('images/inputImage.jpg')],
+            0,
+          ),
+        );
 
   @override
   Stream<SourceImageState> get stream => super.stream.doOnListen(() {
         if (state is SourceImageInitial) {
-          loadAsset('images/inputImage.jpg');
+          _prepare();
         }
       });
 
-  Future<void> loadFile(File file) async {
-    final texture = await TextureSource.fromFile(file);
-    emit(SourceImageReady(texture, file.absolute.path, false));
+  Future<void> loadFile() async {
+    ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final texture = await TextureSource.fromFile(File(image.path));
+      emit(
+        SourceImageReady(
+          [...state.sources, FileInputSource(File(image.path))],
+          state.sources.length,
+          texture,
+        ),
+      );
+    }
   }
 
-  Future<void> loadAsset(String asset) async {
-    final texture = await TextureSource.fromAsset(asset);
-    emit(SourceImageReady(texture, asset, true));
+  Future<void> changeInput(InputSource value) async {
+    if (value is PathInputSource) {
+      final texture = await TextureSource.fromAsset(value.path);
+      final index = state.sources.indexOf(value);
+      emit(SourceImageReady(state.sources, index, texture));
+    }
+  }
+
+  Future<void> _prepare() async {
+    final source = state.selected;
+    if (source is PathInputSource) {
+      final texture = await TextureSource.fromAsset(source.path);
+      emit(SourceImageReady(state.sources, state.selectedIndex, texture));
+    }
   }
 }

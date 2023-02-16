@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
+import '../blocs/source_image_bloc/source_image_bloc.dart';
+import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/parameters_container.dart';
 
 class CIFilterDetailsPage extends StatefulWidget {
@@ -20,15 +23,16 @@ class CIFilterDetailsPage extends StatefulWidget {
 
 class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   late final CIFilterConfiguration configuration = widget.configuration;
-  late final CIImagePreviewController sourceController;
-  late final CIImagePreviewController destinationController;
+  late CIImagePreviewController sourceController;
+  late CIImagePreviewController destinationController;
   var _controllersReady = false;
   static const _assetPath = 'images/inputImage1.jpg';
 
   @override
   void initState() {
     super.initState();
-    _prepare().whenComplete(() => setState(() {}));
+    final cubit = context.read<SourceImageCubit>();
+    _prepare(cubit).whenComplete(() => setState(() {}));
   }
 
   @override
@@ -39,10 +43,11 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     super.dispose();
   }
 
-  Future<void> _prepare() async {
-    sourceController = await CIImagePreviewController.fromAsset(_assetPath);
-    destinationController =
-        await CIImagePreviewController.fromAsset(_assetPath);
+  Future<void> _prepare(SourceImageCubit cubit) async {
+    sourceController = await CIImagePreviewController.initialize();
+    await sourceController.setImageSource(cubit.state.selected);
+    destinationController = await CIImagePreviewController.initialize();
+    await destinationController.setImageSource(cubit.state.selected);
     await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
@@ -52,7 +57,10 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.configuration.name),
+        title: FittedBox(child: Text(widget.configuration.name)),
+        actions: const [
+          ImageDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -69,16 +77,25 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
             ),
             Expanded(
               child: _controllersReady
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.61,
-                      child: BeforeAfter(
-                        thumbRadius: 0.0,
-                        thumbColor: Colors.transparent,
-                        beforeImage: CIImagePreview(
-                          controller: sourceController,
-                        ),
-                        afterImage: CIImagePreview(
-                          controller: destinationController,
+                  ? BlocListener<SourceImageCubit, SourceImageState>(
+                      listenWhen: (prev, next) =>
+                          prev.selectedIndex != next.selectedIndex,
+                      listener: (context, state) {
+                        final source = state.selected;
+                        sourceController.setImageSource(source);
+                        destinationController.setImageSource(source);
+                      },
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.61,
+                        child: BeforeAfter(
+                          thumbRadius: 0.0,
+                          thumbColor: Colors.transparent,
+                          beforeImage: CIImagePreview(
+                            controller: sourceController,
+                          ),
+                          afterImage: CIImagePreview(
+                            controller: destinationController,
+                          ),
                         ),
                       ),
                     )
@@ -91,8 +108,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: ConstrainedBox(
-        constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width / 2,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,

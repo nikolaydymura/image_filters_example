@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_gpu_filters_interface: ^0.0.13
   flutter_image_filters: ^0.0.8
-  flutter_core_image_filters: ^0.0.7
+  flutter_core_image_filters: ^0.0.8
   flutter_gpu_video_filters:
     path: gpu_flutter_dependencies/flutter_gpu_video_filters
 
@@ -52,6 +52,8 @@ dependencies:
   rxdart: ^0.27.6
   stream_transform: ^2.1.0
   provider: ^6.0.5
+  image_picker: ^0.8.6+1
+
 
 dev_dependencies:
   flutter_test:

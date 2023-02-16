@@ -17,6 +17,7 @@ void main() {
   FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(
     () => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'),
   );
+
   runApp(
     MultiProvider(
       providers: [
