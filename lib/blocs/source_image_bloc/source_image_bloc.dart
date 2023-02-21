@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'source_image_state.dart';
@@ -55,5 +55,9 @@ class SourceImageCubit extends Cubit<SourceImageState> {
       final texture = await TextureSource.fromAsset(source.path);
       emit(SourceImageReady(state.sources, state.selectedIndex, texture));
     }
+  }
+
+  void updateInitialState(String path) async {
+    emit(SourceImageInitial([AssetInputSource(path)], 0));
   }
 }

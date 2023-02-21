@@ -54,13 +54,6 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                ImageDropdownButtonWidget(),
-              ],
-            ),
             ...configuration.children((e) {
               e.update(configuration);
               setState(() {});
@@ -71,7 +64,11 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
             Expanded(
               child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
-                  if (state is SourceImageReady) {
+                  if (state is SourceImageInitial) {
+                    context
+                        .read<SourceImageCubit>()
+                        .updateInitialState('images/inputImage.jpg');
+                  } else if (state is SourceImageReady) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.60,
                       child: BeforeAfter(
