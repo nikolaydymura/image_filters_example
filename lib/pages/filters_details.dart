@@ -43,7 +43,10 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.filterName),
+        title: FittedBox(child: Text(widget.filterName)),
+        actions: const [
+          ImageDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

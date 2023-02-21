@@ -31,7 +31,8 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _prepare().whenComplete(() => setState(() {}));
+    final cubit = context.read<SourceImageCubit>();
+    _prepare(cubit).whenComplete(() => setState(() {}));
   }
 
   @override
@@ -42,9 +43,11 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     super.dispose();
   }
 
-  Future<void> _prepare() async {
+  Future<void> _prepare(SourceImageCubit cubit) async {
     sourceController = await CIImagePreviewController.initialize();
+    await sourceController.setImageSource(cubit.state.selected);
     destinationController = await CIImagePreviewController.initialize();
+    await destinationController.setImageSource(cubit.state.selected);
     await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
@@ -54,7 +57,10 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.configuration.name),
+        title: FittedBox(child: Text(widget.configuration.name)),
+        actions: const [
+          ImageDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -62,13 +68,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                ImageDropdownButtonWidget(),
-              ],
-            ),
             ...configuration.children((e) async {
               await e.update(configuration);
               setState(() {});

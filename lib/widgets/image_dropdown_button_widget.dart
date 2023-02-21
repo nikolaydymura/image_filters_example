@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
@@ -11,73 +9,61 @@ class ImageDropdownButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: max(MediaQuery.of(context).size.width / 2 - 24, 120),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BlocBuilder<SourceImageCubit, SourceImageState>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  IconButton(
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      context.read<SourceImageCubit>().loadFile();
-                    },
-                    icon: const Icon(Icons.add_circle),
-                  ),
-                  DropdownButton<InputSource>(
-                    value: state.selected,
-                    icon: const Icon(Icons.arrow_drop_down),
-                    elevation: 8,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    underline: Container(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onChanged: (InputSource? value) {
-                      if (value != null) {
-                        context.read<SourceImageCubit>().takeFile(value);
-                      }
-                    },
-                    items: state.sources.map<DropdownMenuItem<InputSource>>(
-                        (InputSource value) {
-                      return DropdownMenuItem<InputSource>(
-                        value: value,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: max(
-                              MediaQuery.of(context).size.width / 2 - (32 + 24),
-                              120,
-                            ),
-                          ),
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              maxWidth: 80,
-                              maxHeight: 80,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: _dataPreview(value),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              );
-            },
-          )
-        ],
-      ),
+    return BlocBuilder<SourceImageCubit, SourceImageState>(
+      builder: (context, state) {
+        return DropdownButton<InputSource>(
+          value: state.selected,
+          icon: const Icon(Icons.arrow_drop_down),
+          elevation: 8,
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
+          underline: Container(
+            color: Theme.of(context).primaryColor,
+          ),
+          onChanged: (InputSource? value) {
+            if (value != null) {
+              context.read<SourceImageCubit>().changeInput(value);
+            } else {
+              context.read<SourceImageCubit>().loadFile();
+            }
+          },
+          items: [newFileInput, ...state.sources.widgets].toList(),
+        );
+      },
     );
   }
+
+  DropdownMenuItem<InputSource> get newFileInput =>
+      DropdownMenuItem<InputSource>(
+        value: null,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 80,
+          ),
+          child: Row(
+            children: const [Icon(Icons.file_upload), Text('File...')],
+          ),
+        ),
+      );
+}
+
+extension on List<InputSource> {
+  Iterable<DropdownMenuItem<InputSource>> get widgets => map(
+        (e) => DropdownMenuItem<InputSource>(
+          value: e,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 80,
+              maxHeight: 80,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: _dataPreview(e),
+            ),
+          ),
+        ),
+      );
 
   Widget _dataPreview(InputSource value) {
     if (value is AssetInputSource) {
