@@ -39,10 +39,7 @@ dependencies:
   flutter_gpu_filters_interface: ^0.0.16
   flutter_image_filters: ^0.0.9
   flutter_core_image_filters: ^0.0.9
-  flutter_gpu_video_filters:
-    path: gpu_flutter_dependencies/flutter_gpu_video_filters
-
-
+  flutter_gpu_video_filters: ^0.0.3
   path_provider: ^2.0.11
   image: ^3.2.2
   before_after_image_slider_nullsafty: ^1.0.1
@@ -84,6 +81,7 @@ flutter:
     - images/
     - lut/
     - videos/
+    - video_shaders/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
