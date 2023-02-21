@@ -36,9 +36,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   collection: ^1.16.0
   cupertino_icons: ^1.0.2
-  flutter_gpu_filters_interface: ^0.0.13
-  flutter_image_filters: ^0.0.8
-  flutter_core_image_filters: ^0.0.8
+  flutter_gpu_filters_interface: ^0.0.16
+  flutter_image_filters: ^0.0.9
+  flutter_core_image_filters: ^0.0.9
   flutter_gpu_video_filters:
     path: gpu_flutter_dependencies/flutter_gpu_video_filters
 
