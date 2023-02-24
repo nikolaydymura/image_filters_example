@@ -6,6 +6,7 @@ import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../brightness_contrast_filter_configuration.dart';
 import '../widgets/export_video_button.dart';
 import '../widgets/parameters_container.dart';
 
@@ -95,8 +96,12 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
       );
 
   @override
-  GPUFilterConfiguration createConfiguration() =>
-      FlutterVideoFilters.createFilter(displayName: widget.filterName);
+  GPUFilterConfiguration createConfiguration() {
+    if (widget.filterName == 'Brightness + Contrast') {
+      return BrightnessContrastFilterConfiguration();
+    }
+    return FlutterVideoFilters.createFilter(displayName: widget.filterName);
+  }
 }
 
 class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>

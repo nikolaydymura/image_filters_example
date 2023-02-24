@@ -12,6 +12,7 @@ const Map<String, List<String>> favorites = {
     'Lookup Table',
   ],
   'GPUFilterConfiguration': [
+    'Brightness + Contrast',
     'HALD Lookup Table',
     'Monochrome',
     'Square Lookup Table',
