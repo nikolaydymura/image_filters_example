@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../blocs/source_video_bloc/source_video_bloc.dart';
 import '../brightness_contrast_filter_configuration.dart';
 import '../widgets/export_video_button.dart';
 import '../widgets/parameters_container.dart';
+import '../widgets/video_dropdown_button_widget.dart';
 
 class VideoDetailsPage extends StatelessWidget {
   final String filterName;
@@ -66,9 +69,14 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
   }
 
   @override
-  Future<void> prepare() async {
+  Future<void> prepare(PathInputSource source) async {
     previewParams = await GPUVideoPreviewParams.create(configuration);
     _previewReady = previewAvailable;
+  }
+
+  @override
+  void changedSource(PathInputSource source) {
+    //controller.setVideoSource(source);
   }
 
   @override
@@ -88,7 +96,7 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
         configuration: configuration,
         onViewCreated: (controller, outputSizeStream) async {
           this.controller = controller;
-          this.controller.setVideoAsset(_VideoDetailsPageState._assetPath);
+          //this.controller.
           await for (final _ in outputSizeStream) {
             setState(() {});
           }
@@ -122,13 +130,17 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
   }
 
   @override
-  Future<void> prepare() async {
-    controller = await CIVideoPreviewController.fromAsset(
-      _VideoDetailsPageState._assetPath,
-    );
+  Future<void> prepare(PathInputSource source) async {
+    controller = await CIVideoPreviewController.initialize();
+    controller.setVideoSource(source);
     await configuration.prepare();
     await controller.connect(configuration);
     _previewReady = previewAvailable;
+  }
+
+  @override
+  void changedSource(PathInputSource source) {
+    controller.setVideoSource(source);
   }
 
   @override
@@ -154,7 +166,6 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
 
 mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
     T extends StatefulWidget> on State<T> {
-  static const _assetPath = 'videos/BigBuckBunny.mp4';
   var _previewReady = false;
 
   late final F configuration;
@@ -165,11 +176,11 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
 
   String get title;
 
-  Future<void> prepare();
+  Future<void> prepare(PathInputSource source);
+
+  void changedSource(PathInputSource source);
 
   Future<void> release();
-
-  Future<void> loadVideo();
 
   Widget get playerView;
 
@@ -177,8 +188,9 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
   void initState() {
     super.initState();
     configuration = createConfiguration();
+    final source = context.read<SourceVideoCubit>().state.selected;
     if (previewAvailable) {
-      prepare().whenComplete(() => setState(() {}));
+      prepare(source).whenComplete(() => setState(() {}));
     }
   }
 
@@ -195,7 +207,10 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(title),
+        title: FittedBox(child: Text(title)),
+        actions: const [
+          VideoDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -222,27 +237,20 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                FloatingActionButton(
-                  heroTag: null,
-                  child: const Icon(Icons.add_box_outlined),
-                  onPressed: () {
-                    loadVideo();
-                    setState(() {});
+                BlocConsumer<SourceVideoCubit, SourceVideoState>(
+                  listener: (prev, next) {
+                    changedSource(next.selected);
                   },
-                ),
-                ExportVideoButton(
-                  sourceBuilder: () => AssetInputSource(_assetPath),
-                  configuration: configuration,
+                  builder: (context, state) {
+                    return ExportVideoButton(
+                      sourceBuilder: () => state.selected,
+                      configuration: configuration,
+                    );
+                  },
                 ),
               ],
             )
-          : FloatingActionButton(
-              heroTag: null,
-              onPressed: () {
-                loadVideo();
-                setState(() {});
-              },
-            ),
+          : null,
     );
   }
 }

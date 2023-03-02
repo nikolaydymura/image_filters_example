@@ -44,7 +44,6 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   }
 
   Future<void> _prepare(SourceImageCubit cubit) async {
-    cubit.updateInitialState(_assetPath);
     sourceController = await CIImagePreviewController.initialize();
     await sourceController.setImageSource(cubit.state.selected);
     destinationController = await CIImagePreviewController.initialize();

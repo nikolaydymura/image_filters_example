@@ -14,7 +14,7 @@ class SourceImageCubit extends Cubit<SourceImageState> {
   SourceImageCubit()
       : super(
           SourceImageInitial(
-            [AssetInputSource('images/inputImage.jpg')],
+            [AssetInputSource('images/inputImage1.jpg')],
             0,
           ),
         );

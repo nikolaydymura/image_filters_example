@@ -28,7 +28,6 @@ class FilterDetailsScreen extends StatefulWidget {
 class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
   ShaderConfiguration get configuration => widget.filterConfiguration;
   late final noConfiguration = NoneShaderConfiguration();
-  static const _assetPath = 'images/inputImage.jpg';
 
   @override
   void initState() {
@@ -65,11 +64,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
             Expanded(
               child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
-                  if (state is SourceImageInitial) {
-                    context
-                        .read<SourceImageCubit>()
-                        .updateInitialState(_assetPath);
-                  } else if (state is SourceImageReady) {
+                   if (state is SourceImageReady) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.60,
                       child: BeforeAfter(

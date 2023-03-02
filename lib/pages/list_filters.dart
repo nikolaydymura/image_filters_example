@@ -48,19 +48,21 @@ class FiltersListScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 1,
         centerTitle: true,
-        title: BlocBuilder<ScreenIndexCubit, int>(
-          builder: (context, state) {
-            if (state == 0) {
-              return const Text('Available Shader filters');
-            }
-            if (state == 1) {
-              return const Text('Available Core Image filters');
-            }
-            if (state == 2) {
-              return const Text('Available Core Image (video) filters');
-            }
-            return const Text('Available GPU video filters');
-          },
+        title: FittedBox(
+          child: BlocBuilder<ScreenIndexCubit, int>(
+            builder: (context, state) {
+              if (state == 0) {
+                return const Text('Available Shader filters');
+              }
+              if (state == 1) {
+                return const Text('Available Core Image filters');
+              }
+              if (state == 2) {
+                return const Text('Available Core Image (video) filters');
+              }
+              return const Text('Available GPU video filters');
+            },
+          ),
         ),
       ),
       bottomNavigationBar: BlocBuilder<ScreenIndexCubit, int>(
