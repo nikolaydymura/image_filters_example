@@ -59,14 +59,14 @@ extension on List<PathInputSource> {
             child: Row(
               children: [
                 const Icon(Icons.video_file),
-                Center(
-                  child: FittedBox(
-                    child: Text(
-                      e.path.substring(
-                        7,
-                        e.path.indexOf('.'),
-                      ),
+                Expanded(
+                  child: Text(
+                    e.path.substring(
+                      7,
+                      e.path.indexOf('.'),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 )
               ],
