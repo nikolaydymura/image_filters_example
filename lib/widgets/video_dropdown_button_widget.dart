@@ -28,7 +28,7 @@ class VideoDropdownButtonWidget extends StatelessWidget {
               context.read<SourceVideoCubit>().loadFile();
             }
           },
-          items: [newFileInput, ...state.sources.widgets].toList(),
+          items: [newFileInput, ...state.widgets].toList(),
         );
       },
     );
@@ -48,36 +48,30 @@ class VideoDropdownButtonWidget extends StatelessWidget {
       );
 }
 
-extension on List<PathInputSource> {
-  Iterable<DropdownMenuItem<PathInputSource>> get widgets => map(
+extension on SourceVideoState {
+  Iterable<DropdownMenuItem<PathInputSource>> get widgets => sources.map(
         (e) => DropdownMenuItem<PathInputSource>(
           value: e,
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               maxWidth: 80,
             ),
-            child: BlocBuilder<SourceVideoCubit, SourceVideoState>(
-              builder: (context, state) {
-                if (state is SourceVideoReady) {
-                  final img = Image.file(state.textureSource);
-                  return Row(
-                    children: [
-                      Image(image: img.image),
-                      Expanded(
-                        child: Text(
-                          e.path.substring(
-                            7,
-                            e.path.indexOf('.'),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return const CircularProgressIndicator();
-              },
+            child: Row(
+              children: [
+                previews[e] != null
+                    ? Image.memory(previews[e]!)
+                    : const Icon(Icons.video_file),
+                Expanded(
+                  child: Text(
+                    e.path.substring(
+                      7,
+                      e.path.indexOf('.'),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
             ),
           ),
         ),

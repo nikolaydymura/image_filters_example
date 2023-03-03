@@ -52,7 +52,6 @@ class _CIVideoDetailsBody extends StatefulWidget {
 
 class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
     with _VideoDetailsPageState<GPUFilterConfiguration, _GPUVideoDetailsBody> {
-  late final GPUVideoPreviewController controller;
   late final GPUVideoPreviewParams previewParams;
 
   @override
@@ -62,22 +61,10 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
   String get title => configuration.name;
 
   @override
-  Future<void> release() async {
-    await controller.dispose();
-    await configuration.dispose();
-  }
-
-  @override
   Future<void> prepare(PathInputSource source) async {
     previewParams = await GPUVideoPreviewParams.create(configuration);
     _previewReady = previewAvailable;
   }
-
-  @override
-  void changedSource(PathInputSource source) {
-    //controller.setVideoSource(source);
-  }
-
 
   @override
   Widget get playerView => GPUVideoNativePreview(
@@ -85,7 +72,9 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
         configuration: configuration,
         onViewCreated: (controller, outputSizeStream) async {
           this.controller = controller;
-          //this.controller.
+          await this
+              .controller
+              .setVideoSource(context.read<SourceVideoCubit>().state.selected);
           await for (final _ in outputSizeStream) {
             setState(() {});
           }
@@ -103,7 +92,6 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
 
 class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
     with _VideoDetailsPageState<CIFilterConfiguration, _CIVideoDetailsBody> {
-  late final CIVideoPreviewController controller;
 
   @override
   bool get previewAvailable => Platform.isIOS || Platform.isMacOS;
@@ -112,28 +100,16 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
   String get title => configuration.name;
 
   @override
-  Future<void> release() async {
-    await controller.disconnect();
-    await controller.dispose();
-    await configuration.dispose();
-  }
-
-  @override
   Future<void> prepare(PathInputSource source) async {
     controller = await CIVideoPreviewController.initialize();
-    controller.setVideoSource(source);
+    await controller.setVideoSource(source);
     await configuration.prepare();
     await controller.connect(configuration);
     _previewReady = previewAvailable;
   }
 
   @override
-  void changedSource(PathInputSource source) {
-    controller.setVideoSource(source);
-  }
-
-  @override
-  Widget get playerView => CIVideoPreview(
+  Widget get playerView => VideoPreview(
         controller: controller,
       );
 
@@ -146,6 +122,7 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
     T extends StatefulWidget> on State<T> {
   var _previewReady = false;
 
+  late final VideoPreviewController controller;
   late final F configuration;
 
   F createConfiguration();
@@ -156,9 +133,11 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
 
   Future<void> prepare(PathInputSource source);
 
-  void changedSource(PathInputSource source);
-
-  Future<void> release();
+  Future<void> release() async {
+    await controller.disconnect();
+    await controller.dispose();
+    await configuration.dispose();
+  }
 
   Widget get playerView;
 
@@ -217,7 +196,7 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
               children: [
                 BlocConsumer<SourceVideoCubit, SourceVideoState>(
                   listener: (prev, next) {
-                    changedSource(next.selected);
+                    controller.setVideoSource(next.selected);
                   },
                   builder: (context, state) {
                     return ExportVideoButton(
