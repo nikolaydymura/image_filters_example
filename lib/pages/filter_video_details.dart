@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../blocs/source_video_bloc/source_video_bloc.dart';
 import '../brightness_contrast_filter_configuration.dart';
@@ -79,16 +78,6 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
     //controller.setVideoSource(source);
   }
 
-  @override
-  Future<void> loadVideo() async {
-    ImagePicker? picker = ImagePicker();
-    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
-    if (video != null) {
-      controller = await GPUVideoPreviewController.fromAsset(video.path);
-      await configuration.prepare();
-      await controller.connect(configuration);
-    }
-  }
 
   @override
   Widget get playerView => GPUVideoNativePreview(
@@ -141,17 +130,6 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
   @override
   void changedSource(PathInputSource source) {
     controller.setVideoSource(source);
-  }
-
-  @override
-  Future<void> loadVideo() async {
-    ImagePicker? picker = ImagePicker();
-    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
-    if (video != null) {
-      controller = await CIVideoPreviewController.fromAsset(video.path);
-      await configuration.prepare();
-      await controller.connect(configuration);
-    }
   }
 
   @override

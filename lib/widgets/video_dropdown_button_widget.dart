@@ -56,20 +56,28 @@ extension on List<PathInputSource> {
             constraints: const BoxConstraints(
               maxWidth: 80,
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.video_file),
-                Expanded(
-                  child: Text(
-                    e.path.substring(
-                      7,
-                      e.path.indexOf('.'),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              ],
+            child: BlocBuilder<SourceVideoCubit, SourceVideoState>(
+              builder: (context, state) {
+                if (state is SourceVideoReady) {
+                  final img = Image.file(state.textureSource);
+                  return Row(
+                    children: [
+                      Image(image: img.image),
+                      Expanded(
+                        child: Text(
+                          e.path.substring(
+                            7,
+                            e.path.indexOf('.'),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  );
+                }
+                return const CircularProgressIndicator();
+              },
             ),
           ),
         ),

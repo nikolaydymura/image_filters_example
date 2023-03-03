@@ -20,11 +20,14 @@ class SourceVideoInitial extends SourceVideoState {
 }
 
 class SourceVideoReady extends SourceVideoState {
+  final File textureSource;
+
   const SourceVideoReady(
     super.sources,
     super.selectedIndex,
+    this.textureSource,
   );
 
   @override
-  List<Object?> get props => [...super.props];
+  List<Object?> get props => [...super.props, textureSource];
 }
