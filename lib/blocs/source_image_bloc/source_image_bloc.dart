@@ -14,7 +14,7 @@ class SourceImageCubit extends Cubit<SourceImageState> {
   SourceImageCubit()
       : super(
           SourceImageInitial(
-            [AssetInputSource('images/inputImage.jpg')],
+            [AssetInputSource('images/inputImage1.jpg')],
             0,
           ),
         );
@@ -55,5 +55,9 @@ class SourceImageCubit extends Cubit<SourceImageState> {
       final texture = await TextureSource.fromAsset(source.path);
       emit(SourceImageReady(state.sources, state.selectedIndex, texture));
     }
+  }
+
+  void updateInitialState(String path) async {
+    emit(SourceImageInitial([AssetInputSource(path)], 0));
   }
 }

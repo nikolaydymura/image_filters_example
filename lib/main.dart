@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'blocs/screen_index_cubit.dart';
 import 'blocs/search_bloc/search_bloc.dart';
 import 'blocs/source_image_bloc/source_image_bloc.dart';
+import 'blocs/source_video_bloc/source_video_bloc.dart';
 import 'brightness_contrast_shader_configuration.dart';
 import 'pages/list_filters.dart';
 
@@ -23,6 +24,9 @@ void main() {
       providers: [
         BlocProvider<SourceImageCubit>(
           create: (context) => SourceImageCubit(),
+        ),
+        BlocProvider<SourceVideoCubit>(
+          create: (context) => SourceVideoCubit(),
         ),
         BlocProvider<ScreenIndexCubit>(
           create: (context) => ScreenIndexCubit(),

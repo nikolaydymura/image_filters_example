@@ -36,10 +36,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   collection: ^1.16.0
   cupertino_icons: ^1.0.2
-  flutter_gpu_filters_interface: ^0.0.16
-  flutter_image_filters: ^0.0.9
-  flutter_core_image_filters: ^0.0.9
-  flutter_gpu_video_filters: ^0.0.3
+  flutter_gpu_filters_interface: ^0.0.18
+  flutter_image_filters: ^0.0.10
+  flutter_core_image_filters: ^0.0.10
+  flutter_gpu_video_filters: ^0.0.5
   path_provider: ^2.0.11
   image: ^3.2.2
   before_after_image_slider_nullsafty: ^1.0.1
@@ -49,7 +49,8 @@ dependencies:
   rxdart: ^0.27.6
   stream_transform: ^2.1.0
   provider: ^6.0.5
-  image_picker: ^0.8.6+1
+  image_picker: ^0.8.6+4
+  video_thumbnail: ^0.5.3
 
 
 dev_dependencies:
