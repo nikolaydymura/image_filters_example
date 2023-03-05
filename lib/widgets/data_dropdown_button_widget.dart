@@ -49,7 +49,7 @@ class DataDropdownButtonWidget extends StatelessWidget {
               )
             ],
           ),
-          Row(
+          /*Row(
             children: [
               IconButton(
                 onPressed: () {
@@ -59,7 +59,7 @@ class DataDropdownButtonWidget extends StatelessWidget {
               ),
               const Text('File...')
             ],
-          ),
+          ),*/
           BlocBuilder<DataBlocCubit, DataBlocState>(
             builder: (context, state) {
               return DropdownButton<DataItem>(
@@ -75,51 +75,11 @@ class DataDropdownButtonWidget extends StatelessWidget {
                 onChanged: (DataItem? value) {
                   if (value != null) {
                     context.read<DataBlocCubit>().change(value);
+                  } else {
+                    context.read<DataBlocCubit>().loadFile();
                   }
                 },
-                items: state.items
-                    .map<DropdownMenuItem<DataItem>>((DataItem value) {
-                  return DropdownMenuItem<DataItem>(
-                    value: value,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: max(
-                          MediaQuery.of(context).size.width / 2 - (32 + 24),
-                          120,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              maxWidth: 50,
-                              maxHeight: 50,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: _dataPreview(value),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                            child: Text(
-                              value.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
+                items: [newFileInput, ...state.items.widgets].toList(),
               );
             },
           )
@@ -127,6 +87,36 @@ class DataDropdownButtonWidget extends StatelessWidget {
       ),
     );
   }
+
+  DropdownMenuItem<DataItem> get newFileInput => DropdownMenuItem<DataItem>(
+        value: null,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 80,
+          ),
+          child: Row(
+            children: const [Icon(Icons.file_upload), Text('File...')],
+          ),
+        ),
+      );
+}
+
+extension on List<DataItem> {
+  Iterable<DropdownMenuItem<DataItem>> get widgets => map(
+        (e) => DropdownMenuItem<DataItem>(
+          value: e,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 80,
+              maxHeight: 80,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: _dataPreview(e),
+            ),
+          ),
+        ),
+      );
 
   Widget _dataPreview(DataItem value) {
     if (value is ImageAssetDataItem) {
