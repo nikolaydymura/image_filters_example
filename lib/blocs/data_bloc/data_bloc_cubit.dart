@@ -6,6 +6,7 @@ import 'package:flutter_core_image_filters/flutter_core_image_filters.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_gpu_video_filters/flutter_gpu_video_filters.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'data_bloc_state.dart';
 
@@ -49,6 +50,16 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     }
     await parameter.update(configuration);
     emit(state.copyWith(selected: value));
+  }
+
+  Future<void> loadFile() async {
+    ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final texture = FileDataItem(File(image.path));
+      _backgroundImages.add(texture);
+      emit(DataBlocState(_backgroundImages.first, _backgroundImages));
+    }
   }
 
   static final List<DataItem> _backgroundImages = [

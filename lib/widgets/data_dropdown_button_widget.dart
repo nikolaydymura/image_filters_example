@@ -49,6 +49,17 @@ class DataDropdownButtonWidget extends StatelessWidget {
               )
             ],
           ),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  context.read<DataBlocCubit>().loadFile();
+                },
+                icon: const Icon(Icons.file_upload),
+              ),
+              const Text('File...')
+            ],
+          ),
           BlocBuilder<DataBlocCubit, DataBlocState>(
             builder: (context, state) {
               return DropdownButton<DataItem>(
@@ -94,16 +105,13 @@ class DataDropdownButtonWidget extends StatelessWidget {
                             width: 8,
                           ),
                           Expanded(
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                value.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            child: Text(
+                              value.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
