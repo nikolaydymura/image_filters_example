@@ -92,7 +92,6 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
 
 class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
     with _VideoDetailsPageState<CIFilterConfiguration, _CIVideoDetailsBody> {
-
   @override
   bool get previewAvailable => Platform.isIOS || Platform.isMacOS;
 

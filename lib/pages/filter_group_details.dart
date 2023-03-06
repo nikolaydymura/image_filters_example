@@ -77,8 +77,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
               height: 8.0,
             ),
             Expanded(
-              child:
-              BlocBuilder<SourceImageCubit, SourceImageState>(
+              child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
                   if (state is SourceImageReady) {
                     return SizedBox(

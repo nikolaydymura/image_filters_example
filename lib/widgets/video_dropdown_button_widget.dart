@@ -63,12 +63,13 @@ extension on SourceVideoState {
                     : const Icon(Icons.video_file),
                 Expanded(
                   child: Text(
-                      e.path.substring(
-                        7,
-                        e.path.indexOf('.'),
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis),
+                    e.path.substring(
+                      7,
+                      e.path.indexOf('.'),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 )
               ],
             ),

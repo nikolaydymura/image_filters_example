@@ -13,7 +13,7 @@ part 'source_video_state.dart';
 class SourceVideoCubit extends Cubit<SourceVideoState> {
   SourceVideoCubit()
       : super(
-    SourceVideoState(
+          SourceVideoState(
             [
               AssetInputSource('videos/BigBuckBunny.mp4'),
               AssetInputSource('videos/Mona.mp4'),

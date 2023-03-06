@@ -18,8 +18,10 @@ void main() {
   FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(
     () => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'),
   );
-  FlutterImageFilters.register<LookupContrastBrightnessExposureShaderConfiguration>(
-        () => FragmentProgram.fromAsset('shaders/lookup_contrast_brightness_exposure.frag'),
+  FlutterImageFilters.register<
+      LookupContrastBrightnessExposureShaderConfiguration>(
+    () => FragmentProgram.fromAsset(
+        'shaders/lookup_contrast_brightness_exposure.frag'),
   );
 
   runApp(
