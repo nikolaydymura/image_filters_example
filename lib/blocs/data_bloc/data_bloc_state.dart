@@ -1,17 +1,17 @@
 part of 'data_bloc_cubit.dart';
 
 class DataBlocState {
-  final DataItem selected;
+  final DataItem? selected;
   final List<DataItem> items;
 
-  DataBlocState(this.selected, this.items);
+  DataBlocState(this.items, {this.selected});
 
   DataBlocState copyWith({
     DataItem? selected,
   }) {
     return DataBlocState(
-      selected ?? this.selected,
       items,
+      selected: selected ?? this.selected,
     );
   }
 }

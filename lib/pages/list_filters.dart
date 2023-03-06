@@ -192,7 +192,9 @@ extension on FiltersListScreen {
     ShaderConfiguration? configuration;
     if (name == 'Brightness + Contrast') {
       configuration = BrightnessContrastShaderConfiguration();
-    } else {
+    } else if (name == 'Lookup + Contrast + Brightness + Exposure') {
+      configuration = LookupContrastBrightnessExposureShaderConfiguration();
+    }else {
       configuration = FlutterImageFilters.createFilter(displayName: name);
     }
     if (configuration == null) {
