@@ -4,3 +4,14 @@ class BrightnessContrastShaderConfiguration extends BunchShaderConfiguration {
   BrightnessContrastShaderConfiguration()
       : super([BrightnessShaderConfiguration(), ContrastShaderConfiguration()]);
 }
+
+class LookupContrastBrightnessExposureShaderConfiguration
+    extends BunchShaderConfiguration {
+  LookupContrastBrightnessExposureShaderConfiguration()
+      : super([
+          SquareLookupTableShaderConfiguration(),
+          ContrastShaderConfiguration(),
+          BrightnessShaderConfiguration(),
+          ExposureShaderConfiguration()
+        ]);
+}

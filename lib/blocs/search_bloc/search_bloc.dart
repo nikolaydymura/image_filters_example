@@ -88,7 +88,7 @@ class SearchBloc extends SearchableBloc
       SearchSucceeded._(
         '',
         state.focusNode,
-        state.controller,
+        state.controller..text = '',
         SplayTreeSet<String>.from(
           _items,
         ).toList(),
