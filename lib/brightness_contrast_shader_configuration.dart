@@ -15,3 +15,14 @@ class LookupContrastBrightnessExposureShaderConfiguration
           ExposureShaderConfiguration()
         ]);
 }
+
+class HALDLookupContrastBrightnessExposureShaderConfiguration
+    extends BunchShaderConfiguration {
+  HALDLookupContrastBrightnessExposureShaderConfiguration()
+      : super([
+    HALDLookupTableShaderConfiguration(),
+    ContrastShaderConfiguration(),
+    BrightnessShaderConfiguration(),
+    ExposureShaderConfiguration()
+  ]);
+}

@@ -20,6 +20,7 @@ const Map<String, List<String>> favorites = {
   'ShaderConfiguration': [
     'Brightness + Contrast',
     'Lookup + Contrast + Brightness + Exposure',
+    'HALD Lookup + Contrast + Brightness + Exposure',
     'Brightness + Saturation',
     'HALD Lookup Table',
     'Monochrome',
