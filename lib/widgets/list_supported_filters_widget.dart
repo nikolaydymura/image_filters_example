@@ -5,6 +5,7 @@ import '../blocs/search_bloc/search_bloc.dart';
 
 const Map<String, List<String>> favorites = {
   'CIFilterConfiguration': [
+    'Vibrance + Vignette',
     'Color Cube',
     'Color Cubes Mixed With Mask',
     'Color Cube with ColorSpace',
