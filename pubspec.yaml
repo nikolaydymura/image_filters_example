@@ -73,6 +73,7 @@ flutter:
   shaders:
     - shaders/brightness_contrast.frag
     - shaders/lookup_contrast_brightness_exposure.frag
+    - shaders/hald_lookup_contrast_brightness_exposure.frag
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
