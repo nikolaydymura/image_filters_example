@@ -9,7 +9,7 @@ const Map<String, List<String>> favorites = {
     'Color Cubes Mixed With Mask',
     'Color Cube with ColorSpace',
     'Color Monochrome',
-    'Lookup Table',
+    'Square Lookup Table',
   ],
   'GPUFilterConfiguration': [
     'Brightness + Contrast',
