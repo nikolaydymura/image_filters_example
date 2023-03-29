@@ -64,7 +64,7 @@ class _CIFilterGroupDetailsScreenState
     await sourceController.setImageSource(cubit.state.selected);
     destinationController = await CIImagePreviewController.initialize();
     await destinationController.setImageSource(cubit.state.selected);
-    await widget.configuration1.prepare();
+    await configuration.prepare();
     await destinationController.connect(configuration);
     _controllersReady = true;
   }
