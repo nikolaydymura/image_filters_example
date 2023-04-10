@@ -9,6 +9,7 @@ import '../blocs/search_bloc/search_bloc.dart';
 import '../brightness_contrast_shader_configuration.dart';
 import '../widgets/list_supported_filters_widget.dart';
 import 'ci_filter_details.dart';
+import 'ci_filter_group_details.dart';
 import 'filter_group_details.dart';
 import 'filter_video_details.dart';
 import 'filters_details.dart';
@@ -146,9 +147,29 @@ extension on FiltersListScreen {
   }
 
   void handleCIImageTap(BuildContext context, String name) {
-    final configuration = FlutterCoreImageFilters.createFilter(
-      displayName: name,
-    );
+    if (name == 'Vibrance + Vignette') {
+      final configuration1 = FlutterCoreImageFilters.createFilter(
+        displayName: 'Vibrance',
+      );
+      final configuration2 = FlutterCoreImageFilters.createFilter(
+        displayName: 'Vignette',
+      );
+      _pushPage(
+        context,
+        (context) {
+          return CIFilterGroupDetailsScreen(
+            filterName1: configuration1.name,
+            filterName2: configuration2.name,
+            configuration1: configuration1,
+            configuration2: configuration2,
+          );
+        },
+      );
+      return;
+    }
+
+    final configuration =
+        FlutterCoreImageFilters.createFilter(displayName: name);
     if (configuration.categories.contains(CICategory.stillImage) &&
         configuration.hasInputImage) {
       _pushPage(
