@@ -15,6 +15,12 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+```shell
+flutter pub run flutter_image_filters generate --filters brightness,contrast
+flutter pub run flutter_image_filters generate --filters hald_lookup,contrast,brightness,exposure
+flutter pub run flutter_image_filters generate --filters lookup,contrast,brightness,exposure
+```
+
 ## Examples
 
 - [Big Flutter Filters Demo](https://github.com/nikolaydymura/image_filters_example) - big example of how to use filters and.
