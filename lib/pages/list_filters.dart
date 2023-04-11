@@ -7,7 +7,6 @@ import '../blocs/export_bloc/export_cubit.dart';
 import '../blocs/screen_index_cubit.dart';
 import '../blocs/search_bloc/search_bloc.dart';
 import '../brightness_contrast_shader_configuration.dart';
-import '../vibrance_vignette_ci_filter_configuration.dart';
 import '../widgets/list_supported_filters_widget.dart';
 import 'ci_filter_details.dart';
 import 'ci_filter_group_details.dart';
@@ -169,19 +168,15 @@ extension on FiltersListScreen {
       return;
     }
 
-    CIFilterConfiguration? configuration;
-    if (name == 'Vibrance + Vignette') {
-      configuration = VibranceVignetteCIFilterConfiguration();
-    } else {
-      configuration = FlutterCoreImageFilters.createFilter(displayName: name);
-    }
+    final configuration =
+        FlutterCoreImageFilters.createFilter(displayName: name);
     if (configuration.categories.contains(CICategory.stillImage) &&
         configuration.hasInputImage) {
       _pushPage(
         context,
         (context) {
           return CIFilterDetailsPage(
-            configuration: configuration!,
+            configuration: configuration,
           );
         },
       );

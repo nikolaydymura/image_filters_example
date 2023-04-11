@@ -6,7 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import flutter_core_image_filters
-import path_provider_macos
+import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   CoreImageFiltersPlugin.register(with: registry.registrar(forPlugin: "CoreImageFiltersPlugin"))

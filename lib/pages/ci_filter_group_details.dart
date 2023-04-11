@@ -42,9 +42,6 @@ class _CIFilterGroupDetailsScreenState
   @override
   void initState() {
     super.initState();
-    configuration = GroupCIFilterConfiguration();
-    configuration.add(widget.configuration1);
-    configuration.add(widget.configuration2);
     final cubit = context.read<SourceImageCubit>();
     _prepare(cubit).whenComplete(() => setState(() {}));
   }
@@ -60,6 +57,8 @@ class _CIFilterGroupDetailsScreenState
   }
 
   Future<void> _prepare(SourceImageCubit cubit) async {
+    configuration = GroupCIFilterConfiguration(
+        [widget.configuration1, widget.configuration2]);
     sourceController = await CIImagePreviewController.initialize();
     await sourceController.setImageSource(cubit.state.selected);
     destinationController = await CIImagePreviewController.initialize();
@@ -86,13 +85,8 @@ class _CIFilterGroupDetailsScreenState
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ...widget.configuration1.children((e) async {
-              await e.update(widget.configuration1);
-              setState(() {});
-            }),
-            const Divider(),
-            ...widget.configuration2.children((e) async {
-              await e.update(widget.configuration2);
+            ...configuration.children((e) async {
+              await e.update(configuration);
               setState(() {});
             }),
             const SizedBox(
