@@ -18,6 +18,8 @@ jobs:
       - run: flutter analyze
         continue-on-error: true
         name: Analyzing sources
+      - run: dart format --set-exit-if-changed
+        name: Format sources
   build_android_flutter_app:
     name: Build Android application using Flutter
     runs-on: ubuntu-latest

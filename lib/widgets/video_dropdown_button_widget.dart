@@ -41,8 +41,8 @@ class VideoDropdownButtonWidget extends StatelessWidget {
           constraints: const BoxConstraints(
             maxWidth: 80,
           ),
-          child: Row(
-            children: const [Icon(Icons.file_upload), Text('File...')],
+          child: const Row(
+            children: [Icon(Icons.file_upload), Text('File...')],
           ),
         ),
       );

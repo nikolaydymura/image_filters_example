@@ -20,9 +20,9 @@ class HALDLookupContrastBrightnessExposureShaderConfiguration
     extends BunchShaderConfiguration {
   HALDLookupContrastBrightnessExposureShaderConfiguration()
       : super([
-    HALDLookupTableShaderConfiguration(),
-    ContrastShaderConfiguration(),
-    BrightnessShaderConfiguration(),
-    ExposureShaderConfiguration()
-  ]);
+          HALDLookupTableShaderConfiguration(),
+          ContrastShaderConfiguration(),
+          BrightnessShaderConfiguration(),
+          ExposureShaderConfiguration()
+        ]);
 }
