@@ -121,12 +121,13 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
       throw UnsupportedError('Failed to extract bytes for image');
     }
     final image1 = img.Image.fromBytes(
-      image.width,
-      image.height,
-      bytes.buffer.asUint8List(),
+      width: image.width,
+      height: image.height,
+      bytes: bytes.buffer,
+      numChannels: 4,
     );
     img.JpegEncoder encoder = img.JpegEncoder();
-    final data = encoder.encodeImage(image1);
+    final data = encoder.encode(image1);
     await output.writeAsBytes(data);
     debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
     debugPrint('Exported: ${output.absolute}');
