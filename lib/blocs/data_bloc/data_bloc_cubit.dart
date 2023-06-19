@@ -172,6 +172,10 @@ bool isSquareCube(
         .isNotEmpty;
   }
   if (parameter.name == 'inputTextureCubeData' &&
+      configuration is BunchFilterConfiguration) {
+    return true;
+  }
+  if (parameter.name == 'inputTextureCubeData' &&
       configuration is SquareLookupTableShaderConfiguration) {
     return true;
   }

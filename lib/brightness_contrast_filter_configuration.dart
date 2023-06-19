@@ -7,3 +7,14 @@ class BrightnessContrastFilterConfiguration extends BunchFilterConfiguration {
           [GPUBrightnessConfiguration(), GPUContrastConfiguration()],
         );
 }
+
+class LookupContrastBrightnessExposureFilterConfiguration
+    extends BunchFilterConfiguration {
+  LookupContrastBrightnessExposureFilterConfiguration()
+      : super('video_shaders', [
+          GPUSquareLookupTableConfiguration(),
+          GPUContrastConfiguration(),
+          GPUBrightnessConfiguration(),
+          GPUExposureConfiguration()
+        ]);
+}

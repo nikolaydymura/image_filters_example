@@ -19,6 +19,7 @@ samples, guidance on mobile development, and a full API reference.
 flutter pub run flutter_image_filters generate --filters brightness,contrast
 flutter pub run flutter_image_filters generate --filters hald_lookup,contrast,brightness,exposure
 flutter pub run flutter_image_filters generate --filters lookup,contrast,brightness,exposure
+flutter pub run flutter_gpu_video_filters generate --filters SquareLookupTable,Contrast,Brightness,Exposure
 ```
 
 ## Examples
