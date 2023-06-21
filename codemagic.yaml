@@ -3,6 +3,11 @@ workflows:
     name: Android Workflow
     max_build_duration: 120
     instance_type: mac_mini_m1
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
     environment:
       flutter:
         version: 3.10.4
