@@ -29,31 +29,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Downloading sources
-      - uses: actions/checkout@v3
-        name: Downloading Core Image sources
-        with:
-          repository: nikolaydymura/flutter_core_image_filters
-          path: gpu_flutter_dependencies/flutter_core_image_filters
-          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-        name: Downloading GPU Video sources
-        with:
-          repository: nikolaydymura/flutter_gpu_video_filters
-          path: gpu_flutter_dependencies/flutter_gpu_video_filters
-          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-        name: Downloading Image Filters sources
-        with:
-          repository: nikolaydymura/flutter_image_filters
-          path: gpu_flutter_dependencies/flutter_image_filters
-          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
           flutter-version: '3.10.0'
           channel: 'stable'
       - run: |
-          sed -i -E 's/\.\./gpu_flutter_dependencies/g' pubspec.yaml
           flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
         name: Building application
       - uses: actions/upload-artifact@v3
@@ -70,24 +51,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Downloading sources
-      - uses: actions/checkout@v3
-        name: Downloading Core Image sources
-        with:
-          repository: nikolaydymura/flutter_core_image_filters
-          path: gpu_flutter_dependencies/flutter_core_image_filters
-          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-        name: Downloading GPU Video sources
-        with:
-          repository: nikolaydymura/flutter_gpu_video_filters
-          path: gpu_flutter_dependencies/flutter_gpu_video_filters
-          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-        name: Downloading Image Filters sources
-        with:
-          repository: nikolaydymura/flutter_image_filters
-          path: gpu_flutter_dependencies/flutter_image_filters
-          token: ${{ secrets.GPU_FILTERS_GITHUB_TOKEN }}
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
@@ -106,7 +69,6 @@ jobs:
           security unlock-keychain -p "" ~/Library/Keychains/flutter-build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/flutter-build.keychain
           
-          sed -i '' -E 's/\.\./gpu_flutter_dependencies/g' pubspec.yaml
           flutter build ipa --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --export-options-plist=ios/app-ios-export.plist
         name: Building application
       - uses: actions/upload-artifact@v3
