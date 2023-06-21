@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'codemagic.yaml'
 jobs:
   analyze_flutter_app:
     name: Check Flutter sources
