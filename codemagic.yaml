@@ -6,6 +6,9 @@ workflows:
     environment:
       flutter:
         version: 3.10.4
+      ios_signing:
+        distribution_type: ad_hoc
+        bundle_identifier: nd.imagevideo.filters
     scripts:
       - name: Set up code signing settings on Xcode project
         script: |
