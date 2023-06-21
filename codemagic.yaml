@@ -24,10 +24,10 @@ workflows:
           flutter build ipa --release \
             --build-name=1.0.0 \
             --export-options-plist=/Users/builder/export_options.plist
-      artifacts:
-        - build/ios/ipa/*.ipa
-        - /tmp/xcodebuild_logs/*.log
-        - flutter_drive.log
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
 
   ios-workflow-id:
     name: iOS Workflow
