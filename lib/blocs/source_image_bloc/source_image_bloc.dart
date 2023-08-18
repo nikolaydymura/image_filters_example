@@ -18,6 +18,7 @@ class SourceImageCubit extends Cubit<SourceImageState> {
               AssetInputSource('images/inputImage1.jpg'),
               AssetInputSource('images/inputImage2.jpg'),
               AssetInputSource('images/inputImage3.png'),
+              AssetInputSource('images/inputImage4.heic'),
               AssetInputSource('images/inputImage.jpg'),
             ],
             0,
