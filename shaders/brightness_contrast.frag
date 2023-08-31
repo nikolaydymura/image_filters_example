@@ -1,11 +1,13 @@
 #include <flutter/runtime_effect.glsl>
 precision mediump float;
 
-layout(location = 0) out vec4 fragColor;
-layout(location = 0) uniform sampler2D inputImageTexture;
-layout(location = 1) uniform lowp float inputBrightness;
-layout(location = 2) uniform lowp float inputContrast;
-layout(location = 3) uniform vec2 screenSize;
+out vec4 fragColor;
+
+uniform sampler2D inputImageTexture;
+
+layout(location = 0) uniform lowp float inputBrightness;
+layout(location = 1) uniform lowp float inputContrast;
+layout(location = 2) uniform vec2 screenSize;
 
 vec4 processColor0(vec4 sourceColor){
     return vec4((sourceColor.rgb + vec3(inputBrightness * sourceColor.a)), sourceColor.a);

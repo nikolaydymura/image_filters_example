@@ -116,8 +116,9 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
       throw UnsupportedError('Unsupported input source');
     }
     final directory = await getTemporaryDirectory();
-    final output =
-        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.$extension');
+    final output = File(
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.$extension',
+    );
     final watch = Stopwatch();
     watch.start();
     final image = await configuration.export(

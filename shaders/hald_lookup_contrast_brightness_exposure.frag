@@ -1,14 +1,16 @@
 #include <flutter/runtime_effect.glsl>
 precision mediump float;
 
-layout(location = 0) out vec4 fragColor;
-layout(location = 0) uniform sampler2D inputImageTexture;
-layout(location = 1) uniform lowp float inputIntensity;
-layout(location = 2) uniform mediump sampler2D inputTextureCubeData;
-layout(location = 3) uniform lowp float inputContrast;
-layout(location = 4) uniform lowp float inputBrightness;
-layout(location = 5) uniform highp float inputExposure;
-layout(location = 6) uniform vec2 screenSize;
+out vec4 fragColor;
+
+uniform sampler2D inputImageTexture;
+uniform mediump sampler2D inputTextureCubeData;
+
+layout(location = 0) uniform lowp float inputIntensity;
+layout(location = 1) uniform lowp float inputContrast;
+layout(location = 2) uniform lowp float inputBrightness;
+layout(location = 3) uniform highp float inputExposure;
+layout(location = 4) uniform vec2 screenSize;
 
 const float cubeSize = 8.0;
 const float cubeRows = 64.0;

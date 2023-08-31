@@ -39,27 +39,8 @@ class DataDropdownButtonWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  //TODO: context.read<DataBlocCubit>().addItem();
-                },
-                icon: const Icon(
-                  Icons.import_export,
-                ),
-              )
             ],
           ),
-          /*Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  context.read<DataBlocCubit>().loadFile();
-                },
-                icon: const Icon(Icons.file_upload),
-              ),
-              const Text('File...')
-            ],
-          ),*/
           BlocBuilder<DataBlocCubit, DataBlocState>(
             builder: (context, state) {
               return DropdownButton<DataItem>(

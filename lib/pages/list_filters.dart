@@ -9,6 +9,7 @@ import '../blocs/search_bloc/search_bloc.dart';
 import '../brightness_contrast_shader_configuration.dart';
 import '../widgets/list_supported_filters_widget.dart';
 import 'ci_filter_details.dart';
+import 'ci_filter_group_details.dart';
 import 'filter_group_details.dart';
 import 'filter_video_details.dart';
 import 'filters_details.dart';
@@ -146,9 +147,29 @@ extension on FiltersListScreen {
   }
 
   void handleCIImageTap(BuildContext context, String name) {
+    if (name == 'Color Monochrome + Color Threshold') {
+      final configuration1 = FlutterCoreImageFilters.createFilter(
+        displayName: 'Color Monochrome',
+      );
+      final configuration2 = FlutterCoreImageFilters.createFilter(
+        displayName: 'Color Threshold',
+      );
+      _pushPage(
+        context,
+        (context) {
+          return CIFilterGroupDetailsScreen(
+            filterName1: 'Color Monochrome',
+            filterName2: 'Color Threshold',
+            filterConfiguration1: configuration1,
+            filterConfiguration2: configuration2,
+          );
+        },
+      );
+    }
     final configuration = FlutterCoreImageFilters.createFilter(
       displayName: name,
     );
+
     if (configuration.categories.contains(CICategory.stillImage) &&
         configuration.hasInputImage) {
       _pushPage(

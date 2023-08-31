@@ -37,8 +37,10 @@ dependencies:
   collection: ^1.16.0
   cupertino_icons: ^1.0.2
   flutter_gpu_filters_interface: ^0.0.18
-  flutter_image_filters: ^0.0.15
-  flutter_core_image_filters: ^0.0.11
+  flutter_image_filters: ^0.0.16
+    #path: gpu_flutter_dependencies/flutter_image_filters
+  flutter_core_image_filters: ^0.0.13
+    #path: gpu_flutter_dependencies/flutter_core_image_filters
   flutter_gpu_video_filters: ^0.0.8
   path_provider: ^2.0.15
   image: ^4.0.17

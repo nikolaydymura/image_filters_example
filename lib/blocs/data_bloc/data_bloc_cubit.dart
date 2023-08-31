@@ -17,18 +17,7 @@ class DataBlocCubit extends Cubit<DataBlocState> {
 
   DataBlocCubit(this.parameter, this.configuration, {this.onChanged})
       : super(DataBlocState([])) {
-    if (isHALDCube(parameter, configuration)) {
-      emit(DataBlocState(_lutHALDImages));
-    } else if (isSquareCube(parameter, configuration)) {
-      emit(DataBlocState(_lutSquareImages));
-    } else
-    /*if (parameter.name == 'inputBackgroundImage' ||
-        parameter.name == 'inputImage2' ||
-        parameter.name == 'inputImageTexture2' ||
-        parameter.name == 'inputTextureToneCurve')*/
-    {
-      emit(DataBlocState(_backgroundImages));
-    }
+    emit(DataBlocState(_dataItemsFor(parameter, configuration)));
   }
 
   Future<void> change(DataItem value, {bool append = false}) async {
@@ -53,6 +42,13 @@ class DataBlocCubit extends Cubit<DataBlocState> {
         final parameter = configuration.parameters
             .firstWhere((e) => e.name == 'inputCubeDimension');
         onChanged?.call(parameter);
+      }
+      final p = parameter;
+      if (p is CubeDataParameter) {
+        p.image = true;
+        p.size = metadata.size;
+        p.columns = metadata.columns;
+        p.rows = metadata.rows;
       }
     }
     await parameter.update(configuration);
@@ -93,72 +89,88 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   static final List<DataItem> _lutHALDImages = [
     LutAssetDataItem(
       'lut/ColorCubeReferenceImage64.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/NightVisionColorCube.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/JustBlueItColorCube.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/HotBlackColorCube.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/HighContrastBWColorCube.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/filter_lut_7.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/filter_lut_8.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
     LutAssetDataItem(
       'lut/filter_lut_9.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 64, 8),
     ),
   ];
 
   static final List<DataItem> _lutSquareImages = [
     LutAssetDataItem(
       'lut/lookup_demo.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/lookup_amatorka.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/lookup_miss_etikate.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/lookup_soft_elegance_1.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/lookup_soft_elegance_2.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/filter_lut_1.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/filter_lut_2.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
     LutAssetDataItem(
       'lut/filter_lut_3.png',
-      metadata: LutMetadata(64),
+      metadata: LutMetadata(64, 8, 8, 8),
     ),
   ];
+
+  static List<DataItem> _dataItemsFor(
+    DataParameter parameter,
+    FilterConfiguration configuration,
+  ) {
+    if (parameter is CubeDataParameter) {
+      return [..._lutSquareImages, ..._lutHALDImages];
+    }
+    if (isSquareCube(parameter, configuration)) {
+      return _lutSquareImages;
+    }
+    if (isHALDCube(parameter, configuration)) {
+      return _lutHALDImages;
+    }
+    return _backgroundImages;
+  }
 }
 
 bool isSquareCube(
@@ -195,23 +207,6 @@ bool isHALDCube(
   DataParameter parameter,
   FilterConfiguration configuration,
 ) {
-  if (parameter.name == 'inputCubeData' &&
-      configuration is CIColorCubeConfiguration) {
-    return true;
-  }
-  if (parameter.name == 'inputCubeData' &&
-      configuration is CIColorCubeWithColorSpaceConfiguration) {
-    return true;
-  }
-  if (parameter.name == 'inputCube0Data' &&
-      configuration is CIColorCubesMixedWithMaskConfiguration) {
-    return true;
-  }
-  if (parameter.name == 'inputCube1Data' &&
-      configuration is CIColorCubesMixedWithMaskConfiguration) {
-    return true;
-  }
-
   if (parameter.name == 'inputTextureCubeData' &&
       configuration is BunchShaderConfiguration) {
     return configuration

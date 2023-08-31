@@ -12,17 +12,27 @@ import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/parameters_container.dart';
 
-class CIFilterDetailsPage extends StatefulWidget {
-  final CIFilterConfiguration configuration;
+class CIFilterGroupDetailsScreen extends StatefulWidget {
+  final String filterName1;
+  final String filterName2;
+  final CIFilterConfiguration filterConfiguration1;
+  final CIFilterConfiguration filterConfiguration2;
 
-  const CIFilterDetailsPage({super.key, required this.configuration});
+  const CIFilterGroupDetailsScreen({
+    super.key,
+    required this.filterName1,
+    required this.filterName2,
+    required this.filterConfiguration1,
+    required this.filterConfiguration2,
+  });
 
   @override
-  State<CIFilterDetailsPage> createState() => _CIFilterDetailsPageState();
+  State<CIFilterGroupDetailsScreen> createState() =>
+      _FilterDetailsScreenState();
 }
 
-class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
-  late final CIFilterConfiguration configuration = widget.configuration;
+class _FilterDetailsScreenState extends State<CIFilterGroupDetailsScreen> {
+  late GroupCIFilterConfiguration configuration;
   late CIImagePreviewController sourceController;
   late CIImagePreviewController destinationController;
   var _controllersReady = false;
@@ -43,6 +53,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   }
 
   Future<void> _prepare(SourceImageCubit cubit) async {
+    configuration = GroupCIFilterConfiguration(
+      [widget.filterConfiguration1, widget.filterConfiguration2],
+    );
     sourceController = await CIImagePreviewController.initialize();
     await sourceController.setImageSource(cubit.state.selected);
     destinationController = await CIImagePreviewController.initialize();
@@ -56,7 +69,9 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FittedBox(child: Text(widget.configuration.name)),
+        title: FittedBox(
+          child: Text('${widget.filterName1} + ${widget.filterName2}'),
+        ),
         actions: const [
           ImageDropdownButtonWidget(),
         ],
@@ -67,8 +82,15 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ...configuration.children((e) async {
-              await e.update(configuration);
+            Text(widget.filterName1),
+            ...widget.filterConfiguration1.children((e) async {
+              await e.update(widget.filterConfiguration1);
+              setState(() {});
+            }),
+            const Divider(height: 4),
+            Text(widget.filterName2),
+            ...widget.filterConfiguration2.children((e) async {
+              await e.update(widget.filterConfiguration2);
               setState(() {});
             }),
             const SizedBox(
