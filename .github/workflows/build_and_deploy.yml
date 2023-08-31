@@ -15,7 +15,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: '3.10.0'
+          flutter-version: '3.10.6'
           channel: 'stable'
       - run: flutter analyze
         continue-on-error: true
@@ -32,7 +32,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: '3.10.0'
+          flutter-version: '3.10.6'
           channel: 'stable'
       - run: |
           flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
@@ -54,7 +54,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: '3.10.0'
+          flutter-version: '3.10.6'
           channel: 'stable'
       - run: |
           ./generate_ios_plist.sh

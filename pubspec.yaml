@@ -41,7 +41,8 @@ dependencies:
     #path: gpu_flutter_dependencies/flutter_image_filters
   flutter_core_image_filters: ^0.0.13
     #path: gpu_flutter_dependencies/flutter_core_image_filters
-  flutter_gpu_video_filters: ^0.0.8
+  flutter_gpu_video_filters: ^0.0.9
+    #path: gpu_flutter_dependencies/flutter_gpu_video_filters
   path_provider: ^2.0.15
   image: ^4.0.17
   before_after_image_slider_nullsafty: ^1.0.1
