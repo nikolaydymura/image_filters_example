@@ -35,7 +35,11 @@ jobs:
           flutter-version: '3.10.6'
           channel: 'stable'
       - run: |
-          flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
+           export KEYSTORE_PATH=$(pwd)/android/flutter-tour-keystore.jks
+           export KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
+           export KEY_ALIAS=${{ vars.KEY_ALIAS }}
+           export KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
+           flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
         name: Building application
       - uses: actions/upload-artifact@v3
         name: Archive production artifacts
@@ -62,7 +66,7 @@ jobs:
           cp ios/imagevideofilters.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           
           security create-keychain -p "" flutter-build.keychain
-          security import ios/imagevideo.p12 -t agg -k ~/Library/Keychains/flutter-build.keychain -P "098qwe!@#" -A
+          security import ios/imagevideo.p12 -t agg -k ~/Library/Keychains/flutter-build.keychain -P "${{ secrets.CERTIFICATE_PASSWORD }}" -A
           
           security list-keychains -s ~/Library/Keychains/flutter-build.keychain
           security default-keychain -s ~/Library/Keychains/flutter-build.keychain
