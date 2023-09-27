@@ -70,7 +70,7 @@ jobs:
           export-plist-path: 'ios/app-ios-export.plist'
       - uses: nickwph/apple-provisioning-profile-action@v1
         with:
-          profile-file: ios/imagevideofilters.mobileprovision
+          profile-base64: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER_BASE64 }}
       - run: |
           cat ios/app-ios-export.plist
           
