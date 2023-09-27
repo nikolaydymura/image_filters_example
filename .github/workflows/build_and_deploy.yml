@@ -60,7 +60,7 @@ jobs:
         with:
           flutter-version: '3.10.6'
           channel: 'stable'
-      - uses: nikolaydymura/Flutter-Export-Plist-Github-Action@v1
+      - uses: nikolaydymura/Flutter-Export-Plist-Github-Action@v2
         id: generate-plist
         with:
           development-team-id: '8MJN994E42'
