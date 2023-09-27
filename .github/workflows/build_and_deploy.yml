@@ -60,19 +60,18 @@ jobs:
         with:
           flutter-version: '3.10.6'
           channel: 'stable'
-      - uses: nikolaydymura/Flutter-Export-Plist-Github-Action@v2
+      - uses: nikolaydymura/Flutter-Export-Plist-Github-Action@v3
         id: generate-plist
         with:
           development-team-id: '8MJN994E42'
           development-team-name: 'Mykola Dymura'
           product-bundle-identifier: 'nd.imagevideo.filters'
           provisioning-profile-specifier: 'imagevideo-filters'
+          export-plist-path: 'ios/app-ios-export.plist'
       - uses: nickwph/apple-provisioning-profile-action@v1
         with:
           profile-file: ios/imagevideofilters.mobileprovision
       - run: |
-          echo '${{ steps.generate-plist.outputs.export-plist-content }}' > ios/app-ios-export.plist
-          
           cat ios/app-ios-export.plist
           
           security create-keychain -p "" flutter-build.keychain
