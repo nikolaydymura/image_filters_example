@@ -60,20 +60,20 @@ jobs:
         with:
           flutter-version: '3.10.6'
           channel: 'stable'
-      - uses: nikolaydymura/AppCenterUpload-Github-Action@main
+      - uses: nikolaydymura/AppCenterUpload-Github-Action@v1
         id: generate-plist
         with:
           development-team-id: '8MJN994E42'
           development-team-name: 'Mykola Dymura'
           product-bundle-identifier: 'nd.imagevideo.filters'
           provisioning-profile-specifier: 'imagevideo-filters'
+      - uses: nickwph/apple-provisioning-profile-action@v1
+        with:
+          profile-file: ios/imagevideofilters.mobileprovision
       - run: |
           echo '${{ steps.generate-plist.outputs.export-plist-content }}' > ios/app-ios-export.plist
           
           cat ios/app-ios-export.plist
-          
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ios/imagevideofilters.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           
           security create-keychain -p "" flutter-build.keychain
           security import ios/imagevideo.p12 -t agg -k ~/Library/Keychains/flutter-build.keychain -P "${{ secrets.CERTIFICATE_PASSWORD }}" -A
