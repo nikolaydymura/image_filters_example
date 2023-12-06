@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'export_state.dart';
@@ -50,6 +51,7 @@ class ExportCubit extends Cubit<ExportState> {
       },
       onDone: () {
         debugPrint('Exported: ${output.absolute}');
+        GallerySaver.saveVideo(output.absolute.path);
         emit(
           ExportCompleted(
             output.absolute.path,

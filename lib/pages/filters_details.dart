@@ -66,8 +66,10 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
                   if (state is SourceImageReady) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.60,
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.60,
+                      ),
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
