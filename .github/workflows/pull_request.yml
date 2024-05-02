@@ -13,7 +13,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: ' 3.19.4'
+          flutter-version: '3.19.4'
           channel: 'stable'
       - name: Format
         run: dart format --set-exit-if-changed lib
@@ -26,7 +26,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         name: Preparing Flutter SDK
         with:
-          flutter-version: ' 3.19.4'
+          flutter-version: '3.19.4'
           channel: 'stable'
       - name: Analyze
         run: flutter analyze lib
