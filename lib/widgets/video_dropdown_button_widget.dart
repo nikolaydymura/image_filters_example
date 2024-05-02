@@ -70,7 +70,7 @@ extension on SourceVideoState {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                )
+                ),
               ],
             ),
           ),

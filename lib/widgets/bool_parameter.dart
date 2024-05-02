@@ -6,10 +6,10 @@ class BoolParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const BoolParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class BoolParameterWidget extends StatelessWidget {
             parameter.value = value;
             onChanged.call();
           },
-        )
+        ),
       ],
     );
   }

@@ -74,7 +74,7 @@ class StringOptionDropdownButtonWidget<T extends OptionString>
                 }).toList(),
               );
             },
-          )
+          ),
         ],
       ),
     );

@@ -153,7 +153,7 @@ extension ParametersContainer on FilterConfiguration {
           runSpacing: 12,
           children: [...numbers, ...datas, ...colors, ...variations],
         ),
-      ...params
+      ...params,
     ];
   }
 }

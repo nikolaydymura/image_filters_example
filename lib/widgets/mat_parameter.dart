@@ -9,10 +9,10 @@ class Mat7ParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const Mat7ParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +70,10 @@ class Mat5ParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const Mat5ParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -131,10 +131,10 @@ class Mat3ParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const Mat3ParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -192,10 +192,10 @@ class Mat4ParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const Mat4ParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -253,10 +253,10 @@ class ListParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const ListParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

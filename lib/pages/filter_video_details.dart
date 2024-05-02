@@ -75,7 +75,7 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
           await this
               .controller
               .setVideoSource(context.read<SourceVideoCubit>().state.selected);
-          await for (final size in outputSizeStream) {
+          await for (final _ in outputSizeStream) {
             setState(() {
               //_aspectRatio = size.width / size.height;
             });
@@ -126,7 +126,7 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
 mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
     T extends StatefulWidget> on State<T> {
   var _previewReady = false;
-  var _aspectRatio = 1.0;
+  final _aspectRatio = 1.0;
 
   late final VideoPreviewController controller;
   late final F configuration;

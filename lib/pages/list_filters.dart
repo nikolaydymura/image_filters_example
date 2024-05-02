@@ -15,7 +15,7 @@ import 'filter_video_details.dart';
 import 'filters_details.dart';
 
 class FiltersListScreen extends StatelessWidget {
-  const FiltersListScreen({Key? key}) : super(key: key);
+  const FiltersListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

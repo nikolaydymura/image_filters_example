@@ -9,10 +9,10 @@ class ColorParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const ColorParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class ColorParameterWidget extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

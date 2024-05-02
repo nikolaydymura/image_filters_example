@@ -12,7 +12,7 @@ class LookupContrastBrightnessExposureShaderConfiguration
           SquareLookupTableShaderConfiguration(),
           ContrastShaderConfiguration(),
           BrightnessShaderConfiguration(),
-          ExposureShaderConfiguration()
+          ExposureShaderConfiguration(),
         ]);
 }
 
@@ -23,6 +23,6 @@ class HALDLookupContrastBrightnessExposureShaderConfiguration
           HALDLookupTableShaderConfiguration(),
           ContrastShaderConfiguration(),
           BrightnessShaderConfiguration(),
-          ExposureShaderConfiguration()
+          ExposureShaderConfiguration(),
         ]);
 }

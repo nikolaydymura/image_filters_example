@@ -142,7 +142,7 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

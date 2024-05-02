@@ -148,7 +148,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
 }
 
 class PreviewPage extends StatefulWidget {
-  const PreviewPage({Key? key}) : super(key: key);
+  const PreviewPage({super.key});
 
   @override
   State<PreviewPage> createState() => _PreviewPageState();

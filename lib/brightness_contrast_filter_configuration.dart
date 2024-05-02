@@ -15,6 +15,6 @@ class LookupContrastBrightnessExposureFilterConfiguration
           GPUSquareLookupTableConfiguration(),
           GPUContrastConfiguration(),
           GPUBrightnessConfiguration(),
-          GPUExposureConfiguration()
+          GPUExposureConfiguration(),
         ]);
 }

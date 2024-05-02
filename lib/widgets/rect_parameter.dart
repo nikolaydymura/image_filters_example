@@ -6,10 +6,10 @@ class RectParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const RectParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

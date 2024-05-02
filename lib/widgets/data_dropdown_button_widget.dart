@@ -63,7 +63,7 @@ class DataDropdownButtonWidget extends StatelessWidget {
                 items: [newFileInput, ...state.items.widgets].toList(),
               );
             },
-          )
+          ),
         ],
       ),
     );

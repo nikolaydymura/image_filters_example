@@ -8,10 +8,10 @@ class NumberParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const NumberParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

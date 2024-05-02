@@ -6,10 +6,10 @@ class SliderNumberParameterWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const SliderNumberParameterWidget({
-    Key? key,
+    super.key,
     required this.parameter,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
