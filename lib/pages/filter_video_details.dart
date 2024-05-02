@@ -67,8 +67,8 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
   }
 
   @override
-  Widget get playerView => GPUVideoNativePreview(
-        params: previewParams,
+  Widget get playerView => GPUVideoSurfacePreview(
+        //params: previewParams,
         configuration: configuration,
         onViewCreated: (controller, outputSizeStream) async {
           this.controller = controller;
@@ -77,7 +77,7 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
               .setVideoSource(context.read<SourceVideoCubit>().state.selected);
           await for (final size in outputSizeStream) {
             setState(() {
-              _aspectRatio = size.width / size.height;
+              //_aspectRatio = size.width / size.height;
             });
           }
         },
