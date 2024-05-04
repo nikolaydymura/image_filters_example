@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 
 class ColorParameterWidget extends StatelessWidget {
@@ -49,7 +49,11 @@ class ColorParameterWidget extends StatelessWidget {
                       title: const Text('Pick a color!'),
                       content: SingleChildScrollView(
                         child: ColorPicker(
-                          pickerColor: parameter.value, //default color
+                          color: parameter.value, //default color
+                          wheelDiameter: MediaQuery.sizeOf(context).width * 0.7,
+                          pickersEnabled: const <ColorPickerType, bool>{
+                            ColorPickerType.wheel: true,
+                          },
                           onColorChanged: (Color color) {
                             //on color picked
                             parameter.value = color;

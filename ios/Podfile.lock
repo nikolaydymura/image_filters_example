@@ -53,9 +53,9 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_core_image_filters: d019e0716de65d1946706bbb7f54136582cb8502
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
-  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  image_picker_ios: b545a5f16c0fa88e3ecbbce3ed4de45567a8ec18
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
