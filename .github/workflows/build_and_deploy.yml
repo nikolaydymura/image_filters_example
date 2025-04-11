@@ -41,7 +41,7 @@ jobs:
            export KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
            flutter build apk --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}}
         name: Building application
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Archive production artifacts
         with:
           name: android-app-1.0.0-${{github.run_number}}-${{github.sha}}
@@ -83,7 +83,7 @@ jobs:
           
           flutter build ipa --build-name=1.0.0-${{github.sha}} --build-number=${{github.run_number}} --export-options-plist=ios/app-ios-export.plist
         name: Building application
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Archive production artifacts
         with:
           name: ios-app-1.0.0-${{github.run_number}}-${{github.sha}}
@@ -95,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_ios_flutter_app, build_android_flutter_app]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         name: Download all workflow run artifacts
         with:
           path: ./artifacts
