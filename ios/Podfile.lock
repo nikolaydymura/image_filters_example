@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_core_image_filters (0.0.21):
+  - flutter_core_image_filters (0.0.25):
     - Flutter
     - FlutterMacOS
   - gallery_saver (0.0.1):
@@ -51,7 +51,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_core_image_filters: d019e0716de65d1946706bbb7f54136582cb8502
+  flutter_core_image_filters: 33d43f3dad253978ec1f0673805912b82384dffd
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   image_picker_ios: b545a5f16c0fa88e3ecbbce3ed4de45567a8ec18
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
@@ -60,4 +60,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
