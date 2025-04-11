@@ -64,9 +64,9 @@ class ExportVideoButton extends StatelessWidget {
         return FloatingActionButton(
           onPressed: () {
             context.read<ExportCubit>().exportVideo(
-                  sourceBuilder.call(),
-                  configuration,
-                );
+              sourceBuilder.call(),
+              configuration,
+            );
           },
           child: const Icon(Icons.save),
         );

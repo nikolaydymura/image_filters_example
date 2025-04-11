@@ -6,11 +6,6 @@ class TabsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tab(
-      child: Align(
-        alignment: Alignment.center,
-        child: outputText,
-      ),
-    );
+    return Tab(child: Align(alignment: Alignment.center, child: outputText));
   }
 }

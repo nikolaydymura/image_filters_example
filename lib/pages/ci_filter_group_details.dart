@@ -53,9 +53,10 @@ class _FilterDetailsScreenState extends State<CIFilterGroupDetailsScreen> {
   }
 
   Future<void> _prepare(SourceImageCubit cubit) async {
-    configuration = GroupCIFilterConfiguration(
-      [widget.filterConfiguration1, widget.filterConfiguration2],
-    );
+    configuration = GroupCIFilterConfiguration([
+      widget.filterConfiguration1,
+      widget.filterConfiguration2,
+    ]);
     sourceController = await CIImagePreviewController.initialize();
     await sourceController.setImageSource(cubit.state.selected);
     destinationController = await CIImagePreviewController.initialize();
@@ -72,9 +73,7 @@ class _FilterDetailsScreenState extends State<CIFilterGroupDetailsScreen> {
         title: FittedBox(
           child: Text('${widget.filterName1} + ${widget.filterName2}'),
         ),
-        actions: const [
-          ImageDropdownButtonWidget(),
-        ],
+        actions: const [ImageDropdownButtonWidget()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -93,36 +92,34 @@ class _FilterDetailsScreenState extends State<CIFilterGroupDetailsScreen> {
               await e.update(widget.filterConfiguration2);
               setState(() {});
             }),
-            const SizedBox(
-              height: 8.0,
-            ),
+            const SizedBox(height: 8.0),
             Expanded(
-              child: _controllersReady
-                  ? BlocListener<SourceImageCubit, SourceImageState>(
-                      listenWhen: (prev, next) =>
-                          prev.selectedIndex != next.selectedIndex,
-                      listener: (context, state) {
-                        final source = state.selected;
-                        sourceController.setImageSource(source);
-                        destinationController.setImageSource(source);
-                      },
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.61,
-                        child: BeforeAfter(
-                          thumbRadius: 0.0,
-                          thumbColor: Colors.transparent,
-                          beforeImage: CIImagePreview(
-                            controller: sourceController,
-                          ),
-                          afterImage: CIImagePreview(
-                            controller: destinationController,
+              child:
+                  _controllersReady
+                      ? BlocListener<SourceImageCubit, SourceImageState>(
+                        listenWhen:
+                            (prev, next) =>
+                                prev.selectedIndex != next.selectedIndex,
+                        listener: (context, state) {
+                          final source = state.selected;
+                          sourceController.setImageSource(source);
+                          destinationController.setImageSource(source);
+                        },
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.61,
+                          child: BeforeAfter(
+                            thumbRadius: 0.0,
+                            thumbColor: Colors.transparent,
+                            beforeImage: CIImagePreview(
+                              controller: sourceController,
+                            ),
+                            afterImage: CIImagePreview(
+                              controller: destinationController,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                      )
+                      : const Center(child: CircularProgressIndicator()),
             ),
           ],
         ),
@@ -201,11 +198,7 @@ class _FilterDetailsScreenState extends State<CIFilterGroupDetailsScreen> {
     final watch = Stopwatch();
     watch.start();
     await configuration.exportImageFile(
-      ImageExportConfig(
-        source,
-        output,
-        format: ImageExportFormat.jpeg,
-      ),
+      ImageExportConfig(source, output, format: ImageExportFormat.jpeg),
     );
     debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
     debugPrint('Exported: ${output.absolute}');

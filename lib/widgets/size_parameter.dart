@@ -21,10 +21,7 @@ class SizeParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         Row(
@@ -35,23 +32,21 @@ class SizeParameterWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: InkWell(
                     onTap: () {
-                      parameter.value = parameter.value
-                          .copyWith(width: parameter.value.width - 0.05);
+                      parameter.value = parameter.value.copyWith(
+                        width: parameter.value.width - 0.05,
+                      );
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_downward,
-                    ),
+                    child: const Icon(Icons.arrow_downward),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {
-                      parameter.value = parameter.value
-                          .copyWith(width: parameter.value.width + 0.05);
+                      parameter.value = parameter.value.copyWith(
+                        width: parameter.value.width + 0.05,
+                      );
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_upward,
-                    ),
+                    child: const Icon(Icons.arrow_upward),
                   ),
                 ),
                 onSubmitted: (inputValue) {
@@ -67,31 +62,27 @@ class SizeParameterWidget extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 8),
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
                   prefixIcon: InkWell(
                     onTap: () {
-                      parameter.value = parameter.value
-                          .copyWith(height: parameter.value.height - 0.05);
+                      parameter.value = parameter.value.copyWith(
+                        height: parameter.value.height - 0.05,
+                      );
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_downward,
-                    ),
+                    child: const Icon(Icons.arrow_downward),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {
-                      parameter.value = parameter.value
-                          .copyWith(height: parameter.value.height + 0.05);
+                      parameter.value = parameter.value.copyWith(
+                        height: parameter.value.height + 0.05,
+                      );
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_upward,
-                    ),
+                    child: const Icon(Icons.arrow_upward),
                   ),
                 ),
                 onSubmitted: (inputValue) {

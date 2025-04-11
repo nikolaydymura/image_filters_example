@@ -19,13 +19,15 @@ void main() {
     () => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'),
   );
   FlutterImageFilters.register<
-      LookupContrastBrightnessExposureShaderConfiguration>(
+    LookupContrastBrightnessExposureShaderConfiguration
+  >(
     () => FragmentProgram.fromAsset(
       'shaders/lookup_contrast_brightness_exposure.frag',
     ),
   );
   FlutterImageFilters.register<
-      HALDLookupContrastBrightnessExposureShaderConfiguration>(
+    HALDLookupContrastBrightnessExposureShaderConfiguration
+  >(
     () => FragmentProgram.fromAsset(
       'shaders/hald_lookup_contrast_brightness_exposure.frag',
     ),
@@ -34,25 +36,21 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider<SourceImageCubit>(
-          create: (context) => SourceImageCubit(),
-        ),
-        BlocProvider<SourceVideoCubit>(
-          create: (context) => SourceVideoCubit(),
-        ),
-        BlocProvider<ScreenIndexCubit>(
-          create: (context) => ScreenIndexCubit(),
-        ),
+        BlocProvider<SourceImageCubit>(create: (context) => SourceImageCubit()),
+        BlocProvider<SourceVideoCubit>(create: (context) => SourceVideoCubit()),
+        BlocProvider<ScreenIndexCubit>(create: (context) => ScreenIndexCubit()),
         BlocProvider<ShadersBloc>(
           create: (context) => SearchBloc(FlutterImageFilters.availableFilters),
         ),
         BlocProvider<CIImageBloc>(
-          create: (context) =>
-              SearchBloc(FlutterCoreImageFilters.availableImageOnlyFilters),
+          create:
+              (context) =>
+                  SearchBloc(FlutterCoreImageFilters.availableImageOnlyFilters),
         ),
         BlocProvider<CIVideoBloc>(
-          create: (context) =>
-              SearchBloc(FlutterCoreImageFilters.availableVideoOnlyFilters),
+          create:
+              (context) =>
+                  SearchBloc(FlutterCoreImageFilters.availableVideoOnlyFilters),
         ),
         BlocProvider<GPUVideoBloc>(
           create: (context) => SearchBloc(FlutterVideoFilters.availableFilters),
@@ -88,11 +86,11 @@ class MyApp extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Color(Colors.deepPurple[200]!.value)),
+            borderSide: BorderSide(color: Color(Colors.deepPurple[200]!.toARGB32())),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Color(Colors.deepPurple[200]!.value)),
+            borderSide: BorderSide(color: Color(Colors.deepPurple[200]!.toARGB32())),
           ),
         ),
         cardTheme: CardTheme(color: Colors.deepPurple[200]),

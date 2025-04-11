@@ -23,10 +23,7 @@ class PointParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         Row(
@@ -40,18 +37,14 @@ class PointParameterWidget extends StatelessWidget {
                       parameter.value -= const Point<double>(0.05, 0.0);
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_downward,
-                    ),
+                    child: const Icon(Icons.arrow_downward),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {
                       parameter.value += const Point<double>(0.05, 0.0);
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_upward,
-                    ),
+                    child: const Icon(Icons.arrow_upward),
                   ),
                 ),
                 onSubmitted: (inputValue) {
@@ -67,9 +60,7 @@ class PointParameterWidget extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 8),
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
@@ -78,18 +69,14 @@ class PointParameterWidget extends StatelessWidget {
                       parameter.value -= const Point<double>(0.00, 0.05);
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_downward,
-                    ),
+                    child: const Icon(Icons.arrow_downward),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {
                       parameter.value += const Point<double>(0.0, 0.05);
                       onChanged.call();
                     },
-                    child: const Icon(
-                      Icons.arrow_upward,
-                    ),
+                    child: const Icon(Icons.arrow_upward),
                   ),
                 ),
                 onSubmitted: (inputValue) {

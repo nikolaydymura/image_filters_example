@@ -34,19 +34,16 @@ class SearchBloc extends SearchableBloc
     with ShadersBloc, CIImageBloc, CIVideoBloc, GPUVideoBloc {
   final List<String> _items;
 
-  SearchBloc(
-    Iterable<String> items,
-  )   : _items = items.toList(),
-        super(
-          SearchSucceeded._(
-            '',
-            FocusNode(),
-            TextEditingController(),
-            SplayTreeSet<String>.from(
-              items,
-            ).toList(),
-          ),
-        ) {
+  SearchBloc(Iterable<String> items)
+    : _items = items.toList(),
+      super(
+        SearchSucceeded._(
+          '',
+          FocusNode(),
+          TextEditingController(),
+          SplayTreeSet<String>.from(items).toList(),
+        ),
+      ) {
     on<StartSearchEvent>(
       _onSearchStart,
       transformer: debounceTime(const Duration(milliseconds: 100)),
@@ -54,30 +51,19 @@ class SearchBloc extends SearchableBloc
     on<ResetSearchEvent>(_resetSearch);
   }
 
-  void _onSearchStart(
-    StartSearchEvent event,
-    Emitter<SearchState> emit,
-  ) {
+  void _onSearchStart(StartSearchEvent event, Emitter<SearchState> emit) {
     final result = _items.where(
       (e) => e.toLowerCase().contains(event.term.toLowerCase()),
     );
     if (result.isEmpty) {
-      emit(
-        SearchEmpty(
-          event.term,
-          state.focusNode,
-          state.controller,
-        ),
-      );
+      emit(SearchEmpty(event.term, state.focusNode, state.controller));
     } else {
       emit(
         SearchSucceeded._(
           event.term,
           state.focusNode,
           state.controller,
-          SplayTreeSet<String>.from(
-            result,
-          ).toList(),
+          SplayTreeSet<String>.from(result).toList(),
         ),
       );
     }
@@ -89,9 +75,7 @@ class SearchBloc extends SearchableBloc
         '',
         state.focusNode,
         state.controller..text = '',
-        SplayTreeSet<String>.from(
-          _items,
-        ).toList(),
+        SplayTreeSet<String>.from(_items).toList(),
       ),
     );
     state.focusNode.unfocus();

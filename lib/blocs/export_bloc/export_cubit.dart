@@ -40,10 +40,7 @@ class ExportCubit extends Cubit<ExportState> {
     final watch = Stopwatch();
     watch.start();
     final processStream = configuration.exportVideoFile(
-      VideoExportConfig(
-        source,
-        output,
-      ),
+      VideoExportConfig(source, output),
     );
     processingListener = processStream.listen(
       (progress) {

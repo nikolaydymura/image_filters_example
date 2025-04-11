@@ -12,16 +12,16 @@ part 'source_video_state.dart';
 
 class SourceVideoCubit extends Cubit<SourceVideoState> {
   SourceVideoCubit()
-      : super(
-          SourceVideoState(
-            [
-              AssetInputSource('videos/BigBuckBunny.mp4'),
-              AssetInputSource('videos/Mona.mp4'),
-            ],
-            0,
-            const <PathInputSource, Uint8List?>{},
-          ),
-        );
+    : super(
+        SourceVideoState(
+          [
+            AssetInputSource('videos/BigBuckBunny.mp4'),
+            AssetInputSource('videos/Mona.mp4'),
+          ],
+          0,
+          const <PathInputSource, Uint8List?>{},
+        ),
+      );
 
   Future<void> loadFile() async {
     ImagePicker picker = ImagePicker();

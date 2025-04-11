@@ -52,9 +52,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
         title: FittedBox(
           child: Text('${widget.filterName1} + ${widget.filterName2}'),
         ),
-        actions: const [
-          ImageDropdownButtonWidget(),
-        ],
+        actions: const [ImageDropdownButtonWidget()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -73,9 +71,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
               e.update(widget.filterConfiguration2);
               setState(() {});
             }),
-            const SizedBox(
-              height: 8.0,
-            ),
+            const SizedBox(height: 8.0),
             Expanded(
               child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
@@ -96,9 +92,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
                       ),
                     );
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -118,8 +112,9 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
     const asset = 'images/inputImage.jpg';
     final texture = await TextureSource.fromAsset(asset);
     final directory = await getTemporaryDirectory();
-    final output =
-        File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    final output = File(
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
     final watch = Stopwatch();
     watch.start();
     final image = await configuration.export(
@@ -178,9 +173,9 @@ class _PreviewPageState extends State<PreviewPage> {
   Widget build(BuildContext context) {
     return textureLoaded
         ? PipelineImageShaderPreview(
-            texture: texture,
-            configuration: configuration,
-          )
+          texture: texture,
+          configuration: configuration,
+        )
         : const Offstage();
   }
 }

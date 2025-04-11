@@ -1,3 +1,4 @@
+// ignore_for_file: require_trailing_commas
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -58,9 +59,7 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
                 textAlignVertical: TextAlignVertical.center,
                 textCapitalization: TextCapitalization.none,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.search,
-                  ),
+                  prefixIcon: const Icon(Icons.search),
                   prefixIconColor: Theme.of(context).primaryColor,
                   suffix: InkWell(
                     onTap: () => context.read<T>().reset(),
@@ -72,8 +71,9 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
                       ),
                     ),
                   ),
-                  hintStyle:
-                      TextStyle(color: Theme.of(context).cardTheme.color),
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).cardTheme.color,
+                  ),
                   labelText: 'Search',
                   hintText: 'Type filter name',
                 ),
@@ -91,12 +91,8 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
                     return Card(
                       color: Theme.of(context).primaryColor,
                       child: ListTile(
-                        trailing: const Icon(
-                          Icons.navigate_next,
-                        ),
-                        title: Text(
-                          item,
-                        ),
+                        trailing: const Icon(Icons.navigate_next),
+                        title: Text(item),
                         onTap: () {
                           onItemTap(item);
                         },
@@ -112,24 +108,21 @@ class ListSupportedFiltersWidget<T extends SearchableBloc>
                   if (state is SearchSucceeded) {
                     final items = state.items;
                     return SliverFixedExtentList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final item = items[index];
-                          return Card(
-                            child: ListTile(
-                              title: Text(item),
-                              trailing: Icon(
-                                Icons.navigate_next,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onTap: () {
-                                onItemTap(item);
-                              },
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final item = items[index];
+                        return Card(
+                          child: ListTile(
+                            title: Text(item),
+                            trailing: Icon(
+                              Icons.navigate_next,
+                              color: Theme.of(context).primaryColor,
                             ),
-                          );
-                        },
-                        childCount: items.length,
-                      ),
+                            onTap: () {
+                              onItemTap(item);
+                            },
+                          ),
+                        );
+                      }, childCount: items.length),
                       itemExtent: 64,
                     );
                   }

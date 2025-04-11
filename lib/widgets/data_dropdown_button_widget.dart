@@ -9,10 +9,7 @@ import '../blocs/data_bloc/data_bloc_cubit.dart';
 class DataDropdownButtonWidget extends StatelessWidget {
   final DataParameter parameter;
 
-  const DataDropdownButtonWidget({
-    super.key,
-    required this.parameter,
-  });
+  const DataDropdownButtonWidget({super.key, required this.parameter});
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +44,8 @@ class DataDropdownButtonWidget extends StatelessWidget {
                 value: state.selected,
                 icon: const Icon(Icons.arrow_drop_down),
                 elevation: 8,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
-                underline: Container(
-                  color: Theme.of(context).primaryColor,
-                ),
+                style: TextStyle(color: Theme.of(context).primaryColor),
+                underline: Container(color: Theme.of(context).primaryColor),
                 onChanged: (DataItem? value) {
                   if (value != null) {
                     context.read<DataBlocCubit>().change(value);
@@ -70,34 +63,27 @@ class DataDropdownButtonWidget extends StatelessWidget {
   }
 
   DropdownMenuItem<DataItem> get newFileInput => DropdownMenuItem<DataItem>(
-        value: null,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 80,
-          ),
-          child: const Row(
-            children: [Icon(Icons.file_upload), Text('File...')],
-          ),
-        ),
-      );
+    value: null,
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 80),
+      child: const Row(children: [Icon(Icons.file_upload), Text('File...')]),
+    ),
+  );
 }
 
 extension on List<DataItem> {
   Iterable<DropdownMenuItem<DataItem>> get widgets => map(
-        (e) => DropdownMenuItem<DataItem>(
-          value: e,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 80,
-              maxHeight: 80,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: _dataPreview(e),
-            ),
-          ),
+    (e) => DropdownMenuItem<DataItem>(
+      value: e,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 80, maxHeight: 80),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: _dataPreview(e),
         ),
-      );
+      ),
+    ),
+  );
 
   Widget _dataPreview(DataItem value) {
     if (value is ImageAssetDataItem) {

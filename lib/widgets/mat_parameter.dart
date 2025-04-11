@@ -24,10 +24,7 @@ class Mat7ParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         ConstrainedBox(
@@ -50,8 +47,9 @@ class Mat7ParameterWidget extends StatelessWidget {
                   onSubmitted: (inputValue) {
                     final value = double.tryParse(inputValue);
                     if (value != null) {
-                      parameter.value =
-                          parameter.value.copyWith(items: {index: value});
+                      parameter.value = parameter.value.copyWith(
+                        items: {index: value},
+                      );
                       onChanged.call();
                     }
                   },
@@ -85,15 +83,13 @@ class Mat5ParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.width / 2),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.width / 2,
+          ),
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -111,8 +107,9 @@ class Mat5ParameterWidget extends StatelessWidget {
                   onSubmitted: (inputValue) {
                     final value = double.tryParse(inputValue);
                     if (value != null) {
-                      parameter.value =
-                          parameter.value.copyWith(items: {index: value});
+                      parameter.value = parameter.value.copyWith(
+                        items: {index: value},
+                      );
                       onChanged.call();
                     }
                   },
@@ -146,15 +143,13 @@ class Mat3ParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.width / 3),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.width / 3,
+          ),
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -172,8 +167,9 @@ class Mat3ParameterWidget extends StatelessWidget {
                   onSubmitted: (inputValue) {
                     final value = double.tryParse(inputValue);
                     if (value != null) {
-                      parameter.value =
-                          parameter.value.copyWith(items: {index: value});
+                      parameter.value = parameter.value.copyWith(
+                        items: {index: value},
+                      );
                       onChanged.call();
                     }
                   },
@@ -207,15 +203,13 @@ class Mat4ParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.width / 3),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.width / 3,
+          ),
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -233,8 +227,9 @@ class Mat4ParameterWidget extends StatelessWidget {
                   onSubmitted: (inputValue) {
                     final value = double.tryParse(inputValue);
                     if (value != null) {
-                      parameter.value =
-                          parameter.value.copyWith(items: {index: value});
+                      parameter.value = parameter.value.copyWith(
+                        items: {index: value},
+                      );
                       onChanged.call();
                     }
                   },
@@ -268,15 +263,13 @@ class ListParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: parameter.values.length <= 5 ? 48 : 96),
+          constraints: BoxConstraints(
+            maxHeight: parameter.values.length <= 5 ? 48 : 96,
+          ),
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -294,9 +287,10 @@ class ListParameterWidget extends StatelessWidget {
                   onSubmitted: (inputValue) {
                     final value = double.tryParse(inputValue);
                     if (value != null) {
-                      parameter.value = parameter.value
-                          .mapIndexed((i, e) => i == index ? value : e)
-                          .toList();
+                      parameter.value =
+                          parameter.value
+                              .mapIndexed((i, e) => i == index ? value : e)
+                              .toList();
                       onChanged.call();
                     }
                   },

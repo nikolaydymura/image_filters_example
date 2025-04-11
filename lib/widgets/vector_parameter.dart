@@ -21,10 +21,7 @@ class VectorParameterWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             parameter.displayName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         TextButton(
@@ -33,9 +30,7 @@ class VectorParameterWidget extends StatelessWidget {
           },
           child: const Text(
             'Choice vector parameter',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         const Spacer(),
@@ -56,9 +51,7 @@ class VectorParameterWidget extends StatelessWidget {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(25),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
       title: Text(parameter.displayName),
       content: StatefulBuilder(
@@ -67,9 +60,7 @@ class VectorParameterWidget extends StatelessWidget {
             constraints: const BoxConstraints.tightFor(width: 500, height: 300),
             child: ListView.builder(
               itemCount: parameter.value.length,
-              prototypeItem: ListTile(
-                title: Text('${parameter.value.first}'),
-              ),
+              prototypeItem: ListTile(title: Text('${parameter.value.first}')),
               itemBuilder: (context, index) {
                 return TextField(
                   decoration: InputDecoration(
@@ -80,9 +71,7 @@ class VectorParameterWidget extends StatelessWidget {
                         });
                         onChanged.call();
                       },
-                      child: const Icon(
-                        Icons.arrow_downward,
-                      ),
+                      child: const Icon(Icons.arrow_downward),
                     ),
                     suffixIcon: InkWell(
                       onTap: () {
@@ -91,9 +80,7 @@ class VectorParameterWidget extends StatelessWidget {
                         });
                         onChanged.call();
                       },
-                      child: const Icon(
-                        Icons.arrow_upward,
-                      ),
+                      child: const Icon(Icons.arrow_upward),
                     ),
                   ),
                   onSubmitted: (inputValue) {
@@ -113,9 +100,7 @@ class VectorParameterWidget extends StatelessWidget {
           );
         },
       ),
-      actions: [
-        okButton,
-      ],
+      actions: [okButton],
     );
 
     // show the dialog

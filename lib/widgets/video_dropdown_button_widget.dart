@@ -15,12 +15,8 @@ class VideoDropdownButtonWidget extends StatelessWidget {
           value: state.selected,
           icon: const Icon(Icons.arrow_drop_down),
           elevation: 8,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
-          underline: Container(
-            color: Theme.of(context).primaryColor,
-          ),
+          style: TextStyle(color: Theme.of(context).primaryColor),
+          underline: Container(color: Theme.of(context).primaryColor),
           onChanged: (PathInputSource? value) {
             if (value != null) {
               context.read<SourceVideoCubit>().changeInput(value);
@@ -38,9 +34,7 @@ class VideoDropdownButtonWidget extends StatelessWidget {
       DropdownMenuItem<PathInputSource>(
         value: null,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 80,
-          ),
+          constraints: const BoxConstraints(maxWidth: 80),
           child: const Row(
             children: [Icon(Icons.file_upload), Text('File...')],
           ),
@@ -50,30 +44,25 @@ class VideoDropdownButtonWidget extends StatelessWidget {
 
 extension on SourceVideoState {
   Iterable<DropdownMenuItem<PathInputSource>> get widgets => sources.map(
-        (e) => DropdownMenuItem<PathInputSource>(
-          value: e,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 80,
+    (e) => DropdownMenuItem<PathInputSource>(
+      value: e,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 80),
+        child: Row(
+          children: [
+            previews[e] != null
+                ? Image.memory(previews[e]!)
+                : const Icon(Icons.video_file),
+            Expanded(
+              child: Text(
+                e.path.substring(7, e.path.indexOf('.')),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            child: Row(
-              children: [
-                previews[e] != null
-                    ? Image.memory(previews[e]!)
-                    : const Icon(Icons.video_file),
-                Expanded(
-                  child: Text(
-                    e.path.substring(
-                      7,
-                      e.path.indexOf('.'),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

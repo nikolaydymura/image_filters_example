@@ -31,36 +31,25 @@ extension ParametersContainer on FilterConfiguration {
           ),
         );
     final datas = parameters.whereType<DataParameter>().map(
-          (e) => BlocProvider(
-            create: (context) => DataBlocCubit(
-              e,
-              this,
-              onChanged: onChanged,
-            ),
-            child: DataDropdownButtonWidget(
-              parameter: e,
-            ),
-          ),
-        );
+      (e) => BlocProvider(
+        create: (context) => DataBlocCubit(e, this, onChanged: onChanged),
+        child: DataDropdownButtonWidget(parameter: e),
+      ),
+    );
     final variations = parameters.whereType<OptionStringParameter>().map(
-          (e) => BlocProvider(
-            create: (context) => StringOptionCubit(
-              e,
-              this,
-            ),
-            child: StringOptionDropdownButtonWidget(
-              parameter: e,
-            ),
-          ),
-        );
+      (e) => BlocProvider(
+        create: (context) => StringOptionCubit(e, this),
+        child: StringOptionDropdownButtonWidget(parameter: e),
+      ),
+    );
     final colors = parameters.whereType<ColorParameter>().map(
-          (e) => ColorParameterWidget(
-            parameter: e,
-            onChanged: () {
-              onChanged.call(e);
-            },
-          ),
-        );
+      (e) => ColorParameterWidget(
+        parameter: e,
+        onChanged: () {
+          onChanged.call(e);
+        },
+      ),
+    );
     final params = parameters
         .whereNot((e) => e.hidden)
         .whereNot((e) => e is NumberParameter && e is! RangeNumberParameter)
@@ -68,80 +57,80 @@ extension ParametersContainer on FilterConfiguration {
         .whereNot((e) => e is ColorParameter)
         .whereNot((e) => e is OptionStringParameter)
         .map((e) {
-      if (e is RangeNumberParameter) {
-        return SliderNumberParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is PointParameter) {
-        return PointParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is SizeParameter) {
-        return SizeParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      }
-      if (e is RectParameter) {
-        return RectParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is Mat7Parameter) {
-        return Mat7ParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is Mat5Parameter) {
-        return Mat5ParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is Mat3Parameter) {
-        return Mat3ParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is Mat4Parameter) {
-        return Mat4ParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is BoolParameter) {
-        return BoolParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      } else if (e is ListParameter) {
-        return ListParameterWidget(
-          parameter: e,
-          onChanged: () {
-            onChanged.call(e);
-          },
-        );
-      }
-      return Text('Unknown: ${e.displayName}');
-    });
+          if (e is RangeNumberParameter) {
+            return SliderNumberParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is PointParameter) {
+            return PointParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is SizeParameter) {
+            return SizeParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          }
+          if (e is RectParameter) {
+            return RectParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is Mat7Parameter) {
+            return Mat7ParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is Mat5Parameter) {
+            return Mat5ParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is Mat3Parameter) {
+            return Mat3ParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is Mat4Parameter) {
+            return Mat4ParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is BoolParameter) {
+            return BoolParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          } else if (e is ListParameter) {
+            return ListParameterWidget(
+              parameter: e,
+              onChanged: () {
+                onChanged.call(e);
+              },
+            );
+          }
+          return Text('Unknown: ${e.displayName}');
+        });
 
     return [
       if (numbers.isNotEmpty ||

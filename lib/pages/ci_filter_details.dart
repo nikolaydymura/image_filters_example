@@ -57,9 +57,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(child: Text(widget.configuration.name)),
-        actions: const [
-          ImageDropdownButtonWidget(),
-        ],
+        actions: const [ImageDropdownButtonWidget()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -71,36 +69,34 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
               await e.update(configuration);
               setState(() {});
             }),
-            const SizedBox(
-              height: 8.0,
-            ),
+            const SizedBox(height: 8.0),
             Expanded(
-              child: _controllersReady
-                  ? BlocListener<SourceImageCubit, SourceImageState>(
-                      listenWhen: (prev, next) =>
-                          prev.selectedIndex != next.selectedIndex,
-                      listener: (context, state) {
-                        final source = state.selected;
-                        sourceController.setImageSource(source);
-                        destinationController.setImageSource(source);
-                      },
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.61,
-                        child: BeforeAfter(
-                          thumbRadius: 0.0,
-                          thumbColor: Colors.transparent,
-                          beforeImage: CIImagePreview(
-                            controller: sourceController,
-                          ),
-                          afterImage: CIImagePreview(
-                            controller: destinationController,
+              child:
+                  _controllersReady
+                      ? BlocListener<SourceImageCubit, SourceImageState>(
+                        listenWhen:
+                            (prev, next) =>
+                                prev.selectedIndex != next.selectedIndex,
+                        listener: (context, state) {
+                          final source = state.selected;
+                          sourceController.setImageSource(source);
+                          destinationController.setImageSource(source);
+                        },
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.61,
+                          child: BeforeAfter(
+                            thumbRadius: 0.0,
+                            thumbColor: Colors.transparent,
+                            beforeImage: CIImagePreview(
+                              controller: sourceController,
+                            ),
+                            afterImage: CIImagePreview(
+                              controller: destinationController,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                      )
+                      : const Center(child: CircularProgressIndicator()),
             ),
           ],
         ),
@@ -179,11 +175,7 @@ class _CIFilterDetailsPageState extends State<CIFilterDetailsPage> {
     final watch = Stopwatch();
     watch.start();
     await configuration.exportImageFile(
-      ImageExportConfig(
-        source,
-        output,
-        format: ImageExportFormat.jpeg,
-      ),
+      ImageExportConfig(source, output, format: ImageExportFormat.jpeg),
     );
     debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
     debugPrint('Exported: ${output.absolute}');

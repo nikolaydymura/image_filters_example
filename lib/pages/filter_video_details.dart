@@ -34,7 +34,7 @@ class _GPUVideoDetailsBody extends StatefulWidget {
   final String filterName;
 
   _GPUVideoDetailsBody({required this.filterName})
-      : super(key: ValueKey(filterName));
+    : super(key: ValueKey(filterName));
 
   @override
   State<StatefulWidget> createState() => _GPUVideoDetailsBodyState();
@@ -44,7 +44,7 @@ class _CIVideoDetailsBody extends StatefulWidget {
   final String filterName;
 
   _CIVideoDetailsBody({required this.filterName})
-      : super(key: ValueKey(filterName));
+    : super(key: ValueKey(filterName));
 
   @override
   State<StatefulWidget> createState() => _CIVideoDetailsBodyState();
@@ -68,20 +68,20 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
 
   @override
   Widget get playerView => GPUVideoSurfacePreview(
-        //params: previewParams,
-        configuration: configuration,
-        onViewCreated: (controller, outputSizeStream) async {
-          this.controller = controller;
-          await this
-              .controller
-              .setVideoSource(context.read<SourceVideoCubit>().state.selected);
-          await for (final _ in outputSizeStream) {
-            setState(() {
-              //_aspectRatio = size.width / size.height;
-            });
-          }
-        },
+    //params: previewParams,
+    configuration: configuration,
+    onViewCreated: (controller, outputSizeStream) async {
+      this.controller = controller;
+      await this.controller.setVideoSource(
+        context.read<SourceVideoCubit>().state.selected,
       );
+      await for (final _ in outputSizeStream) {
+        setState(() {
+          //_aspectRatio = size.width / size.height;
+        });
+      }
+    },
+  );
 
   @override
   GPUFilterConfiguration createConfiguration() {
@@ -114,17 +114,18 @@ class _CIVideoDetailsBodyState extends State<_CIVideoDetailsBody>
   }
 
   @override
-  Widget get playerView => VideoPreview(
-        controller: controller,
-      );
+  Widget get playerView => VideoPreview(controller: controller);
 
   @override
   CIFilterConfiguration createConfiguration() =>
       FlutterCoreImageFilters.createFilter(displayName: widget.filterName);
 }
 
-mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
-    T extends StatefulWidget> on State<T> {
+mixin _VideoDetailsPageState<
+  F extends VideoFilterConfiguration,
+  T extends StatefulWidget
+>
+    on State<T> {
   var _previewReady = false;
   final _aspectRatio = 1.0;
 
@@ -171,9 +172,7 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: FittedBox(child: Text(title)),
-        actions: const [
-          VideoDropdownButtonWidget(),
-        ],
+        actions: const [VideoDropdownButtonWidget()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -186,34 +185,37 @@ mixin _VideoDetailsPageState<F extends VideoFilterConfiguration,
               setState(() {});
             }),
             Expanded(
-              child: _previewReady
-                  ? AspectRatio(aspectRatio: _aspectRatio, child: playerView)
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+              child:
+                  _previewReady
+                      ? AspectRatio(
+                        aspectRatio: _aspectRatio,
+                        child: playerView,
+                      )
+                      : const Center(child: CircularProgressIndicator()),
             ),
           ],
         ),
       ),
-      floatingActionButton: previewAvailable
-          ? Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                BlocConsumer<SourceVideoCubit, SourceVideoState>(
-                  listener: (prev, next) {
-                    controller.setVideoSource(next.selected);
-                  },
-                  builder: (context, state) {
-                    return ExportVideoButton(
-                      sourceBuilder: () => state.selected,
-                      configuration: configuration,
-                    );
-                  },
-                ),
-              ],
-            )
-          : null,
+      floatingActionButton:
+          previewAvailable
+              ? Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  BlocConsumer<SourceVideoCubit, SourceVideoState>(
+                    listener: (prev, next) {
+                      controller.setVideoSource(next.selected);
+                    },
+                    builder: (context, state) {
+                      return ExportVideoButton(
+                        sourceBuilder: () => state.selected,
+                        configuration: configuration,
+                      );
+                    },
+                  ),
+                ],
+              )
+              : null,
     );
   }
 }

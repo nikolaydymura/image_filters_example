@@ -27,15 +27,10 @@ class ColorParameterWidget extends StatelessWidget {
           Expanded(
             child: Text(
               parameter.displayName,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8),
           Container(
             color: parameter.value,
             width: 50,
@@ -65,8 +60,9 @@ class ColorParameterWidget extends StatelessWidget {
                         ElevatedButton(
                           child: const Text('DONE'),
                           onPressed: () {
-                            Navigator.of(context)
-                                .pop(); //dismiss the color picker
+                            Navigator.of(
+                              context,
+                            ).pop(); //dismiss the color picker
                           },
                         ),
                       ],
@@ -74,10 +70,7 @@ class ColorParameterWidget extends StatelessWidget {
                   },
                 );
               },
-              icon: const Icon(
-                Icons.color_lens_outlined,
-                color: Colors.white,
-              ),
+              icon: const Icon(Icons.color_lens_outlined, color: Colors.white),
             ),
           ),
         ],

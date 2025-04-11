@@ -10,7 +10,7 @@ class StringOptionCubit<T extends OptionString>
   final FilterConfiguration configuration;
 
   StringOptionCubit(this.parameter, this.configuration)
-      : super(StringOptionState<T>());
+    : super(StringOptionState<T>());
 
   Future<void> change(T? value) async {
     emit(StringOptionState<T>(selected: value));

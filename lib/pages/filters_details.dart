@@ -45,9 +45,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(child: Text(widget.filterName)),
-        actions: const [
-          ImageDropdownButtonWidget(),
-        ],
+        actions: const [ImageDropdownButtonWidget()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -59,9 +57,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
               e.update(configuration);
               setState(() {});
             }),
-            const SizedBox(
-              height: 8.0,
-            ),
+            const SizedBox(height: 8.0),
             Expanded(
               child: BlocBuilder<SourceImageCubit, SourceImageState>(
                 builder: (context, state) {
@@ -84,9 +80,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
                       ),
                     );
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),

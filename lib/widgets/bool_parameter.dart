@@ -17,10 +17,7 @@ class BoolParameterWidget extends StatelessWidget {
       children: [
         Text(
           parameter.displayName,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         Switch(
           value: parameter.value,

@@ -1,3 +1,4 @@
+// ignore_for_file: require_trailing_commas
 import 'dart:async';
 import 'dart:io';
 
@@ -12,25 +13,22 @@ part 'source_image_state.dart';
 
 class SourceImageCubit extends Cubit<SourceImageState> {
   SourceImageCubit()
-      : super(
-          SourceImageInitial(
-            [
-              AssetInputSource('images/inputImage1.jpg'),
-              AssetInputSource('images/inputImage2.jpg'),
-              AssetInputSource('images/inputImage3.png'),
-              AssetInputSource('images/inputImage4.heic'),
-              AssetInputSource('images/inputImage.jpg'),
-            ],
-            0,
-          ),
-        );
+    : super(
+        SourceImageInitial([
+          AssetInputSource('images/inputImage1.jpg'),
+          AssetInputSource('images/inputImage2.jpg'),
+          AssetInputSource('images/inputImage3.png'),
+          AssetInputSource('images/inputImage4.heic'),
+          AssetInputSource('images/inputImage.jpg'),
+        ], 0),
+      );
 
   @override
   Stream<SourceImageState> get stream => super.stream.doOnListen(() {
-        if (state is SourceImageInitial) {
-          _prepare();
-        }
-      });
+    if (state is SourceImageInitial) {
+      _prepare();
+    }
+  });
 
   Future<void> loadFile() async {
     ImagePicker picker = ImagePicker();

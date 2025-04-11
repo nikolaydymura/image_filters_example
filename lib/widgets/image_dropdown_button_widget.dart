@@ -15,12 +15,8 @@ class ImageDropdownButtonWidget extends StatelessWidget {
           value: state.selected,
           icon: const Icon(Icons.arrow_drop_down),
           elevation: 8,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
-          underline: Container(
-            color: Theme.of(context).primaryColor,
-          ),
+          style: TextStyle(color: Theme.of(context).primaryColor),
+          underline: Container(color: Theme.of(context).primaryColor),
           onChanged: (InputSource? value) {
             if (value != null) {
               context.read<SourceImageCubit>().changeInput(value);
@@ -38,9 +34,7 @@ class ImageDropdownButtonWidget extends StatelessWidget {
       DropdownMenuItem<InputSource>(
         value: null,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 80,
-          ),
+          constraints: const BoxConstraints(maxWidth: 80),
           child: const Row(
             children: [Icon(Icons.file_upload), Text('File...')],
           ),
@@ -50,20 +44,17 @@ class ImageDropdownButtonWidget extends StatelessWidget {
 
 extension on List<InputSource> {
   Iterable<DropdownMenuItem<InputSource>> get widgets => map(
-        (e) => DropdownMenuItem<InputSource>(
-          value: e,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 80,
-              maxHeight: 80,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: _dataPreview(e),
-            ),
-          ),
+    (e) => DropdownMenuItem<InputSource>(
+      value: e,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 80, maxHeight: 80),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: _dataPreview(e),
         ),
-      );
+      ),
+    ),
+  );
 
   Widget _dataPreview(InputSource value) {
     if (value is AssetInputSource) {

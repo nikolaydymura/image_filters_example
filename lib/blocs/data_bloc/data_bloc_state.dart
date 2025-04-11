@@ -6,13 +6,8 @@ class DataBlocState {
 
   DataBlocState(this.items, {this.selected});
 
-  DataBlocState copyWith({
-    DataItem? selected,
-  }) {
-    return DataBlocState(
-      items,
-      selected: selected ?? this.selected,
-    );
+  DataBlocState copyWith({DataItem? selected}) {
+    return DataBlocState(items, selected: selected ?? this.selected);
   }
 }
 

@@ -29,9 +29,7 @@ class NumberParameterWidget extends StatelessWidget {
               parameter.value -= 0.05;
               onChanged.call();
             },
-            child: const Icon(
-              Icons.arrow_downward,
-            ),
+            child: const Icon(Icons.arrow_downward),
           ),
           contentPadding: EdgeInsets.zero,
           prefixIconColor: Theme.of(context).primaryColor,
@@ -41,9 +39,7 @@ class NumberParameterWidget extends StatelessWidget {
               parameter.value += 0.05;
               onChanged.call();
             },
-            child: const Icon(
-              Icons.arrow_upward,
-            ),
+            child: const Icon(Icons.arrow_upward),
           ),
         ),
         onSubmitted: (inputValue) {
@@ -54,8 +50,9 @@ class NumberParameterWidget extends StatelessWidget {
           }
         },
         keyboardType: TextInputType.number,
-        controller:
-            TextEditingController(text: parameter.value.toStringAsFixed(3)),
+        controller: TextEditingController(
+          text: parameter.value.toStringAsFixed(3),
+        ),
       ),
     );
   }

@@ -16,7 +16,7 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   final void Function(ConfigurationParameter)? onChanged;
 
   DataBlocCubit(this.parameter, this.configuration, {this.onChanged})
-      : super(DataBlocState([])) {
+    : super(DataBlocState([])) {
     emit(DataBlocState(_dataItemsFor(parameter, configuration)));
   }
 
@@ -39,8 +39,9 @@ class DataBlocCubit extends Cubit<DataBlocState> {
       final config = configuration;
       if (config is CubeDimensionMixin) {
         config.cubeDimension = metadata.dimension;
-        final parameter = configuration.parameters
-            .firstWhere((e) => e.name == 'inputCubeDimension');
+        final parameter = configuration.parameters.firstWhere(
+          (e) => e.name == 'inputCubeDimension',
+        );
         onChanged?.call(parameter);
       }
       final p = parameter;
@@ -53,12 +54,7 @@ class DataBlocCubit extends Cubit<DataBlocState> {
     }
     await parameter.update(configuration);
     if (append) {
-      emit(
-        DataBlocState(
-          [value, ...state.items],
-          selected: value,
-        ),
-      );
+      emit(DataBlocState([value, ...state.items], selected: value));
     } else {
       emit(state.copyWith(selected: value));
     }
@@ -122,10 +118,7 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   ];
 
   static final List<DataItem> _lutSquareImages = [
-    LutAssetDataItem(
-      'lut/lookup_demo.png',
-      metadata: LutMetadata(64, 8, 8, 8),
-    ),
+    LutAssetDataItem('lut/lookup_demo.png', metadata: LutMetadata(64, 8, 8, 8)),
     LutAssetDataItem(
       'lut/lookup_amatorka.png',
       metadata: LutMetadata(64, 8, 8, 8),
@@ -173,10 +166,7 @@ class DataBlocCubit extends Cubit<DataBlocState> {
   }
 }
 
-bool isSquareCube(
-  DataParameter parameter,
-  FilterConfiguration configuration,
-) {
+bool isSquareCube(DataParameter parameter, FilterConfiguration configuration) {
   if (parameter.name == 'inputTextureCubeData' &&
       configuration is BunchShaderConfiguration) {
     return configuration
@@ -203,10 +193,7 @@ bool isSquareCube(
   return false;
 }
 
-bool isHALDCube(
-  DataParameter parameter,
-  FilterConfiguration configuration,
-) {
+bool isHALDCube(DataParameter parameter, FilterConfiguration configuration) {
   if (parameter.name == 'inputTextureCubeData' &&
       configuration is BunchShaderConfiguration) {
     return configuration

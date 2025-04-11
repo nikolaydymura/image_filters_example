@@ -90,8 +90,9 @@ class FiltersListScreen extends StatelessWidget {
               ),
             ],
             currentIndex: state,
-            onTap: (value) =>
-                context.read<ScreenIndexCubit>().updateScreenIndex(value),
+            onTap:
+                (value) =>
+                    context.read<ScreenIndexCubit>().updateScreenIndex(value),
           );
         },
       ),
@@ -109,18 +110,12 @@ class FiltersListScreen extends StatelessWidget {
 
 extension on FiltersListScreen {
   void handleGPUVideoTap(BuildContext context, String name) {
-    _pushPage(
-      context,
-      (context) {
-        return BlocProvider(
-          create: (context) => ExportCubit(),
-          child: VideoDetailsPage(
-            filterName: name,
-            gpu: true,
-          ),
-        );
-      },
-    );
+    _pushPage(context, (context) {
+      return BlocProvider(
+        create: (context) => ExportCubit(),
+        child: VideoDetailsPage(filterName: name, gpu: true),
+      );
+    });
   }
 
   void handleCIVideoTap(BuildContext context, String name) {
@@ -129,18 +124,12 @@ extension on FiltersListScreen {
     );
     if (configuration.categories.contains(CICategory.video) &&
         configuration.hasInputImage) {
-      _pushPage(
-        context,
-        (context) {
-          return BlocProvider(
-            create: (context) => ExportCubit(),
-            child: VideoDetailsPage(
-              filterName: name,
-              gpu: false,
-            ),
-          );
-        },
-      );
+      _pushPage(context, (context) {
+        return BlocProvider(
+          create: (context) => ExportCubit(),
+          child: VideoDetailsPage(filterName: name, gpu: false),
+        );
+      });
     } else {
       _showWarning(context, 'Video processing is unavailable for `$name`');
     }
@@ -154,17 +143,14 @@ extension on FiltersListScreen {
       final configuration2 = FlutterCoreImageFilters.createFilter(
         displayName: 'Color Threshold',
       );
-      _pushPage(
-        context,
-        (context) {
-          return CIFilterGroupDetailsScreen(
-            filterName1: 'Color Monochrome',
-            filterName2: 'Color Threshold',
-            filterConfiguration1: configuration1,
-            filterConfiguration2: configuration2,
-          );
-        },
-      );
+      _pushPage(context, (context) {
+        return CIFilterGroupDetailsScreen(
+          filterName1: 'Color Monochrome',
+          filterName2: 'Color Threshold',
+          filterConfiguration1: configuration1,
+          filterConfiguration2: configuration2,
+        );
+      });
     }
     final configuration = FlutterCoreImageFilters.createFilter(
       displayName: name,
@@ -172,14 +158,9 @@ extension on FiltersListScreen {
 
     if (configuration.categories.contains(CICategory.stillImage) &&
         configuration.hasInputImage) {
-      _pushPage(
-        context,
-        (context) {
-          return CIFilterDetailsPage(
-            configuration: configuration,
-          );
-        },
-      );
+      _pushPage(context, (context) {
+        return CIFilterDetailsPage(configuration: configuration);
+      });
     } else {
       _showWarning(context, 'Image processing is unavailable for `$name`');
     }
@@ -196,17 +177,14 @@ extension on FiltersListScreen {
       if (configuration1 == null || configuration2 == null) {
         _showWarning(context, 'Group not supported');
       } else {
-        _pushPage(
-          context,
-          (context) {
-            return FilterGroupDetailsScreen(
-              filterName1: 'Brightness',
-              filterName2: 'Saturation',
-              filterConfiguration1: configuration1,
-              filterConfiguration2: configuration2,
-            );
-          },
-        );
+        _pushPage(context, (context) {
+          return FilterGroupDetailsScreen(
+            filterName1: 'Brightness',
+            filterName2: 'Saturation',
+            filterConfiguration1: configuration1,
+            filterConfiguration2: configuration2,
+          );
+        });
       }
       return;
     }
@@ -223,22 +201,17 @@ extension on FiltersListScreen {
     if (configuration == null) {
       _showWarning(context, '$name not supported');
     } else {
-      _pushPage(
-        context,
-        (context) {
-          return FilterDetailsScreen(
-            filterName: name,
-            filterConfiguration: configuration!,
-          );
-        },
-      );
+      _pushPage(context, (context) {
+        return FilterDetailsScreen(
+          filterName: name,
+          filterConfiguration: configuration!,
+        );
+      });
     }
   }
 
   void _showWarning(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-    );
+    final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
