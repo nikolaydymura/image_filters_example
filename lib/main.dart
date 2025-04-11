@@ -86,11 +86,15 @@ class MyApp extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Color(Colors.deepPurple[200]!.toARGB32())),
+            borderSide: BorderSide(
+              color: Color(Colors.deepPurple[200]!.toARGB32()),
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Color(Colors.deepPurple[200]!.toARGB32())),
+            borderSide: BorderSide(
+              color: Color(Colors.deepPurple[200]!.toARGB32()),
+            ),
           ),
         ),
         cardTheme: CardTheme(color: Colors.deepPurple[200]),
