@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'export_state.dart';
@@ -46,9 +46,28 @@ class ExportCubit extends Cubit<ExportState> {
       (progress) {
         emit(ExportProcessing(progress));
       },
-      onDone: () {
+      onDone: () async {
         debugPrint('Exported: ${output.absolute}');
-        GallerySaver.saveVideo(output.absolute.path);
+        try {
+          final status = await PhotoManager.requestPermissionExtend(
+            requestOption: const PermissionRequestOption(
+              androidPermission: AndroidPermission(
+                type: RequestType.video,
+                mediaLocation: false,
+              ),
+            ),
+          );
+          if (status.isAuth || status.hasAccess) {
+            await PhotoManager.editor.saveVideo(
+              output,
+              title: output.uri.pathSegments.last,
+            );
+          }
+        } catch (e, s) {
+          debugPrint('Error saving file to gallery: $e');
+          debugPrintStack(stackTrace: s);
+          rethrow;
+        }
         emit(
           ExportCompleted(
             output.absolute.path,

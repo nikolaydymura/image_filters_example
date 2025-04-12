@@ -39,23 +39,24 @@ dependencies:
   flutter_gpu_filters_interface: ^0.0.18
   flutter_image_filters: ^0.0.26
   flutter_core_image_filters: ^0.0.26
-  flutter_gpu_video_filters: 0.0.17
+  flutter_gpu_video_filters: ^0.0.17
   path_provider: ^2.1.3
   image: ^4.1.7
   before_after_image_slider_nullsafty: ^1.0.1
   flex_color_picker: ^3.4.1
-  flutter_bloc: ^8.1.5
+  flutter_bloc: ^9.1.0
   equatable: ^2.0.5
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0
   stream_transform: ^2.1.0
   provider: ^6.1.2
   image_picker: ^1.1.1
-  video_thumbnail: ^0.5.3
-  gallery_saver: ^2.3.2
+  get_thumbnail_video: ^0.7.3
+  photo_manager: ^3.6.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^5.0.0
 
 dependency_overrides:
   win32: 5.5.4
