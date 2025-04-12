@@ -34,6 +34,14 @@ jobs:
         with:
           flutter-version: '3.29.0'
           channel: 'stable'
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - run: |
            export KEYSTORE_PATH=$(pwd)/android/flutter-tour-keystore.jks
            export KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
@@ -60,6 +68,12 @@ jobs:
         with:
           flutter-version: '3.29.0'
           channel: 'stable'
+      - uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
       - uses: nikolaydymura/Flutter-Export-Plist-Github-Action@v3
         id: generate-plist
         with:
@@ -103,13 +117,13 @@ jobs:
         name: Uploading Android production artifact to Firebase App Distribution
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FILE_CONTENT }}
           groups: testers
           file: ./artifacts/android-app-1.0.0-${{github.run_number}}-${{github.sha}}/app-release.apk
       - uses: wzieba/Firebase-Distribution-Github-Action@v1
         name: Uploading iOS production artifact to Firebase App Distribution
         with:
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FILE_CONTENT }}
           groups: testers
           file: ./artifacts/ios-app-1.0.0-${{github.run_number}}-${{github.sha}}/image-video-demo.ipa
