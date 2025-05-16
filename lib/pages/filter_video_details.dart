@@ -62,7 +62,7 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
 
   @override
   Future<void> prepare(PathInputSource source) async {
-    previewParams = await GPUVideoPreviewParams.create(configuration);
+    //previewParams = await GPUVideoPreviewParams.create(configuration);
     _previewReady = previewAvailable;
   }
 
