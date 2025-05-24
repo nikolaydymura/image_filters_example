@@ -195,6 +195,9 @@ extension on FiltersListScreen {
       configuration = LookupContrastBrightnessExposureShaderConfiguration();
     } else if (name == 'HALD Lookup + Contrast + Brightness + Exposure') {
       configuration = HALDLookupContrastBrightnessExposureShaderConfiguration();
+    } else if (name == 'White Balance + Exposure + Contrast + Saturation') {
+      configuration =
+          WhiteBalanceExposureContrastSaturationShaderConfiguration();
     } else {
       configuration = FlutterImageFilters.createFilter(displayName: name);
     }

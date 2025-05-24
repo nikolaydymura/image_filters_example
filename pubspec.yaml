@@ -37,7 +37,7 @@ dependencies:
   collection: ^1.16.0
   cupertino_icons: ^1.0.2
   flutter_gpu_filters_interface: ^0.0.18
-  flutter_image_filters: ^0.0.26
+  flutter_image_filters: ^0.0.27
   flutter_core_image_filters: ^0.0.26
   flutter_gpu_video_filters: ^0.0.18
   path_provider: ^2.1.3
@@ -78,6 +78,7 @@ flutter:
     - shaders/brightness_contrast.frag
     - shaders/lookup_contrast_brightness_exposure.frag
     - shaders/hald_lookup_contrast_brightness_exposure.frag
+    - shaders/white_balance_exposure_contrast_saturation.frag
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

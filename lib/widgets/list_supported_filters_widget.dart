@@ -25,6 +25,7 @@ const Map<String, List<String>> favorites = {
     'Lookup + Contrast + Brightness + Exposure',
     'HALD Lookup + Contrast + Brightness + Exposure',
     'Brightness + Saturation',
+    'White Balance + Exposure + Contrast + Saturation',
     'HALD Lookup Table',
     'Monochrome',
     'Square Lookup Table',

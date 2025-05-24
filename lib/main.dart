@@ -32,6 +32,13 @@ void main() {
       'shaders/hald_lookup_contrast_brightness_exposure.frag',
     ),
   );
+  FlutterImageFilters.register<
+      WhiteBalanceExposureContrastSaturationShaderConfiguration
+  >(
+        () => FragmentProgram.fromAsset(
+      'shaders/white_balance_exposure_contrast_saturation.frag',
+    ),
+  );
 
   runApp(
     MultiProvider(

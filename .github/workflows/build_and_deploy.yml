@@ -88,7 +88,7 @@ jobs:
       - run: |
           security create-keychain -p "" flutter-build.keychain
           echo -n ${{ secrets.CERTIFICATE_BASE64 }} | base64 --decode -o ios/key.p12
-          security import ios/key.p12 -t agg -k ~/Library/Keychains/flutter-build.keychain -P "${{ secrets.CERTIFICATE_PASSWORD }}" -A
+          security import ios/key.p12 -t agg -k ~/Library/Keychains/flutter-build.keychain -P "${{ vars.CERTIFICATE_PASSWORD }}" -A
           
           security list-keychains -s ~/Library/Keychains/flutter-build.keychain
           security default-keychain -s ~/Library/Keychains/flutter-build.keychain

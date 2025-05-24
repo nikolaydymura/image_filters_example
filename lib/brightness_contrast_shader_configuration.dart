@@ -26,3 +26,16 @@ class HALDLookupContrastBrightnessExposureShaderConfiguration
         ExposureShaderConfiguration(),
       ]);
 }
+
+class WhiteBalanceExposureContrastSaturationShaderConfiguration
+    extends BunchShaderConfiguration {
+  WhiteBalanceExposureContrastSaturationShaderConfiguration()
+    : super([
+        WhiteBalanceShaderConfiguration()
+          ..tint = 50
+          ..temperature = 0,
+        ExposureShaderConfiguration(),
+        ContrastShaderConfiguration(),
+        SaturationShaderConfiguration(),
+      ]);
+}
