@@ -33,9 +33,9 @@ void main() {
     ),
   );
   FlutterImageFilters.register<
-      WhiteBalanceExposureContrastSaturationShaderConfiguration
+    WhiteBalanceExposureContrastSaturationShaderConfiguration
   >(
-        () => FragmentProgram.fromAsset(
+    () => FragmentProgram.fromAsset(
       'shaders/white_balance_exposure_contrast_saturation.frag',
     ),
   );
