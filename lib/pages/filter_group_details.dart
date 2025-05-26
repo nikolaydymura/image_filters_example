@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:before_after_image_slider_nullsafty/before_after_image_slider_nullsafty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gpu_filters_interface/flutter_gpu_filters_interface.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
@@ -35,7 +36,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    configuration = GroupShaderConfiguration();
+    configuration = GroupShaderConfiguration(reimportImage: Platform.isAndroid);
     configuration.add(widget.filterConfiguration1);
     configuration.add(widget.filterConfiguration2);
   }
@@ -81,11 +82,11 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
-                        beforeImage: ImageShaderPreview(
-                          texture: state.textureSource,
-                          configuration: NoneShaderConfiguration(),
+                        beforeImage: RawImage(
+                          image: state.textureSource.image,
                         ),
                         afterImage: PipelineImageShaderPreview(
+                          key: UniqueKey(),
                           texture: state.textureSource,
                           configuration: configuration,
                         ),
@@ -109,11 +110,21 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
   }
 
   Future<void> _exportImage() async {
-    const asset = 'images/inputImage.jpg';
-    final texture = await TextureSource.fromAsset(asset);
+    final selectedImage = context.read<SourceImageCubit>().state.selected;
+    final TextureSource texture;
+    final String extension;
+    if (selectedImage is FileInputSource) {
+      texture = await TextureSource.fromFile(selectedImage.file);
+      extension = selectedImage.file.path.split('.').last;
+    } else if (selectedImage is AssetInputSource) {
+      texture = await TextureSource.fromAsset(selectedImage.path);
+      extension = selectedImage.path.split('.').last;
+    } else {
+      throw UnsupportedError('Unsupported input source');
+    }
     final directory = await getTemporaryDirectory();
     final output = File(
-      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg',
+      '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.$extension',
     );
     final watch = Stopwatch();
     watch.start();
@@ -139,43 +150,5 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
     await output.writeAsBytes(data);
     debugPrint('Exporting file took ${watch.elapsedMilliseconds} milliseconds');
     debugPrint('Exported: ${output.absolute}');
-  }
-}
-
-class PreviewPage extends StatefulWidget {
-  const PreviewPage({super.key});
-
-  @override
-  State<PreviewPage> createState() => _PreviewPageState();
-}
-
-class _PreviewPageState extends State<PreviewPage> {
-  late TextureSource texture;
-  late GroupShaderConfiguration configuration;
-  bool textureLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    configuration = GroupShaderConfiguration();
-    configuration.add(BrightnessShaderConfiguration()..brightness = 0.5);
-    configuration.add(SaturationShaderConfiguration()..saturation = 0.5);
-    TextureSource.fromAsset('demo.jpeg')
-        .then((value) => texture = value)
-        .whenComplete(
-          () => setState(() {
-            textureLoaded = true;
-          }),
-        );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return textureLoaded
-        ? PipelineImageShaderPreview(
-          texture: texture,
-          configuration: configuration,
-        )
-        : const Offstage();
   }
 }

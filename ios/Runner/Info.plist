@@ -52,5 +52,9 @@
 	<false/>
 	<key>FLTEnableImpeller</key>
     <true />
+    <key>NSCameraUsageDescription</key>
+    <string>Take photo for processing</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Take photo for processing</string>
 </dict>
 </plist>

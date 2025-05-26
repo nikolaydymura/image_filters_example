@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import '../blocs/source_image_bloc/source_image_bloc.dart';
 import '../widgets/image_dropdown_button_widget.dart';
 import '../widgets/parameters_container.dart';
+import 'take_camera_image.dart';
 
 class FilterDetailsScreen extends StatefulWidget {
   final String filterName;
@@ -45,7 +46,18 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(child: Text(widget.filterName)),
-        actions: const [ImageDropdownButtonWidget()],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TakePictureScreen()),
+              );
+            },
+            icon: Icon(Icons.camera_alt),
+          ),
+          ImageDropdownButtonWidget(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -119,7 +131,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     watch.start();
     final image = await configuration.export(
       texture,
-      Size(texture.width.toDouble(), texture.height.toDouble()),
+      texture.size,
     );
     final bytes = await image.toByteData();
     debugPrint(

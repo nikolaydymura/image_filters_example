@@ -41,10 +41,8 @@ android {
         }
     }
     buildTypes {
-        if (System.getenv("CI") == "true") {
-            release {
-                signingConfig = signingConfigs.getByName("release")
-            }
+        release {
+            signingConfig = if(System.getenv("CI") == "true")  signingConfigs.getByName("release") else signingConfigs.getByName("debug")
         }
     }
 }

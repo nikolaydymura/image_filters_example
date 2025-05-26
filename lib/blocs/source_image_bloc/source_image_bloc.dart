@@ -30,14 +30,15 @@ class SourceImageCubit extends Cubit<SourceImageState> {
     }
   });
 
-  Future<void> loadFile() async {
+  Future<void> loadFile({XFile? image}) async {
     ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      final texture = await TextureSource.fromFile(File(image.path));
+    final XFile? photo =
+        image ?? await picker.pickImage(source: ImageSource.gallery);
+    if (photo != null) {
+      final texture = await TextureSource.fromFile(File(photo.path));
       emit(
         SourceImageReady(
-          [...state.sources, FileInputSource(File(image.path))],
+          [...state.sources, FileInputSource(File(photo.path))],
           state.sources.length,
           texture,
         ),
