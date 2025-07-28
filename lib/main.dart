@@ -11,34 +11,53 @@ import 'blocs/screen_index_cubit.dart';
 import 'blocs/search_bloc/search_bloc.dart';
 import 'blocs/source_image_bloc/source_image_bloc.dart';
 import 'blocs/source_video_bloc/source_video_bloc.dart';
-import 'brightness_contrast_shader_configuration.dart';
 import 'pages/list_filters.dart';
 
+import 'main.config.dart';
+
+@BunchShaderConfigs(
+  configs: [
+    BunchShaderConfig(
+      shaders: [BrightnessShaderConfiguration, ContrastShaderConfiguration],
+    ),
+    BunchShaderConfig(
+      name: 'LookupContrastBrightnessExposureShaderConfiguration',
+      shaders: [
+        SquareLookupTableShaderConfiguration,
+        ContrastShaderConfiguration,
+        BrightnessShaderConfiguration,
+        ExposureShaderConfiguration,
+      ],
+    ),
+    BunchShaderConfig(
+      name: 'HALDLookupContrastBrightnessExposureShaderConfiguration',
+      shaders: [
+        HALDLookupTableShaderConfiguration,
+        ContrastShaderConfiguration,
+        BrightnessShaderConfiguration,
+        ExposureShaderConfiguration,
+      ],
+    ),
+    BunchShaderConfig(
+      shaders: [
+        WhiteBalanceShaderConfiguration,
+        ExposureShaderConfiguration,
+        ContrastShaderConfiguration,
+        SaturationShaderConfiguration,
+      ],
+    ),
+    BunchShaderConfig(
+      shaders: [
+        BrightnessShaderConfiguration,
+        ContrastShaderConfiguration,
+        SaturationShaderConfiguration,
+        VignetteShaderConfiguration,
+      ],
+    ),
+  ],
+)
 void main() {
-  FlutterImageFilters.register<BrightnessContrastShaderConfiguration>(
-    () => FragmentProgram.fromAsset('shaders/brightness_contrast.frag'),
-  );
-  FlutterImageFilters.register<
-    LookupContrastBrightnessExposureShaderConfiguration
-  >(
-    () => FragmentProgram.fromAsset(
-      'shaders/lookup_contrast_brightness_exposure.frag',
-    ),
-  );
-  FlutterImageFilters.register<
-    HALDLookupContrastBrightnessExposureShaderConfiguration
-  >(
-    () => FragmentProgram.fromAsset(
-      'shaders/hald_lookup_contrast_brightness_exposure.frag',
-    ),
-  );
-  FlutterImageFilters.register<
-    WhiteBalanceExposureContrastSaturationShaderConfiguration
-  >(
-    () => FragmentProgram.fromAsset(
-      'shaders/white_balance_exposure_contrast_saturation.frag',
-    ),
-  );
+  registerBunchShaders();
 
   runApp(
     MultiProvider(
@@ -104,7 +123,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        cardTheme: CardTheme(color: Colors.deepPurple[200]),
+        cardTheme: CardThemeData(color: Colors.deepPurple[200]),
       ),
       home: const FiltersListScreen(),
     );

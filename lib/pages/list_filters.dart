@@ -6,7 +6,7 @@ import 'package:flutter_image_filters/flutter_image_filters.dart';
 import '../blocs/export_bloc/export_cubit.dart';
 import '../blocs/screen_index_cubit.dart';
 import '../blocs/search_bloc/search_bloc.dart';
-import '../brightness_contrast_shader_configuration.dart';
+import '../main.config.dart';
 import '../widgets/list_supported_filters_widget.dart';
 import 'ci_filter_details.dart';
 import 'ci_filter_group_details.dart';

@@ -18,3 +18,16 @@ class LookupContrastBrightnessExposureFilterConfiguration
         GPUExposureConfiguration(),
       ]);
 }
+
+
+class ExposureContrastSaturationWhiteBalanceHALDLookupFilterConfiguration
+    extends BunchFilterConfiguration {
+  ExposureContrastSaturationWhiteBalanceHALDLookupFilterConfiguration()
+      : super('video_shaders', [
+    GPUExposureConfiguration(),
+    GPUContrastConfiguration(),
+    GPUSaturationConfiguration(),
+    GPUWhiteBalanceConfiguration(),
+    GPUHALDLookupTableConfiguration(),
+  ]);
+}
