@@ -82,9 +82,7 @@ class _FilterDetailsScreenState extends State<FilterGroupDetailsScreen> {
                       child: BeforeAfter(
                         thumbRadius: 0.0,
                         thumbColor: Colors.transparent,
-                        beforeImage: RawImage(
-                          image: state.textureSource.image,
-                        ),
+                        beforeImage: RawImage(image: state.textureSource.image),
                         afterImage: PipelineImageShaderPreview(
                           key: UniqueKey(),
                           texture: state.textureSource,

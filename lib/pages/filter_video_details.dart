@@ -92,6 +92,10 @@ class _GPUVideoDetailsBodyState extends State<_GPUVideoDetailsBody>
         'SquareLookupTable + Brightness + Contrast + Exposure') {
       return LookupContrastBrightnessExposureFilterConfiguration();
     }
+    if (widget.filterName ==
+        'Exposure + Contrast + Saturation + WhiteBalance + HALDLookupTable') {
+      return ExposureContrastSaturationWhiteBalanceHALDLookupFilterConfiguration();
+    }
     return FlutterVideoFilters.createFilter(displayName: widget.filterName);
   }
 }

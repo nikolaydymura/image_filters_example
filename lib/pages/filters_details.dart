@@ -129,10 +129,7 @@ class _FilterDetailsScreenState extends State<FilterDetailsScreen> {
     );
     final watch = Stopwatch();
     watch.start();
-    final image = await configuration.export(
-      texture,
-      texture.size,
-    );
+    final image = await configuration.export(texture, texture.size);
     final bytes = await image.toByteData();
     debugPrint(
       'Exporting image took ${watch.elapsedMilliseconds} milliseconds',
